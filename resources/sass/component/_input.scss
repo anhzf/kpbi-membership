@@ -1,0 +1,38 @@
+.group-input {
+    @apply flex flex-wrap;
+
+    & > div:not(:last-child) {
+        @apply mr-2;
+    }   
+}
+
+.input-text-container {
+    
+    label {
+        @apply block uppercase text-gray-700 text-sm font-bold mb-2;
+    }
+}
+
+.input-dropdown-container {
+
+    label {
+        @apply block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2;
+    }
+}
+
+
+.input-text {
+    @apply appearance-none block w-full bg-white rounded-lg py-2 px-4 border border-gray-300;
+
+    &:focus {
+        @apply shadow-outline outline-none;
+    }
+}
+
+.input-select {
+    @apply block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight;
+
+    &:focus {
+        @apply outline-none bg-white border-gray-500;
+    }
+}
