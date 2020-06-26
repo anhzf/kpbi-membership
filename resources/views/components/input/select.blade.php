@@ -18,5 +18,5 @@ $classes = [
             <span class="material-icons">arrow_drop_down</span>
         </div>
     </div>
-    {{ $slot }}
+    {{ $slot ?? '' }}
 </div>

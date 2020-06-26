@@ -3,14 +3,15 @@
 @section('page')
 
 @php
-    $banPT = $banPT = ['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi'];
+    $banPT = ['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi'];
 @endphp
 
 <div class="col-span-2 p-16 pt-5 relative">
     <form action="{{ route('profile:update') }}" method="POST">
         @csrf
 
-        <x-input.select name="jenjang" label="Jenjang" :choices="['S1', 'S2', 'S3']" value="{{ $data->jenjang ?? '' }}"></x-input.select>
+        {{-- <x-input.select name="jenjang" label="Jenjang" :choices="['S1', 'S2', 'S3']" value="{{ $data->jenjang ?? '' }}"></x-input.select> --}}
+        @include('components.input.select', ['name' => 'jenjang', 'label' => 'Jenjang', 'choices' => ['S1', 'S2', 'S3'], 'value' => $data->jenjang ?? ''])
         <x-input.text name="nama_prodi" label="Nama Prodi" value="{{ $data->nama_prodi ?? '' }}"></x-input.text>
         <x-input.text name="jurusan" label="Jurusan" value="{{ $data->jurusan ?? '' }}"></x-input.text>
         <x-input.text name="fakultas" label="Fakultas" value="{{ $data->fakultas ?? '' }}"></x-input.text>
@@ -18,13 +19,16 @@
             <x-input.text name="pt[lengkap]" label="Nama PT Lengkap" placeholder="Nama PT Lengkap" class="w-2/4" value="{{ $data->pt['lengkap'] ?? '' }}"></x-input.text>
             <x-input.text name="pt[singkat]" label="Singkat" placeholder="(misal UNS)" class="w-1/4" value="{{ $data->pt['singkat'] ?? '' }}"></x-input.text>
         </div>
-        <x-input.select name="status" label="Status Perguruan Tinggi" :choices="['Negeri', 'Swasta']" value="{{ $data->status ?? '' }}"></x-input.select>
+        {{-- <x-input.select name="status" label="Status Perguruan Tinggi" :choices="['Negeri', 'Swasta']" value="{{ $data->status ?? '' }}"></x-input.select> --}}
+        @include('components.input.select', ['name' => 'status', 'label' => 'Status Perguruan Tinggi', 'choices' => ['Negeri', 'Swasta'], 'value' => $data->status ?? ''])
         <div class="group-input">
-            <x-input.select name="akreditasi_prodi[akreditasi]" label="Akreditasi Prodi" :choices="$banPT" class="w-2/4" value="{{ $data->akreditasi_prodi['akreditasi'] ?? '' }}"></x-input.select>
+            {{-- <x-input.select name="akreditasi_prodi[akreditasi]" label="Akreditasi Prodi" :choices="$banPT" class="w-2/4" value="{{ $data->akreditasi_prodi['akreditasi'] ?? '' }}"></x-input.select> --}}
+            @include('components.input.select', ['name' => 'akreditasi_prodi[akreditasi]', 'label' => 'Akreditasi Prodi', 'choices' => $banPT, 'value' => $data->akreditasi_prodi['akreditasi'] ?? ''])
             <x-input.text name="akreditasi_prodi[tanggal]" type="date" label="Tanggal Akreditasi" placeholder="Tanggal Akreditasi" class="w-2/4" value="{{ $data->akreditasi_prodi['tanggal'] ?? '' }}"></x-input.text>
             <x-input.text name="akreditasi_prodi[internasional]" label="Akreditasi Internasional" placeholder="Akreditasi Internasional Prodi" class="w-full" value="{{ $data->akreditasi_prodi['internasional'] ?? '' }}"></x-input.text>
         </div>
-        <x-input.select name="akreditasi_pt" label="Akreditasi Perguruan Tinggi" :choices="$banPT" value="{{ $data->akreditasi_pt ?? '' }}"></x-input.select>
+        {{-- <x-input.select name="akreditasi_pt" label="Akreditasi Perguruan Tinggi" :choices="$banPT" value="{{ $data->akreditasi_pt ?? '' }}"></x-input.select> --}}
+        @include('components.input.select', ['name' => 'akreditasi_pt', 'label' => 'Akreditasi Perguruan Tinggi', 'choices' => $banPT, 'value' => $data->akreditasi_pt ?? ''])
         <x-input.text name="web_prodi" type="url" label="Alamat Web Prodi" placeholder="Alamat Web Prodi" value="{{ $data->web_prodi ?? '' }}"></x-input.text>
         <div class="group-input">
             <x-input.text name="alamat_kampus[alamat]" label="Alamat Kampus" placeholder="Alamat Kampus" class="w-full" value="{{ $data->alamat_kampus['alamat'] ?? '' }}"></x-input.text>

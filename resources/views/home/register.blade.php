@@ -7,7 +7,8 @@
     <form action="{{ route('register') }}" method="POST">
         @csrf
 
-        <x-input.select name="jenjang" label="Jenjang" :choices="['S1', 'S2', 'S3']" value="{{ old('jenjang') }}"></x-input.select>
+        {{-- <x-input.select name="jenjang" label="Jenjang" :choices="['S1', 'S2', 'S3']" value="{{ old('jenjang') }}"></x-input.select> --}}
+        @include('components.input.select', ['name' => 'jenjang', 'label' => 'Jenjang', 'choices' => ['S1', 'S2', 'S3'], 'value' => old('jenjang')])
         <x-input.text name="nama_prodi" label="Nama Prodi" placeholder="Nama Prodi" value="{{ old('nama_prodi') }}"></x-input.text>
         <div class="group-input flex-no-wrap">
             <x-input.text name="pt[lengkap]" label="Nama PT Lengkap" placeholder="Nama PT Lengkap" class="w-3/4" value="{{ old('pt.lengkap') }}"></x-input.text>
