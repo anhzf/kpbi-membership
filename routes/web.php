@@ -27,7 +27,7 @@ Auth::routes([
 
 Route::get('/members', 'DashboardController@members')->name('memberList');
 Route::post('/register', 'KPBI\RegisterController@register');
-Route::get('/register', 'KPBI\RegisterController@ShowRegisterForm')->name('register');
+Route::get('/register', 'KPBI\RegisterController@showRegisterForm')->name('register');
 Route::group(['prefix' => 'my-profile', 'as' => 'profile'], function() {
 
     Route::get('/', 'DashboardController@myProfile');

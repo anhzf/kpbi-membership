@@ -12,22 +12,22 @@ class RegisterController extends Controller
 {
     public function ShowRegisterForm()
     {
-        if (Auth::check()) return redirect()->route('myProfile');
+        if (Auth::check()) return redirect()->route('profile');
         
-        $form = [
-            'Jenjang' => ['S1', 'S2', 'S3'],
-            'Nama Prodi' => '',
-            'Perguruan Tinggi' => [
-                'Lengkap' => '',
-                'Singkat' => '', 
-            ],
-            'Email Prodi' => [
-                'type' => 'email'
-            ],
-            'Email Kaprodi' => [
-                'type' => 'email'
-            ],
-        ];
+        // $form = [
+        //     'Jenjang' => ['S1', 'S2', 'S3'],
+        //     'Nama Prodi' => '',
+        //     'Perguruan Tinggi' => [
+        //         'Lengkap' => '',
+        //         'Singkat' => '', 
+        //     ],
+        //     'Email Prodi' => [
+        //         'type' => 'email'
+        //     ],
+        //     'Email Kaprodi' => [
+        //         'type' => 'email'
+        //     ],
+        // ];
 
         return view('home.register'/* , ['form' => $form] */);
     }
