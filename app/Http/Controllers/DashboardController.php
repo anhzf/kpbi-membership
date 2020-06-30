@@ -24,12 +24,7 @@ class DashboardController extends Controller
     {
         return view('dashboard.account', ['user' => Auth::user()]);
     }
-
-    public function members(Request $request, KPBI $KPBI)
-    {
-        return view('dashboard.members', ['members' => $KPBI->orderBy('jenjang', 'asc')->get()]);
-    }
-
+    
     public function saveProfile(Request $request)
     {
         if (KPBI::save_info($request->all())) {

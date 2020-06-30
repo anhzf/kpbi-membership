@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\KPBI;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('verified');
+        $this->middleware('verified')->except(['members']);
     }
 
     /**
@@ -25,4 +26,10 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function members(Request $request, KPBI $KPBI)
+    {
+        return view('members', ['members' => $KPBI->orderBy('jenjang', 'asc')->get()]);
+    }
+
 }

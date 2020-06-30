@@ -9,8 +9,8 @@
     <form action="{{ route('account') }}" method="POST" class="flex flex-col">
         @csrf
 
-        <x-input.text name="email" type="email" label="Email" value="{{ $user->email }}" />
-        <x-input.text name="username" type="text" label="Username" value="{{ $user->name }}" />
+        <x-input.text name="email" type="email" label="Email" value="{{ $user->email }}" disabled/>
+        <x-input.text name="username" type="text" label="Username" value="{{ $user->name }}" disabled/>
                                     
         <button type="submit" class="btn self-end m-5">{{ __('dashboard.save') }}</button>
         

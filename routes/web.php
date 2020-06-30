@@ -15,19 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('memberList');
-});
+Route::view('/', 'home')->name('home');
 
 Auth::routes([
     'register' => false,
     'verify' => true,
 ]);
 
-
-Route::get('/members', 'DashboardController@members')->name('memberList');
+Route::get('/members', 'HomeController@members')->name('memberList');
 Route::post('/register', 'KPBI\RegisterController@register');
 Route::get('/register', 'KPBI\RegisterController@showRegisterForm')->name('register');
+
 Route::group(['prefix' => 'my-profile', 'as' => 'profile'], function() {
 
     Route::get('/', 'DashboardController@myProfile');
@@ -42,6 +40,4 @@ Route::group(['prefix' => 'my-account', 'as' => 'account'], function() {
 });
 
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-// Route::any('/404', return)
+// Route::get('/home', 'HomeController@index')->name('home');
