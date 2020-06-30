@@ -25,7 +25,7 @@ class RegisterKPBI extends Mailable
     {
         $this->verifyURL = $verifyURL;
         $this->user = $user;
-        $this->password = Session::get('temp');
+        $this->password = Session::get('temp')['password'];
     }
 
     /**

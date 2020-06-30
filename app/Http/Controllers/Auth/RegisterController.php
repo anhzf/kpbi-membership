@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helper\FlashMsg;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\KPBI;
 use App\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -57,8 +58,7 @@ class RegisterController extends Controller
     {
         $emailSentTo = session()->getOldInput('email_kaprodi');
 
-        session()->flush();
-        session()->flash('flash', [['success', __('global.flash.emailSent', ['email' => $emailSentTo])]]);
+        FlashMsg::add('success', __('global.flash.emailSent', ['email' => $emailSentTo]));
 
         return '/register';
     }
@@ -72,24 +72,34 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'email' => [
+                'unique:users' => ':attribute sudah didaftarkan untuk akun prodi yang lain',
+            ],
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Create a new user instance and KPBI profile after a valid registration.
      *
      * @param  array  $data
      * @return \App\User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $newUser = User::create([
+            'name' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        
+        $data = $data + ['user_id' => $newUser->id];
+
+        KPBI::save_info($data);
+
+        return $newUser;
     }
 }

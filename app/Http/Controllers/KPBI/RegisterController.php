@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\KPBI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -33,29 +32,17 @@ class RegisterController extends Controller
     }
 
     public function register(Request $request)
-    {
-        $request->validate([
-            'jenjang' => ['required'],
-            'nama_prodi' => ['required'],
-            'pt.lengkap' => ['required'],
-            'pt.singkat' => ['required'],
-            'email_prodi' => ['required', 'email'],
-            'email_kaprodi' => ['required', 'email'],
-        ]);
+    {   
+        $data = $request->all();
 
-        $generatedPassword = strtolower("{$request->jenjang}PBIO{$request->pt['singkat']}");
-        $generatedUser = strtoupper("{$request->jenjang} PBIO {$request->pt['singkat']}");
+        KPBI::requiredDataValidator($data)->validate();
 
-        $request->flash();
-        session()->flash('temp', $generatedPassword);
+        $data = $data + KPBI::generateLoginCredentials($request->all());
+        $data['password_confirmation'] = $data['password'];
 
-        $userProfile = [
-            'name' => $generatedUser,
-            'email' => $request->email_kaprodi,
-            'password' => $generatedPassword,
-            'password_confirmation' => $generatedPassword,
-        ];
+        session()->flash('temp', $data);
 
-        return app('App\Http\Controllers\Auth\RegisterController')->register((new Request($userProfile)));
+        // Use Auth\RegisterController to Handle next action
+        return app('App\Http\Controllers\Auth\RegisterController')->register((new Request($data)));
     }
 }
