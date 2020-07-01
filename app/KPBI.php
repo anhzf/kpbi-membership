@@ -43,7 +43,7 @@ class KPBI extends Model
         KPBI::requiredDataValidator($data)->validate();
 
         $profile_template = [
-            'user_id' => Auth::user()->id,
+            // 'user_id' => Auth::user()->id,
             'jenjang' => '',
             'nama_prodi' => '',
             'jurusan' => '',

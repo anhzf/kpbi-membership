@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\FlashMsg;
 use App\User;
 use App\KPBI;
 use Illuminate\Http\Request;
@@ -27,10 +28,10 @@ class DashboardController extends Controller
     
     public function saveProfile(Request $request)
     {
-        if (KPBI::save_info($request->all())) {
-            session()->flash('flash', [['success', 'saved!']]);
+        if (KPBI::save_info($request->all() + ['user_id' => Auth::user()->id])) {
+            FlashMsg::add('success', 'saved!');
         } else {
-            session()->flash('flash', [['error', '❌ something wrong!']]);
+            FlashMsg::add('error', '❌ something wrong!');
         }
         return back();
     }
