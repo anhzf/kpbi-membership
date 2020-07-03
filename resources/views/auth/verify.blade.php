@@ -17,7 +17,8 @@
             <p class="leading-normal">{{ __('Jika anda tidak menerima email dari kami silahkan') }},</p>
             <form class="self-end" method="POST" action="{{ route('verification.resend') }}">
                 @csrf
-                <button type="submit" class="btn">{{ __('Klik disini untuk mengirim') }}</button>
+                <span class="bg-red-200 text-xs text-gray-800 italic">Mohon maaf, terkadang diperlukan beberapa waktu untuk bisa menerima email</span>
+                <button type="submit" class="btn m-4 mb-0">{{ __('Klik disini untuk mengirim') }}</button>
             </form>
         </div>
     </div>
