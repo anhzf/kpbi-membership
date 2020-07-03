@@ -29,7 +29,9 @@ class HomeController extends Controller
 
     public function members(Request $request, KPBI $KPBI)
     {
-        return view('members', ['members' => $KPBI->orderBy('jenjang', 'asc')->get()]);
+        $members = $KPBI->orderBy('jenjang', 'asc')->paginate(15);
+
+        return view('members', ['members' => $members]);
     }
 
 }

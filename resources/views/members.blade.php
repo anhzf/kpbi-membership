@@ -10,17 +10,17 @@
                 <span class="my-auto px-3 text-xl">Konsorsium Pendidikan Biologi Indonesia</span>
             </a>
         </nav>
-    <main class="justify-center overflow-y-auto h-full bg-white">  
-        <table class="col-span-3 w-full table-fixed">
-            <thead>
-                <tr class="bg-gray-200 border-b-2 border-gray-300">
-                    <th class="py-5 font-semibold text-gray-700 uppercase text-xs" style="width: 5rem;"></th>
-                    <th class="w-1/12 py-5 font-semibold text-gray-700 uppercase text-xs">Jenjang</th>
-                    <th class="w-3/12 py-5 font-semibold text-gray-700 uppercase text-xs">Prodi</th>
-                    <th class="w-4/12 py-5 font-semibold text-gray-700 uppercase text-xs">Perguruan Tinggi</th>
-                    <th class="w-4/12 py-5 font-semibold text-gray-700 uppercase text-xs">Website Prodi</th>
-                </tr>
-            </thead>
+        <main class="justify-center overflow-y-auto h-full bg-white">
+            <table class="col-span-3 w-full table-fixed">
+                <thead>
+                    <tr class="bg-gray-200 border-b-2 border-gray-300">
+                        <th class="py-5 font-semibold text-gray-700 uppercase text-xs" style="width: 5rem;"></th>
+                        <th class="w-1/12 py-5 font-semibold text-gray-700 uppercase text-xs">Jenjang</th>
+                        <th class="w-3/12 py-5 font-semibold text-gray-700 uppercase text-xs">Prodi</th>
+                        <th class="w-4/12 py-5 font-semibold text-gray-700 uppercase text-xs">Perguruan Tinggi</th>
+                        <th class="w-4/12 py-5 font-semibold text-gray-700 uppercase text-xs">Website Prodi</th>
+                    </tr>
+                </thead>
                 <tbody>
                     @php $no = 1; @endphp
                     @foreach ($members as $member)
@@ -41,6 +41,9 @@
                 </tbody>
             </table>
         </main>
+        <div class="bg-white pl-4 border-t-2 border-gray-300">
+            {{ $members->links() }}
+        </div>
     </div>
 </div>
         

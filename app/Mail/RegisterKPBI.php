@@ -35,6 +35,7 @@ class RegisterKPBI extends Mailable
      */
     public function build()
     {
-        return $this->subject(__('kpbi.mail.subject'))->view('email.RegisterKPBI');
+        return $this->view('email.RegisterKPBI')
+                    ->subject(__('kpbi.mail.subject'));
     }
 }

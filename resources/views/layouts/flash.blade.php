@@ -12,7 +12,7 @@
 @if (Session::get('flash') || $errors->all())
 <div class="z-50 fixed left-0 bottom-0 w-full flex flex-col-reverse items-stretch">
     @if ($flashes = Session::get('flash'))
-        @foreach ($flashes as [$type, $msg])
+        @foreach ($flashes as list($type, $msg))
             <div class="flash py-5 px-10 {{ $theme[$type] }} flex justify-between" style="animation-delay: {{ $animationDelay }}s">
                 <span>
                     {{ $msg }}

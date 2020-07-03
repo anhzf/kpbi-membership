@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Mail\RegisterKPBI;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useTailwind();
+
         // Override the email notification for verifying email
         
         VerifyEmail::toMailUsing(function ($notifiable) {
