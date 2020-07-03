@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\KPBI;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -23,9 +24,10 @@ class RegisterKPBI extends Mailable
      */
     public function __construct($verifyURL, $user)
     {
+        $profile_info = KPBI::where('user_id', $user->id)->first()->attributesToArray();
         $this->verifyURL = $verifyURL;
         $this->user = $user;
-        $this->password = Session::get('temp')['password'];
+        $this->password = KPBI::generateLoginCredentials($profile_info)['password'];
     }
 
     /**

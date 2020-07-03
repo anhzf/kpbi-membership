@@ -10,6 +10,7 @@ class KPBI extends Model
 {
     protected $table = 'kpbi_member';
 
+    const FIRST_ATTEMPT = 10;
 
     /**
      * The attributes that should be cast.
@@ -36,11 +37,12 @@ class KPBI extends Model
      * Untuk menambah atau mengedit info
      * 
      * @param Array $data data untuk disimpan 
+     * @param Int $option opsi 
      * @param KPBI $KPBI_info 
      **/
-    public static function save_info(Array $data)
+    public static function save_info(array $data, int $option = 0)
     {
-        KPBI::requiredDataValidator($data)->validate();
+        KPBI::requiredDataValidator($data, $option)->validate();
 
         $profile_template = [
             // 'user_id' => Auth::user()->id,
@@ -78,10 +80,10 @@ class KPBI extends Model
             'no_telp_prodi' => '',
         ];
 
-        if(isset($data['username'])) unset($data['username']);
-        if(isset($data['email'])) unset($data['email']);
-        if(isset($data['password'])) unset($data['password']);
-        if(isset($data['password_confirmation'])) unset($data['password_confirmation']);
+        if (isset($data['username'])) unset($data['username']);
+        if (isset($data['email'])) unset($data['email']);
+        if (isset($data['password'])) unset($data['password']);
+        if (isset($data['password_confirmation'])) unset($data['password_confirmation']);
 
         return KPBI::updateOrCreate(
             ['user_id' => Auth::user()->id ?? $data['user_id']],
@@ -89,29 +91,77 @@ class KPBI extends Model
         );
     }
 
-    public static function requiredDataValidator(Array $data)
+    public static function requiredDataValidator(array $data, int $option = 0)
     {
-        return Validator::make($data, [
-            'jenjang' => ['required'],
-            'nama_prodi' => ['required'],
-            'pt.lengkap' => ['required'],
-            'pt.singkat' => ['required'],
-            'email_prodi' => ['required', 'email'],
-            'kaprodi.email' => ['required', 'email'],
-            'username' => ['exists:App\User,name'],
-            'email' => ['exists:App\User,email'],
-        ], [
-            'email' => [
-                'exist' => ':attribute belum didaftarkan menjadi akun prodi',
-            ]
-        ], [
-            'jenjang' => 'Jenjang Prodi',
-            'nama_prodi' => 'Nama Prodi',
-            'pt.lengkap' => 'Nama Lengkap Perguruan Tinggi',
-            'pt.singkat' => 'Singkatan Nama Perguruan Tinggi',
-            'email_prodi' => 'Email Prodi',
-            'kaprodi.email' => 'Email Kaprodi',
-        ]);
+        $detailedData = [
+            'validator' => [
+                'jurusan'                           => [],
+                'fakultas'                          => ['required'],
+                'akreditasi_prodi.akreditasi'       => ['required'],
+                'akreditasi_prodi.tanggal'          => ['required'],
+                'akreditasi_prodi.internasional'    => [],
+                'akreditasi_pt'                     => ['required'],
+                'web_prodi'                         => ['required'],
+                'alamat_kampus.alamat'              => ['required'],
+                'alamat_kampus.kota'                => ['required'],
+                'alamat_kampus.provinsi'            => ['required'],
+                'kaprodi.nama'                      => ['required'],
+                'kaprodi.periode.mulai'             => ['required'],
+                'kaprodi.periode.purna'             => ['required'],
+                'kaprodi.no'                        => ['required'],
+                'no_telp_prodi'                     => ['required'],
+            ],
+            'messages' => [],
+            'custom-attributes' => [
+                'jurusan'                           => __('Jurusan'),
+                'fakultas'                          => __('Fakultas'),
+                'akreditasi_prodi.akreditasi'       => __('Akreditasi Prodi'),
+                'akreditasi_prodi.tanggal'          => __('Tanggal Akreditasi'),
+                'akreditasi_prodi.internasional'    => __('Akreditasi Internasional Prod'),
+                'akreditasi_pt'                     => __('Akreditasi Perguruan Tinggi'),
+                'web_prodi'                         => __('Alamat Web Prodi'),
+                'alamat_kampus.alamat'              => __('Alamat Kampus'),
+                'alamat_kampus.kota'                => __('Kota/Kabupaten Kampus'),
+                'alamat_kampus.provinsi'            => __('Provinsi Kampus'),
+                'kaprodi.nama'                      => __('Nama Kaprodi'),
+                'kaprodi.periode.mulai'             => __('Tahun mulai periode Kaprodi'),
+                'kaprodi.periode.purna'             => __('Tahun purna periode Kaprodi'),
+                'kaprodi.no'                        => __('No telpon/HP Kaprodi'),
+                'no_telp_prodi'                     => __('No Telpon Kantor Prodi'),
+            ],
+        ];
+
+        $registerRequire = [
+            'validator' => [
+                'jenjang'       => ['required'],
+                'nama_prodi'    => ['required'],
+                'pt.lengkap'    => ['required'],
+                'pt.singkat'    => ['required'],
+                'email_prodi'   => ['required', 'email'],
+                'kaprodi.email' => ['required', 'email'],
+                'username'      => ['exists:App\User,name'],
+                'email'         => ['exists:App\User,email'],
+            ],
+            'messages' => [
+                'email' => [
+                    'exist' => ':attribute belum didaftarkan menjadi akun prodi',
+                ],
+            ],
+            'custom-attributes' => [
+                'jenjang'       => __('Jenjang Prodi'),
+                'nama_prodi'    => __('Nama Prodi'),
+                'pt.lengkap'    => __('Nama Lengkap Perguruan Tinggi'),
+                'pt.singkat'    => __('Singkatan Nama Perguruan Tinggi'),
+                'email_prodi'   => __('Email Prodi'),
+                'kaprodi.email' => __('Email Kaprodi'),
+            ],
+        ];
+
+        $validator          = ($option === KPBI::FIRST_ATTEMPT) ? $registerRequire['validator'] : $registerRequire['validator'] + $detailedData['validator'];
+        $messages           = ($option === KPBI::FIRST_ATTEMPT) ? $registerRequire['messages'] : $registerRequire['messages'] + $detailedData['messages'];
+        $customAttributes   = ($option === KPBI::FIRST_ATTEMPT) ? $registerRequire['custom-attributes'] : $registerRequire['custom-attributes'] + $detailedData['custom-attributes'];
+
+        return Validator::make($data, $validator, $messages, $customAttributes);
     }
 
     /**
@@ -120,7 +170,7 @@ class KPBI extends Model
      * @param Array $data Data Received
      * @return String
      **/
-    public static function generateLoginCredentials(Array $data)
+    public static function generateLoginCredentials(array $data)
     {
         return [
             'email' => $data['kaprodi']['email'],

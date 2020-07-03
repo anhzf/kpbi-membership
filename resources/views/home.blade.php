@@ -20,8 +20,11 @@
         </div>
         @endguest
         @auth
-        <a href="{{ route('profile') }}" class="w-full h-64 shadow-md grid bg-white hover:bg-gray-400 hover:shadow-2xl hover:z-10 focus:shadow-inner transition ease duration-200">
-            <span class="m-auto text-3xl font-bold font-mono">Profil</span>
+        <a href="{{ route('profile') }}" class="w-full h-64 shadow-md grid bg-white group hover:bg-gray-400 hover:shadow-2xl hover:z-10 focus:shadow-inner transition ease duration-200">
+            <span class="m-auto text-3xl font-bold font-mono">
+                <p>Profil</p>
+                <p class="text-center text-xs font-sans font-thin bg-gray-300 group-hover:bg-white rounded-md">{{ Auth::user()->name }}</p>
+            </span>
         </a>
         @endauth
         <a href="{{ route('memberList') }}" class="w-full h-64 shadow-md grid bg-white hover:bg-gray-400 hover:shadow-2xl hover:z-10 focus:shadow-inner transition ease duration-200   ">

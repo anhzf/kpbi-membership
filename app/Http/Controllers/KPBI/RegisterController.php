@@ -35,12 +35,10 @@ class RegisterController extends Controller
     {   
         $data = $request->all();
 
-        KPBI::requiredDataValidator($data)->validate();
+        KPBI::requiredDataValidator($data, KPBI::FIRST_ATTEMPT)->validate();
 
         $data = $data + KPBI::generateLoginCredentials($request->all());
         $data['password_confirmation'] = $data['password'];
-
-        session()->flash('temp', $data);
 
         // Use Auth\RegisterController to Handle next action
         return app('App\Http\Controllers\Auth\RegisterController')->register((new Request($data)));

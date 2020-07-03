@@ -32,13 +32,13 @@
         <x-input.text name="web_prodi" type="url" label="Alamat Web Prodi" placeholder="Alamat Web Prodi" value="{{ $data->web_prodi ?? old('web_prodi') }}"></x-input.text>
         <div class="group-input">
             <x-input.text name="alamat_kampus[alamat]" label="Alamat Kampus" placeholder="Alamat Kampus" class="w-full" value="{{ $data->alamat_kampus['alamat'] ?? old('alamat_kampus.alamat') }}"></x-input.text>
-            <x-input.text name="alamat_kampus[kota]" label="Kota/Kabupaten" placeholder="Kota/Kabupaten" class="w-1/2" value="{{ $data->alamat_kampus['kota'] ?? old('alamat_kampus.kota') }}"></x-input.text>
-            <x-input.text name="alamat_kampus[provinsi]" label="Provinsi" placeholder="Provinsi" class="w-1/2" value="{{ $data->alamat_kampus['provinsi'] ?? old('alamat_kampus.provinsi') }}"></x-input.text>
+            <x-input.text name="alamat_kampus[kota]" label="Kota/Kabupaten" placeholder="Kota/Kabupaten" class="w-1/3" value="{{ $data->alamat_kampus['kota'] ?? old('alamat_kampus.kota') }}"></x-input.text>
+            <x-input.text name="alamat_kampus[provinsi]" label="Provinsi" placeholder="Provinsi" class="w-1/3" value="{{ $data->alamat_kampus['provinsi'] ?? old('alamat_kampus.provinsi') }}"></x-input.text>
         </div>
         <div class="group-input">
             <x-input.text name="kaprodi[nama]" label="Nama Lengkap dan Gelar Kaprodi" placeholder="Nama Lengkap dan Gelar Kaprodi" class="w-full" value="{{ $data->kaprodi['nama'] ?? old('kaprodi.nama') }}"></x-input.text>
             <x-input.text name="kaprodi[periode][mulai]" label="Periode Jabatan Kaprodi" placeholder="(tahun mulai)" class="w-2/4" value="{{ $data->kaprodi['periode']['mulai'] ?? old('kaprodi.periode.mulai') }}"></x-input.text>
-            <x-input.text name="kaprodi[periode][akhir]" label="Purna" placeholder="(tahun purna)" class="w-1/4" value="{{ $data->kaprodi['periode']['akhir'] ?? old('kaprodi.periode.akhir') }}"></x-input.text>
+            <x-input.text name="kaprodi[periode][purna]" label="Purna" placeholder="(tahun purna)" class="w-1/4" value="{{ $data->kaprodi['periode']['purna'] ?? old('kaprodi.periode.purna') }}"></x-input.text>
             <x-input.text name="kaprodi[email]" type="email" label="Email Kaprodi" placeholder="Email Kaprodi" class="w-full" value="{{ $data->kaprodi['email'] ?? old('kaprodi.email') }}"></x-input.text>
             <x-input.text name="kaprodi[no]" type="tel" label="Nomor HP Kaprodi" placeholder="Nomor HP Kaprodi" class="w-full" value="{{ $data->kaprodi['no'] ?? old('kaprodi.no') }}"></x-input.text>
         </div>

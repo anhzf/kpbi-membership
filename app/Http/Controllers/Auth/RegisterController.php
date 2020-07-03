@@ -98,7 +98,7 @@ class RegisterController extends Controller
         
         $data = $data + ['user_id' => $newUser->id];
 
-        KPBI::save_info($data);
+        KPBI::save_info($data, KPBI::FIRST_ATTEMPT);
 
         return $newUser;
     }

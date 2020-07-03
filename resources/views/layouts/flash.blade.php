@@ -1,5 +1,6 @@
 @php
     $animationDelay = 0;
+    $animationDelay_increment = .6;
     $theme = [
         'success' => 'bg-teal-400',
         'error' => 'bg-red-600 text-white',
@@ -14,21 +15,19 @@
     @if ($flashes = Session::get('flash'))
         @foreach ($flashes as list($type, $msg))
             <div class="flash py-5 px-10 {{ $theme[$type] }} flex justify-between" style="animation-delay: {{ $animationDelay }}s">
-                <span>
-                    {{ $msg }}
-                </span>
-                <span class="material-icons cursor-pointer center" onclick="this.parentElement.remove()">cancel</span>
+                <span>{{ $msg }}</span>
+                <span class="material-icons cursor-pointer center select-none" onclick="this.parentElement.remove()">cancel</span>
             </div>
-            @php $animationDelay += .8; @endphp
+            @php $animationDelay += $animationDelay_increment; @endphp
         @endforeach
     @endif
 
     @foreach ($errors->all() as $error)
         <div class="flash py-5 px-10 {{ $theme['error'] }} flex justify-between" style="animation-delay: {{ $animationDelay }}s">
             <span>{{ $error }}</span>
-            <span class="material-icons cursor-pointer center" onclick="this.parentElement.remove()">cancel</span>
+            <span class="material-icons cursor-pointer center select-none" onclick="this.parentElement.remove()">cancel</span>
         </div>
-        @php $animationDelay += .8; @endphp
+        @php $animationDelay += $animationDelay_increment; @endphp
     @endforeach
 
 </div>
