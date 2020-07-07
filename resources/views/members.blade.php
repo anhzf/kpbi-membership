@@ -22,8 +22,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $no = 1; @endphp
+                    @php $no = ($members->currentPage() - 1) * $members->perPage(); @endphp
                     @foreach ($members as $member)
+                        @php $no++; @endphp
                         <tr class="hover:bg-gray-200">
                             <td class="py-4 bg-gray-100 text-center border-r border-gray-300">{{ $no }}</td>
                             <td class="px-2 py-3">{{ $member->jenjang }}</td>
@@ -36,14 +37,13 @@
                                 </a>
                             </td>
                         </tr>
-                        @php $no++; @endphp
                     @endforeach
                 </tbody>
             </table>
         </main>
         <div class="bg-white pl-4 border-t-2 border-gray-300">
             {{-- <form action="route()" method="get"></form> --}}
-            {{ $members->withQueryString()->links() }}
+            {{ $members->links() }}
         </div>
     </div>
 </div>
