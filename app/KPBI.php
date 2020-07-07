@@ -31,6 +31,12 @@ class KPBI extends Model
      */
     protected $guarded = [];
 
+
+    public function account()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     /**
      * Edit Info KPBI / tambahkan Info
      *
@@ -101,6 +107,7 @@ class KPBI extends Model
                 'akreditasi_prodi.tanggal'          => ['required'],
                 'akreditasi_prodi.internasional'    => [],
                 'akreditasi_pt'                     => ['required'],
+                'status'                            => ['required'],
                 'web_prodi'                         => ['required'],
                 'alamat_kampus.alamat'              => ['required'],
                 'alamat_kampus.kota'                => ['required'],
