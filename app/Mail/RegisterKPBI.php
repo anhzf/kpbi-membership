@@ -2,11 +2,14 @@
 
 namespace App\Mail;
 
+use App\Helper\FlashMsg;
 use App\KPBI;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class RegisterKPBI extends Mailable
@@ -22,9 +25,11 @@ class RegisterKPBI extends Mailable
      *
      * @return void
      */
-    public function __construct($verifyURL, $user)
+    public function __construct($verifyURL, User $user)
     {
-        $profile_info = KPBI::where('user_id', $user->id)->first()->attributesToArray();
+        $user_profile = $user->kpbi_profile;
+        $profile_info = $user_profile->attributesToArray();
+        
         $this->verifyURL = $verifyURL;
         $this->user = $user;
         $this->password = KPBI::generateLoginCredentials($profile_info)['password'];

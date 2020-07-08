@@ -86,7 +86,7 @@ class KPBI extends Model
             'no_telp_prodi' => '',
         ];
 
-        if (isset($data['username'])) unset($data['username']);
+        if (isset($data['name'])) unset($data['name']);
         if (isset($data['email'])) unset($data['email']);
         if (isset($data['password'])) unset($data['password']);
         if (isset($data['password_confirmation'])) unset($data['password_confirmation']);
@@ -181,7 +181,7 @@ class KPBI extends Model
     {
         return [
             'email' => $data['kaprodi']['email'],
-            'username' => strtoupper("{$data['jenjang']} PBIO {$data['pt']['singkat']}"),
+            'name' => strtoupper("{$data['jenjang']} PBIO {$data['pt']['singkat']}"),
             'password' => strtolower("{$data['jenjang']}PBIO{$data['pt']['singkat']}"),
         ];
     }

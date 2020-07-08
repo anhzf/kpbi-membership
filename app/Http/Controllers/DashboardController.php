@@ -13,16 +13,18 @@ use Illuminate\Support\Facades\Validator;
 class DashboardController extends Controller
 {
     public function __construct() {
-        $this->middleware('verified')->except(['members']);
+        $this->middleware('verified');
     }
 
     public function myProfile()
     {
+        $this->flash_info();
         return view('dashboard.profile', ['data' => KPBI::current_profile()]);
     }
 
     public function myAccount()
     {
+        $this->flash_info();
         return view('dashboard.account', ['user' => Auth::user()]);
     }
     
@@ -53,5 +55,13 @@ class DashboardController extends Controller
         $userInstance->save();
         
         return back()->with('flash', [['success', __('dashboard.password.changed')]]);
+    }
+
+    public function flash_info()
+    {
+        // Check if Required data is not fulfilled then give flash message
+        if (KPBI::requiredDataValidator(Auth::user()->kpbi_profile->attributesToArray())->fails()) {
+            FlashMsg::add('info', __('Data profil KPBI anda belum lengkap, Silahkan lengkapi data profil di Dashboard kemudian Bagian Profil'));
+        }        
     }
 }

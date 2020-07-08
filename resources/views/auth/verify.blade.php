@@ -14,7 +14,7 @@
                 </div>
             @endif
             <p class="leading-normal">{{ __('Untuk melanjutkan silahkan verifikasi email anda melalui link yang kami kirim ke email anda') }}</p>
-            <p class="leading-normal">{{ __('Jika anda tidak menerima email dari kami silahkan') }},</p>
+            <p class="leading-normal">{{ __('Jika anda tidak menerima email dari kami silahkan klik tombol berikut') }},</p>
             <form class="self-end" method="POST" action="{{ route('verification.resend') }}">
                 @csrf
                 <span class="bg-red-200 text-xs text-gray-800 italic">Mohon maaf, terkadang diperlukan beberapa waktu untuk bisa menerima email</span>
