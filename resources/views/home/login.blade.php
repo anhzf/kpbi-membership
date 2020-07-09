@@ -17,6 +17,7 @@
         </div>
 
         <div class="input-action-container flex justify-end px-10 w-full">
+            {{-- <a class="self-end mr-auto text-sm text-blue-500" href="{{ route('password.request') }}">{{ __('Lupa password') }}</a> --}}
             <a href="{{ route('register') }}" class="btn bg-gray-300 text-gray-700 ml-auto mx-3 md:mt-3 hover:bg-gray-400">Daftar</a>
             <button type="submit" class="btn mx-3 md:mt-3">Login</button>
         </div>

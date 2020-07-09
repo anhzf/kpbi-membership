@@ -11,10 +11,11 @@
         @csrf
 
         {{-- <x-input.select name="jenjang" label="Jenjang" :choices="['S1', 'S2', 'S3']" value="{{ $data->jenjang ?? old('') }}">jenjang</x-input.select> --}}
+        <div class="group-input"></div>
         @include('components.input.select', ['name' => 'jenjang', 'label' => 'Jenjang', 'choices' => ['S1', 'S2', 'S3'], 'value' => $data->jenjang ?? old('jenjang')])
         <x-input.text name="nama_prodi" label="Nama Prodi" value="{{ $data->nama_prodi ?? old('nama_prodi') }}"></x-input.text>
         <x-input.text name="jurusan" label="Jurusan" value="{{ $data->jurusan ?? old('jurusan') }}"></x-input.text>
-        <x-input.text name="fakultas" label="Fakultas" value="{{ $data->fakultas ?? old('fakultas') }}"></x-input.text>
+        <x-input.text name="fakultas" label="Fakultas/Pengelola Prodi" value="{{ $data->fakultas ?? old('fakultas') }}"></x-input.text>
         <div class="group-input">
             <x-input.text name="pt[lengkap]" label="Nama PT Lengkap" placeholder="Nama PT Lengkap" class="w-2/4" value="{{ $data->pt['lengkap'] ?? old('pt.lengkap') }}"></x-input.text>
             <x-input.text name="pt[singkat]" label="Singkat" placeholder="(misal UNS)" class="w-1/4" value="{{ $data->pt['singkat'] ?? old('pt.singkat') }}"></x-input.text>
