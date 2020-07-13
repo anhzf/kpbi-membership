@@ -39,7 +39,7 @@ class HomeController extends Controller
                 ->fails());
         });
 
-        $fulfilledData_members_paginate = HomeController::members_paginate($fulfilledData_members, 25);
+        $fulfilledData_members_paginate = HomeController::members_paginate($fulfilledData_members, 50);
 
         return view('members', ['members' => $fulfilledData_members_paginate]);
     }
