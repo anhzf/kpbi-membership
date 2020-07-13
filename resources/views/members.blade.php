@@ -37,7 +37,7 @@
                                     <span class="material-icons align-text-bottom text-sm hidden group-hover:inline">open_in_new</span>
                                 </a>
                             </td>
-                            <td class="px-2">
+                            <td class="px-2 truncate">
                                 <a class="btn bg-gray-300 text-gray-500 hover:bg-gray-400" onclick="alert('Coming soon feature')">Lihat detail</a>
                             </td>
                         </tr>
