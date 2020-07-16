@@ -1,7 +1,9 @@
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   purge: [
-    // './resources/**/*.html',
-    // './resources/**/*.blade.php',
+    './resources/**/*.html',
+    './resources/**/*.blade.php',
   ],
   theme: {
     extend: {},
@@ -11,5 +13,15 @@ module.exports = {
     display: ['responsive', 'hover', 'focus', 'group-hover'],
     borderRadius: ['responsive', 'hover', 'focus', 'first', 'last'],
   },
-  plugins: [],
+  plugins: [
+    plugin(({addUtilities}) => {
+
+      addUtilities({
+        '.grid-center': {
+          'place-items' : 'center',
+        },
+      })
+
+    })
+  ],
 }

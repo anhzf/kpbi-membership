@@ -41,7 +41,7 @@ class HomeController extends Controller
 
         $fulfilledData_members_paginate = HomeController::members_paginate($fulfilledData_members, 50);
 
-        return view('members', ['members' => $fulfilledData_members_paginate]);
+        return view('member.index', ['members' => $fulfilledData_members_paginate]);
     }
 
     public static function members_paginate($members, $perPage = 15, $page = null)

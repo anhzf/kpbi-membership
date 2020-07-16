@@ -2,7 +2,7 @@
 
 @section('content')
     
-<div class="flex flex-col justify-start items-center w-full h-screen p-10">
+<div id="app" class="flex flex-col justify-start items-center w-full h-screen p-10">
     <div class="flex flex-col w-3/4 h-full shadow-2xl">
         <nav class="flex justify-start items-center bg-blue-600 text-white">
             <a href='{{ route('home') }}' class='btn bg-blue-600 hover:bg-blue-700 flex'>
@@ -22,7 +22,7 @@
                         <th class="w-2/12 py-5 font-semibold text-gray-700 uppercase text-xs">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-sm">
                     @php $no = ($members->currentPage() - 1) * $members->perPage(); @endphp
                     @foreach ($members as $member)
                         @php $no++; @endphp
@@ -33,12 +33,12 @@
                             <td class="px-2 py-3">{{ $member->pt['lengkap'] }}</td>
                             <td class="px-2 truncate group">
                                 <a href="{{ $member->web_prodi }}" target="_blank" title="{{ $member->web_prodi }}" class="w-full h-full text-blue-400 lowercase align-middle">
-                                    <span class="align-middle truncate w-full">{{ $member->web_prodi }}{{ $member->web_prodi }}{{ $member->web_prodi }}</span>
+                                    <span class="align-middle truncate w-full">{{ $member->web_prodi }}</span>
                                     <span class="material-icons align-text-bottom text-sm hidden group-hover:inline">open_in_new</span>
                                 </a>
                             </td>
                             <td class="px-2 truncate">
-                                <a class="btn bg-gray-300 text-gray-500 hover:bg-gray-400" onclick="alert('Coming soon feature')">Lihat detail</a>
+                                <button class="btn px-3 py-1" onclick="showProfile({{ $member->id }})">Lihat detail</button>
                             </td>
                         </tr>
                     @endforeach
@@ -50,6 +50,51 @@
             {{ $members->links() }}
         </div>
     </div>
+    {{-- <Modal title="hmm">
+        <profile-modalBody></profile-modalBody>
+    </Modal> --}}
 </div>
+
+@include('member._modal-profile')
         
 @endsection
+
+@push('script')
+<script defer>
+    let profiles
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        detailModal.close()
+    
+        profiles = (@json($members)).data
+    })
+
+    function showProfile(id) {
+        let profile = profiles.filter(profile => profile.id === id)
+        profile = profile[profile.length - 1]
+    
+        detailModal.akreditasiInternasional = profile.akreditasi_prodi.internasional
+        detailModal.akreditasiPT            = profile.akreditasi_pt
+        detailModal.akreditasiProdi         = profile.akreditasi_prodi.akreditasi
+        detailModal.alamat                  = profile.alamat_kampus.alamat
+        detailModal.emailKaprodi            = profile.kaprodi.email
+        detailModal.emailProdi              = profile.email_prodi
+        detailModal.fakultas                = profile.fakultas
+        detailModal.jenjangProdi            = profile.jenjang
+        detailModal.jurusan                 = profile.jurusan
+        detailModal.kota                    = profile.alamat_kampus.kota
+        detailModal.mulaiKaprodi            = profile.kaprodi.periode.mulai
+        detailModal.namaKaprodi             = profile.kaprodi.nama
+        detailModal.noKaprodi               = profile.kaprodi.no
+        detailModal.provinsi                = profile.alamat_kampus.provinsi
+        detailModal.ptSingkat               = profile.pt.singkat
+        detailModal.purnaKaprodi            = profile.kaprodi.periode.purna
+        detailModal.status                  = profile.status
+        detailModal.telpon                  = profile.no_telp_prodi
+        detailModal.username                = `${profile.jenjang} ${profile.pt.singkat}`.toUpperCase()
+        detailModal.web                     = profile.web_prodi
+
+        detailModal.show()
+    }
+</script>
+@endpush
