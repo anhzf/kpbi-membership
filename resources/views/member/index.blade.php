@@ -67,6 +67,7 @@
         detailModal.close()
     
         profiles = (@json($members)).data
+        profiles = Object.values(profiles)
     })
 
     function showProfile(id) {

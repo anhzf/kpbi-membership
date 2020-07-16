@@ -2,8 +2,8 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   purge: [
-    './resources/**/*.html',
-    './resources/**/*.blade.php',
+    // './resources/**/*.html',
+    // './resources/**/*.blade.php',
   ],
   theme: {
     extend: {},
