@@ -1,5 +1,3 @@
-const { default: Axios } = require("axios")
-
 let detailModal = {
     el: document.getElementById('detail__modal'),
 
@@ -11,13 +9,14 @@ let detailModal = {
     }
 }
 
-detailModal.el.querySelectorAll('[id^=detail__]:not([id^=detail__email])').forEach(el => {
+detailModal.el.querySelectorAll('[id^=detail__]:not([id^=detail__email]):not(#detail__web)').forEach(el => {
     const attrName = el.id.split('detail__')[1]
     Object.defineProperty(detailModal, attrName, {
         get: () => el.textContent,
         set: value => el.textContent = value
     })
 })
+
 detailModal.el.querySelectorAll('[id^=detail__email]').forEach(el => {
     const attrName = el.id.split('detail__')[1]
     Object.defineProperty(detailModal, attrName, {
@@ -29,19 +28,12 @@ detailModal.el.querySelectorAll('[id^=detail__email]').forEach(el => {
     })
 })
 
-// let
-//     detailModalEl = document.getElementById('detail__modal'),
-//     detailModalBody = detailModalEl.querySelector('.modal__body')
+detailModal.el.querySelectorAll('#detail__web').forEach(el => {
+    const attrName = el.id.split('detail__')[1]
+    Object.defineProperty(detailModal, attrName, {
+        get: () => el.textContent,
+        set: value => el.textContent = el.href = value
+    })
+})
 
-// async function showProfileDetail($apiUrl) {
-//     const
-//         profileData = (await Axios.get($apiUrl)).data,
-//         detailModal = new modal(detailModalEl)
-
-//     detailModalBody.textContent = JSON.stringify(profileData)
-//     detailModal.open()
-// }
-
-// window.detailModal = detailModal
-// window.showProfileDetail = showProfileDetail
 export default detailModal
