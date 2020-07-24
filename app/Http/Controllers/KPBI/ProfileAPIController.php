@@ -4,9 +4,9 @@ namespace App\Http\Controllers\KPBI;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\KPBI;
 use Illuminate\Http\Request;
 
-use function PHPSTORM_META\map;
 
 class ProfileAPIController extends Controller
 {
@@ -27,6 +27,17 @@ class ProfileAPIController extends Controller
             return $user->kpbi_profile;
         });
 
-        return $members->all();
+        $fullfilledData = $members->filter(function($member) {
+            return !(KPBI::requiredDataValidator($member->attributesToArray())
+                ->fails());
+        });
+
+        $members = array_values($fullfilledData->toArray());
+
+        foreach ($members as $index => $member) {
+            $members[$index]['no'] = $index+1;
+        }
+        
+        return response()->json($members);
     }
 }

@@ -15,14 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'home')->name('home');
 
-Auth::routes([
-    'register' => false,
-    'verify' => true,
-]);
+// Auth::routes([
+//     'register' => false,
+//     'verify' => true,
+// ]);
 
-Route::get('/members', 'HomeController@members')->name('memberList');
+// Route::get('/members', 'HomeController@members')->name('memberList');
+Route::get('api/auth', function () {
+    dd(Auth::user());
+});
+// Route::get('api/auth', response()->json(Auth::user() ?? ['error' => 'Belum login']));
 Route::post('/register', 'KPBI\RegisterController@register');
 Route::get('/register', 'KPBI\RegisterController@showRegisterForm')->name('register');
 
@@ -40,4 +43,6 @@ Route::group(['prefix' => 'my-account', 'as' => 'account'], function() {
 });
 
 
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/{vue_capture?}', function () {
+    return view('vue.app');
+})->where('vue_capture', '[\/\w\.-]*');

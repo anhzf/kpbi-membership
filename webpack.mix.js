@@ -1,7 +1,6 @@
 const mix = require('laravel-mix');
 const tailwindcss = require('tailwindcss');
-require('laravel-mix-purgecss')
-// const path = require('path');
+require('vuetifyjs-mix-extension')
 
 /*
  |--------------------------------------------------------------------------
@@ -14,15 +13,12 @@ require('laravel-mix-purgecss')
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js').vuetify()
     .sass('resources/sass/app.scss', 'public/css')
-    .options({
-        processCssUrls: false,
-        postCss: [
-            tailwindcss('./tailwind.config.js'),
-        ]
-    })
-    .purgeCss({
-        enabled: mix.inProduction(),
-    })
+    // .options({
+    //     processCssUrls: false,
+    //     postCss: [
+    //         tailwindcss('./tailwind.config.js'),
+    //     ]
+    // })
     .copyDirectory('resources/img', 'public/img')
