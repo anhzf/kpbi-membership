@@ -23,7 +23,10 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/members', 'HomeController@members')->name('memberList');
 Route::get('api/auth', function () {
-    return response()->json(Auth::user() ? Auth::user()->toArray() : ['error' => 'Belum login']);
+    return response()->json(auth()->user() ? auth()->user() : ['error' => 'Belum login']);
+});
+Route::get('api/kpbi/profile', function () {
+    return response()->json(auth()->user() ? auth()->user()->kpbi_profile : ['error' => 'Belum login']);
 });
 
 Route::post('/login', 'Auth\LoginController@login');

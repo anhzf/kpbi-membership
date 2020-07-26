@@ -10,7 +10,8 @@ import guest from "../middleware/guest"
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+
+const router = new VueRouter({
     mode: 'history',
 
     routes: [
@@ -23,7 +24,7 @@ export default new VueRouter({
             path: '/members',
             alias: '/',
             component: Member,
-            meta: { keepAlive: true},
+            meta: { keepAlive: true },
         },
         {
             name: 'Login',
@@ -35,6 +36,7 @@ export default new VueRouter({
             name: 'MyProfile',
             path: '/profil-saya',
             component: MyProfile,
+            meta: { keepAlive: true },
             beforeEnter: auth,
         },
         {
@@ -59,3 +61,5 @@ export default new VueRouter({
         // },
     ]
 })
+
+export default router

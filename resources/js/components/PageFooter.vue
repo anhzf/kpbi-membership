@@ -1,5 +1,5 @@
 <template>
-<v-footer color="indigo" app>
+<v-footer color="teal accent-4" app>
     <span class="white--text text-caption">Copyright &copy; {{ new Date().getFullYear() }} KPBI. All right reserved</span>
 </v-footer>
 </template>

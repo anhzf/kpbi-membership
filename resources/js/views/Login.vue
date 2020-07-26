@@ -4,7 +4,7 @@
         <v-row justify="center" align="stretch">
 
             <v-card width="320" class="elevation-4 mb-16">
-                <v-form @submit.prevent="login">
+                <v-form @submit.prevent="$emit('login', {username, password})">
                     
                     <v-card-title primary-title>
                         <v-container fluid>
@@ -55,6 +55,9 @@
 </template>
 
 <script>
+import csrf from "../components/csrf";
+
+
 export default {
     name: 'Login',
 
@@ -64,24 +67,6 @@ export default {
             showPassword: false,
             username: null,
             password: null,
-        }
-    },
-
-
-    methods: {
-        login() {
-            const loginData = {
-                name: this.username,
-                password: this.password,
-                _token: document.querySelector('meta[name=csrf-token]').content,
-            }
-
-            window.axios.post('/login', loginData)
-                .then(() => {
-                    console.log('Logged In!')
-                    this.$emit('authenticate')
-                    this.$router.push({name: 'MyProfile'})
-                })
         }
     },
 }

@@ -1,5 +1,5 @@
 <template>
-<v-app id="inspire">
+<v-app>
 
     <DrawerNavigation
         :drawer="drawer"
@@ -8,16 +8,16 @@
         :userName="userName"
         @logout="logout"
     ></DrawerNavigation>
-    <NavigationBar @navigate="drawer = !drawer" @authenticate="authenticate"></NavigationBar>
+    <NavigationBar @navigate="drawer = !drawer" :contentLoading="isContentLoading"></NavigationBar>
 
     <v-main>
         <keep-alive>
-            <router-view v-if="$route.meta.keepAlive"></router-view>
+            <router-view v-if="$route.meta.keepAlive" @login="login" @contentLoading="isContentLoading = $event"></router-view>
         </keep-alive>
-        <router-view v-if="!$route.meta.keepAlive" @authenticate="authenticate"></router-view>
+        <router-view v-if="!$route.meta.keepAlive" @login="login" @contentLoading="isContentLoading = $event"></router-view>
     </v-main>
 
-    <PageFooter></PageFooter>
+    <!-- <PageFooter></PageFooter> -->
 
 </v-app>
 </template>
@@ -27,12 +27,13 @@ import DrawerNavigation from "./components/DrawerNavigation";
 import PageFooter from "./components/PageFooter";
 import NavigationBar from "./components/NavigationBar";
 import authentication from "./util/authentication";
-
+import hardRedirect from "./util/hardRedirect";
 
 export default {
     data() {
         return {
             drawer: true,
+            isContentLoading: false,
             isLoggedIn: false,
             userId: null,
             userEmail: null,
@@ -43,29 +44,43 @@ export default {
 
     methods: {
         async authenticate() {
-            // console.log(await authentication());
             ({
                 isLoggedIn: this.isLoggedIn,
                 userId: this.userId,
                 userEmail: this.userEmail,
                 userName: this.userName,
-            } = await authentication())
+            } = await authentication)
         },
 
         
+        login(data) {
+            const loginData = {
+                name: data.username,
+                password: data.password,
+                _token: document.querySelector('meta[name=csrf-token]').content,
+            }
+
+            window.axios.post('/login', loginData)
+                .then(() => hardRedirect(this, {name: 'MyProfile'}))
+        },
+
+
         logout() {
             window.axios.post('/logout')
-                .then(() => {
-                    console.log('Logged Out!')
-                    this.authenticate()
-                    this.$router.push({name: 'Login'})
-                })
+                .then(() => hardRedirect(this, {name: 'Login'}))
         }
     },
 
 
     created() {
         this.authenticate()
+    },
+
+
+    watch: {
+        $route() {
+            this.isContentLoading = false
+        }
     },
 
 

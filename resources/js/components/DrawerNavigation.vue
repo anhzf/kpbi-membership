@@ -1,7 +1,7 @@
 <template>
 
-    <v-navigation-drawer v-model="drawer" app>
-        <v-system-bar color="indigo lighten-1"></v-system-bar>
+    <v-navigation-drawer v-model="drawer" app class="elevation2">
+        <v-system-bar color="light-green lighten-2"></v-system-bar>
 
         <v-list>
             
@@ -63,7 +63,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item v-if="isLoggedIn" @click="$emit('logout')">
+            <v-list-item v-if="isLoggedIn" @click.stop="$emit('logout')">
                 <v-list-item-action>
                     <v-icon>mdi-exit-to-app</v-icon>
                 </v-list-item-action>
@@ -92,6 +92,7 @@
 <script>
 export default {
     name: 'DrawerNavigation',
+
 
     props: {
         drawer: Boolean,
