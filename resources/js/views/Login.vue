@@ -4,7 +4,7 @@
         <v-row justify="center" align="stretch">
 
             <v-card width="320" class="elevation-4 mb-16">
-                <v-form>
+                <v-form @submit.prevent="login">
                     
                     <v-card-title primary-title>
                         <v-container fluid>
@@ -26,6 +26,7 @@
                         <v-text-field
                             label="Username"
                             placeholder="(ex. S2 PBIO UNS)"
+                            v-model="username"
                             solo
                         ></v-text-field>
                         <v-text-field
@@ -33,6 +34,7 @@
                             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                             label="Password"
                             placeholder="password"
+                            v-model="password"
                             solo
                             @click:append="showPassword = !showPassword"
                         ></v-text-field>
@@ -56,9 +58,30 @@
 export default {
     name: 'Login',
 
+
     data() {
         return {
             showPassword: false,
+            username: null,
+            password: null,
+        }
+    },
+
+
+    methods: {
+        login() {
+            const loginData = {
+                name: this.username,
+                password: this.password,
+                _token: document.querySelector('meta[name=csrf-token]').content,
+            }
+
+            window.axios.post('/login', loginData)
+                .then(() => {
+                    console.log('Logged In!')
+                    this.$emit('authenticate')
+                    this.$router.push({name: 'MyProfile'})
+                })
         }
     },
 }

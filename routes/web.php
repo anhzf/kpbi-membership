@@ -23,23 +23,24 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/members', 'HomeController@members')->name('memberList');
 Route::get('api/auth', function () {
-    dd(Auth::user());
+    return response()->json(Auth::user() ? Auth::user()->toArray() : ['error' => 'Belum login']);
 });
-// Route::get('api/auth', response()->json(Auth::user() ?? ['error' => 'Belum login']));
+
+Route::post('/login', 'Auth\LoginController@login');
+Route::post('/logout', 'Auth\LoginController@logout');
+
+
 Route::post('/register', 'KPBI\RegisterController@register');
 Route::get('/register', 'KPBI\RegisterController@showRegisterForm')->name('register');
 
-Route::group(['prefix' => 'my-profile', 'as' => 'profile'], function() {
-
+Route::group(['prefix' => 'my-profile', 'as' => 'profile'], function () {
     Route::get('/', 'DashboardController@myProfile');
     Route::post('/', 'DashboardController@saveProfile')->name(':update');
-
 });
-Route::group(['prefix' => 'my-account', 'as' => 'account'], function() {
 
+Route::group(['prefix' => 'my-account', 'as' => 'account'], function () {
     Route::get('/', 'DashboardController@myAccount');
     Route::post('/change-password', 'DashboardController@changePassword')->name(':change-password');
-
 });
 
 
