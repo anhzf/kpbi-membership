@@ -2005,24 +2005,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     login: function login(data) {
       var _this2 = this;
 
+      this.isContentLoading = true;
       var loginData = {
         name: data.username,
         password: data.password,
         _token: document.querySelector('meta[name=csrf-token]').content
       };
       window.axios.post('/login', loginData).then(function () {
-        return Object(_util_hardRedirect__WEBPACK_IMPORTED_MODULE_5__["default"])(_this2, {
+        Object(_util_hardRedirect__WEBPACK_IMPORTED_MODULE_5__["default"])(_this2, {
           name: 'MyProfile'
         });
+        _this2.isContentLoading = false;
       });
     },
     logout: function logout() {
       var _this3 = this;
 
+      this.isContentLoading = true;
       window.axios.post('/logout').then(function () {
-        return Object(_util_hardRedirect__WEBPACK_IMPORTED_MODULE_5__["default"])(_this3, {
+        Object(_util_hardRedirect__WEBPACK_IMPORTED_MODULE_5__["default"])(_this3, {
           name: 'Login'
         });
+        _this3.isContentLoading = false;
       });
     }
   },
@@ -2463,8 +2467,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ProfileCard',
+  props: {
+    id: {
+      "default": ''
+    },
+    editMode: {
+      type: Boolean,
+      "default": false
+    }
+  },
   data: function data() {
     return {
       isLoading: false,
@@ -2488,21 +2525,21 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.isLoading = true;
-      window.axios.get('/api/kpbi/profile').then(function (_ref) {
+      window.axios.get('/api/kpbi/profile/' + this.id).then(function (_ref) {
         var data = _ref.data;
-        _this.jenjang = data["jenjang"];
-        _this.prodi = data["nama_prodi"];
-        _this.jurusan = data["jurusan"];
-        _this.fakultas = data["fakultas"];
-        _this.pt = data["pt"];
-        _this.status = data["status"];
-        _this.akreditasi_prodi = data["akreditasi_prodi"];
-        _this.akreditasi_pt = data["akreditasi_pt"];
-        _this.web_prodi = data["web_prodi"];
-        _this.alamat = data["alamat_kampus"];
-        _this.kaprodi = data["kaprodi"];
-        _this.email_prodi = data["email_prodi"];
-        _this.no_kantor = data["no_telp_prodi"];
+        _this.jenjang = data.jenjang;
+        _this.prodi = data.nama_prodi;
+        _this.jurusan = data.jurusan;
+        _this.fakultas = data.fakultas;
+        _this.pt = data.pt;
+        _this.status = data.status;
+        _this.akreditasi_prodi = data.akreditasi_prodi;
+        _this.akreditasi_pt = data.akreditasi_pt;
+        _this.web_prodi = data.web_prodi;
+        _this.alamat = data.alamat_kampus;
+        _this.kaprodi = data.kaprodi;
+        _this.email_prodi = data.email_prodi;
+        _this.no_kantor = data.no_telp_prodi;
         _this.isLoading = false;
       })["catch"](function (err) {
         return console.log(err);
@@ -2511,6 +2548,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getProfile();
+  },
+  watch: {
+    id: function id() {
+      this.getProfile();
+    }
   }
 });
 
@@ -2710,6 +2752,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Members',
   data: function data() {
@@ -2733,10 +2813,15 @@ __webpack_require__.r(__webpack_exports__);
         text: 'WEBSITE PRODI',
         value: 'web_prodi',
         sortable: false
+      }, {
+        text: 'AKSI',
+        value: 'actions',
+        sortable: false
       }],
       members: [],
       isLoading: false,
-      search: null
+      search: null,
+      detailDialog: false
     };
   },
   methods: {
@@ -2796,9 +2881,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'MyProfile',
+  data: function data() {
+    return {
+      editMode: true
+    };
+  },
+  methods: {
+    save: function save() {
+      console.log('saved!');
+      this.editMode = false;
+    }
+  },
   components: {
     ProfileCard: _components_ProfileCard__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
@@ -22155,10 +22254,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
-    {
-      staticClass: "elevation4",
-      attrs: { width: "100%", "max-width": "650", loading: _vm.isLoading }
-    },
+    { attrs: { width: "100%", "max-width": "650", elevation: "4" } },
     [
       _c(
         "v-card-text",
@@ -22181,20 +22277,32 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "4" } },
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Jenjang",
-                                  "prepend-icon": "mdi-school",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.jenjang,
-                                  callback: function($$v) {
-                                    _vm.jenjang = $$v
-                                  },
-                                  expression: "jenjang"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          label: "Jenjang",
+                                          items: ["S1", "S2", "S3"],
+                                          "prepend-icon": "mdi-school",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.jenjang,
+                                          callback: function($$v) {
+                                            _vm.jenjang = $$v
+                                          },
+                                          expression: "jenjang"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           ),
@@ -22203,16 +22311,30 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "8" } },
                             [
-                              _c("v-text-field", {
-                                attrs: { label: "Prodi", dense: "" },
-                                model: {
-                                  value: _vm.prodi,
-                                  callback: function($$v) {
-                                    _vm.prodi = $$v
-                                  },
-                                  expression: "prodi"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Prodi",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.prodi,
+                                          callback: function($$v) {
+                                            _vm.prodi = $$v
+                                          },
+                                          expression: "prodi"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22226,20 +22348,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Jurusan",
-                                  "prepend-icon": "mdi-warehouse",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.jurusan,
-                                  callback: function($$v) {
-                                    _vm.jurusan = $$v
-                                  },
-                                  expression: "jurusan"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Jurusan",
+                                          "prepend-icon": "mdi-warehouse",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.jurusan,
+                                          callback: function($$v) {
+                                            _vm.jurusan = $$v
+                                          },
+                                          expression: "jurusan"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22253,20 +22386,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Fakultas",
-                                  "prepend-icon": "mdi-domain",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.fakultas,
-                                  callback: function($$v) {
-                                    _vm.fakultas = $$v
-                                  },
-                                  expression: "fakultas"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Fakultas",
+                                          "prepend-icon": "mdi-domain",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.fakultas,
+                                          callback: function($$v) {
+                                            _vm.fakultas = $$v
+                                          },
+                                          expression: "fakultas"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22281,20 +22425,32 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "9" } },
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Nama Lengkap Perguruan Tinggi",
-                                  "prepend-icon": "mdi-school-outline",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.pt.lengkap,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.pt, "lengkap", $$v)
-                                  },
-                                  expression: "pt.lengkap"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label:
+                                            "Nama Lengkap Perguruan Tinggi",
+                                          "prepend-icon": "mdi-school-outline",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.pt.lengkap,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.pt, "lengkap", $$v)
+                                          },
+                                          expression: "pt.lengkap"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           ),
@@ -22303,16 +22459,30 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "3" } },
                             [
-                              _c("v-text-field", {
-                                attrs: { label: "Singkatan", dense: "" },
-                                model: {
-                                  value: _vm.pt.singkat,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.pt, "singkat", $$v)
-                                  },
-                                  expression: "pt.singkat"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Singkatan",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.pt.singkat,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.pt, "singkat", $$v)
+                                          },
+                                          expression: "pt.singkat"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22326,20 +22496,32 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Status Perguruan Tinggi",
-                                  "prepend-icon": "mdi-shield-check",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.status,
-                                  callback: function($$v) {
-                                    _vm.status = $$v
-                                  },
-                                  expression: "status"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          label: "Status Perguruan Tinggi",
+                                          items: ["Negeri", "Swasta"],
+                                          "prepend-icon": "mdi-shield-check",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.status,
+                                          callback: function($$v) {
+                                            _vm.status = $$v
+                                          },
+                                          expression: "status"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22354,24 +22536,37 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "6" } },
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Akreditasi Prodi",
-                                  "prepend-icon": "mdi-check-underline",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.akreditasi_prodi.akreditasi,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.akreditasi_prodi,
-                                      "akreditasi",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "akreditasi_prodi.akreditasi"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Akreditasi Prodi",
+                                          "prepend-icon": "mdi-check-underline",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.akreditasi_prodi.akreditasi,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.akreditasi_prodi,
+                                              "akreditasi",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "akreditasi_prodi.akreditasi"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           ),
@@ -22380,24 +22575,35 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "6" } },
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Tanggal Akreditasi",
-                                  "prepend-icon": "mdi-calendar",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.akreditasi_prodi.tanggal,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.akreditasi_prodi,
-                                      "tanggal",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "akreditasi_prodi.tanggal"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Tanggal Akreditasi",
+                                          "prepend-icon": "mdi-calendar",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.akreditasi_prodi.tanggal,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.akreditasi_prodi,
+                                              "tanggal",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "akreditasi_prodi.tanggal"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22411,24 +22617,37 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Akreditasi Internasional",
-                                  "prepend-icon": "mdi-earth",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.akreditasi_prodi.internasional,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.akreditasi_prodi,
-                                      "internasional",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "akreditasi_prodi.internasional"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Akreditasi Internasional",
+                                          "prepend-icon": "mdi-earth",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.akreditasi_prodi.internasional,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.akreditasi_prodi,
+                                              "internasional",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "akreditasi_prodi.internasional"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22442,20 +22661,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Alamat Web Prodi",
-                                  "prepend-icon": "mdi-web",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.web_prodi,
-                                  callback: function($$v) {
-                                    _vm.web_prodi = $$v
-                                  },
-                                  expression: "web_prodi"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Alamat Web Prodi",
+                                          "prepend-icon": "mdi-web",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.web_prodi,
+                                          callback: function($$v) {
+                                            _vm.web_prodi = $$v
+                                          },
+                                          expression: "web_prodi"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22469,20 +22699,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Alamat Kampus",
-                                  "prepend-icon": "mdi-map-marker",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.alamat.alamat,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.alamat, "alamat", $$v)
-                                  },
-                                  expression: "alamat.alamat"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Alamat Kampus",
+                                          "prepend-icon": "mdi-map-marker",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.alamat.alamat,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.alamat, "alamat", $$v)
+                                          },
+                                          expression: "alamat.alamat"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22496,20 +22737,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Kota/Kabupaten",
-                                  "prepend-icon": "mdi-map-marker",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.alamat.kota,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.alamat, "kota", $$v)
-                                  },
-                                  expression: "alamat.kota"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Kota/Kabupaten",
+                                          "prepend-icon": "mdi-map-marker",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.alamat.kota,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.alamat, "kota", $$v)
+                                          },
+                                          expression: "alamat.kota"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           ),
@@ -22517,16 +22769,34 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: { label: "Provinsi", dense: "" },
-                                model: {
-                                  value: _vm.alamat.provinsi,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.alamat, "provinsi", $$v)
-                                  },
-                                  expression: "alamat.provinsi"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Provinsi",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.alamat.provinsi,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.alamat,
+                                              "provinsi",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "alamat.provinsi"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22540,20 +22810,32 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Nama Lengkap dan Gelar Kaprodi",
-                                  "prepend-icon": "mdi-account",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.kaprodi.nama,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.kaprodi, "nama", $$v)
-                                  },
-                                  expression: "kaprodi.nama"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label:
+                                            "Nama Lengkap dan Gelar Kaprodi",
+                                          "prepend-icon": "mdi-account",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.kaprodi.nama,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.kaprodi, "nama", $$v)
+                                          },
+                                          expression: "kaprodi.nama"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22567,20 +22849,36 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Periode Jabatan Kaprodi (mulai)",
-                                  "prepend-icon": "mdi-calendar-clock",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.kaprodi.periode.mulai,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.kaprodi.periode, "mulai", $$v)
-                                  },
-                                  expression: "kaprodi.periode.mulai"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label:
+                                            "Periode Jabatan Kaprodi (mulai)",
+                                          "prepend-icon": "mdi-calendar-clock",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.kaprodi.periode.mulai,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.kaprodi.periode,
+                                              "mulai",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "kaprodi.periode.mulai"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           ),
@@ -22588,16 +22886,34 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: { label: "(purna)", dense: "" },
-                                model: {
-                                  value: _vm.kaprodi.periode.purna,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.kaprodi.periode, "purna", $$v)
-                                  },
-                                  expression: "kaprodi.periode.purna"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "(purna)",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.kaprodi.periode.purna,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.kaprodi.periode,
+                                              "purna",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "kaprodi.periode.purna"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22611,20 +22927,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Email Kaprodi",
-                                  "prepend-icon": "mdi-email",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.kaprodi.email,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.kaprodi, "email", $$v)
-                                  },
-                                  expression: "kaprodi.email"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Email Kaprodi",
+                                          "prepend-icon": "mdi-email",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.kaprodi.email,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.kaprodi, "email", $$v)
+                                          },
+                                          expression: "kaprodi.email"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22638,20 +22965,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Email Kaprodi",
-                                  "prepend-icon": "mdi-contacts",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.kaprodi.no,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.kaprodi, "no", $$v)
-                                  },
-                                  expression: "kaprodi.no"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Email Kaprodi",
+                                          "prepend-icon": "mdi-contacts",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.kaprodi.no,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.kaprodi, "no", $$v)
+                                          },
+                                          expression: "kaprodi.no"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22665,20 +23003,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Email Prodi",
-                                  "prepend-icon": "mdi-email",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.email_prodi,
-                                  callback: function($$v) {
-                                    _vm.email_prodi = $$v
-                                  },
-                                  expression: "email_prodi"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Email Prodi",
+                                          "prepend-icon": "mdi-email",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.email_prodi,
+                                          callback: function($$v) {
+                                            _vm.email_prodi = $$v
+                                          },
+                                          expression: "email_prodi"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -22692,20 +23041,31 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Nomer Telepon Kantor",
-                                  "prepend-icon": "mdi-phone",
-                                  dense: ""
-                                },
-                                model: {
-                                  value: _vm.no_kantor,
-                                  callback: function($$v) {
-                                    _vm.no_kantor = $$v
-                                  },
-                                  expression: "no_kantor"
-                                }
-                              })
+                              _vm.isLoading
+                                ? _c("v-skeleton-loader", {
+                                    attrs: { type: "text" }
+                                  })
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Nomer Telepon Kantor",
+                                          "prepend-icon": "mdi-phone",
+                                          dense: "",
+                                          outlined: ""
+                                        },
+                                        model: {
+                                          value: _vm.no_kantor,
+                                          callback: function($$v) {
+                                            _vm.no_kantor = $$v
+                                          },
+                                          expression: "no_kantor"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                             ],
                             1
                           )
@@ -23124,9 +23484,99 @@ var render = function() {
                             )
                           ]
                         }
+                      },
+                      {
+                        key: "item.actions",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  outlined: "",
+                                  small: "",
+                                  color: "purple"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.detailDialog = true
+                                  }
+                                }
+                              },
+                              [_vm._v("Details")]
+                            )
+                          ]
+                        }
                       }
                     ])
                   })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "290" },
+          model: {
+            value: _vm.detailDialog,
+            callback: function($$v) {
+              _vm.detailDialog = $$v
+            },
+            expression: "detailDialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", { staticClass: "headline" }, [
+                _vm._v("Use Google's location service?")
+              ]),
+              _vm._v(" "),
+              _c("v-card-text", [
+                _vm._v(
+                  "\r\n            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.\r\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.detailDialog = false
+                        }
+                      }
+                    },
+                    [_vm._v("\r\n                Disagree\r\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.detailDialog = false
+                        }
+                      }
+                    },
+                    [_vm._v("\r\n                Agree\r\n            ")]
+                  )
                 ],
                 1
               )
@@ -23166,7 +23616,12 @@ var render = function() {
     "v-container",
     { attrs: { fluid: "" } },
     [
-      _c("v-row", { attrs: { justify: "center" } }, [_c("ProfileCard")], 1),
+      _c(
+        "v-row",
+        { attrs: { justify: "center" } },
+        [_c("ProfileCard", { attrs: { editMode: _vm.editMode, id: "10" } })],
+        1
+      ),
       _vm._v(" "),
       _c(
         "v-tooltip",
@@ -23191,6 +23646,11 @@ var render = function() {
                             right: "",
                             color: "blue",
                             dark: ""
+                          },
+                          on: {
+                            click: function($event) {
+                              _vm.editMode ? _vm.save() : (_vm.editMode = true)
+                            }
                           }
                         },
                         "v-btn",
@@ -23199,7 +23659,11 @@ var render = function() {
                       ),
                       on
                     ),
-                    [_c("v-icon", [_vm._v("mdi-content-save")])],
+                    [
+                      _vm.editMode
+                        ? _c("v-icon", [_vm._v("mdi-content-save")])
+                        : _c("v-icon", [_vm._v("mdi-pencil")])
+                    ],
                     1
                   )
                 ]
@@ -23207,7 +23671,12 @@ var render = function() {
             }
           ])
         },
-        [_vm._v(" "), _c("span", [_vm._v("Save")])]
+        [
+          _vm._v(" "),
+          _vm.editMode
+            ? _c("span", [_vm._v("Save")])
+            : _c("span", [_vm._v("Edit")])
+        ]
       )
     ],
     1

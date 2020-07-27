@@ -54,6 +54,8 @@ export default {
 
         
         login(data) {
+            this.isContentLoading = true
+
             const loginData = {
                 name: data.username,
                 password: data.password,
@@ -61,13 +63,21 @@ export default {
             }
 
             window.axios.post('/login', loginData)
-                .then(() => hardRedirect(this, {name: 'MyProfile'}))
+                .then(() => {
+                    hardRedirect(this, {name: 'MyProfile'})
+                    this.isContentLoading = false
+                })
         },
 
 
         logout() {
+            this.isContentLoading = true
+
             window.axios.post('/logout')
-                .then(() => hardRedirect(this, {name: 'Login'}))
+                .then(() => {
+                    hardRedirect(this, {name: 'Login'})
+                    this.isContentLoading = false
+                })
         }
     },
 

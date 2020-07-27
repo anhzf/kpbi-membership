@@ -2,7 +2,7 @@
 <v-container fluid>
     <v-row justify="center">
 
-        <ProfileCard></ProfileCard>
+        <ProfileCard :editMode="editMode" id="10"></ProfileCard>
 
     </v-row>
 
@@ -13,11 +13,14 @@
                 color="blue" dark
                 v-bind="attrs"
                 v-on="on"
+                @click="editMode ? save():editMode = true"
             >
-                <v-icon>mdi-content-save</v-icon>
+                <v-icon v-if="editMode">mdi-content-save</v-icon>
+                <v-icon v-else>mdi-pencil</v-icon>
             </v-btn>
         </template>
-        <span>Save</span>
+        <span v-if="editMode">Save</span>
+        <span v-else>Edit</span>
     </v-tooltip>
     
 </v-container>
@@ -30,6 +33,22 @@ import ProfileCard from "../components/ProfileCard";
 
 export default {
     name: 'MyProfile',
+
+
+    data() {
+        return {
+            editMode: true,
+        }
+    },
+
+
+    methods: {
+        save() {
+            console.log('saved!')
+            this.editMode = false
+        }
+    },
+
 
     components: {
         ProfileCard,
