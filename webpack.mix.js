@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-const tailwindcss = require('tailwindcss');
 require('vuetifyjs-mix-extension')
 
 /*
@@ -15,10 +14,4 @@ require('vuetifyjs-mix-extension')
 
 mix.js('resources/js/app.js', 'public/js').vuetify()
     .sass('resources/sass/app.scss', 'public/css')
-    // .options({
-    //     processCssUrls: false,
-    //     postCss: [
-    //         tailwindcss('./tailwind.config.js'),
-    //     ]
-    // })
     .copyDirectory('resources/img', 'public/img')

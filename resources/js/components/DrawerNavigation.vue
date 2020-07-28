@@ -36,7 +36,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item v-if="!isLoggedIn" link>
+            <v-list-item v-if="!isLoggedIn" link :to="{name: 'Register'}">
                 <v-list-item-action>
                     <v-icon>mdi-account-plus</v-icon>
                 </v-list-item-action>

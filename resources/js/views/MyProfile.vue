@@ -1,28 +1,27 @@
 <template>
 <v-container fluid>
+
     <v-row justify="center">
 
         <ProfileCard :editMode="editMode" :profileData="profileData" :isLoading="profileLoading"></ProfileCard>
 
     </v-row>
 
-    <v-tooltip top>
+    <!-- <v-tooltip top>
         <template v-slot:activator="{on, attrs}">
-            <v-btn
-                fab fixed bottom right
-                color="blue" dark
-                v-bind="attrs"
-                v-on="on"
-                @click="editMode ? save() : editMode = true"
-            >
-                <v-icon v-if="editMode">mdi-content-save</v-icon>
-                <v-icon v-else>mdi-pencil</v-icon>
-            </v-btn>
+            <v-fab-transition>
+                <v-btn
+                    v-show="editMode"
+                    fab fixed bottom right color="blue" dark
+                    v-bind="attrs" v-on="on"
+                    @click="save"
+                ><v-icon>mdi-content-save</v-icon>
+                </v-btn>
+            </v-fab-transition>
         </template>
-        <span v-if="editMode">Save</span>
-        <span v-else>Edit</span>
+        <span>Save</span>
     </v-tooltip>
-    
+     -->
 </v-container>
 
 </template>
@@ -37,7 +36,7 @@ export default {
 
     data() {
         return {
-            editMode: false,
+            editMode: true,
             profileLoading: false,
             profileData: {}
         }
@@ -61,7 +60,6 @@ export default {
 
         save() {
             console.log('saved!')
-            this.editMode = false
         },
     },
 

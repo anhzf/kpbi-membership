@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Member from '../views/Member.vue'
-import Login from '../views/Login.vue'
-import MyProfile from "../views/MyProfile.vue"
-import AccountSettings from "../views/AccountSettings.vue";
+// use import() instead of default import statement to make lazy router-views 
+const Member = () => import('../views/Member.vue')
+const Login = () => import('../views/Login.vue')
+const Register = () => import('../views/Register.vue')
+const MyProfile = () => import('../views/MyProfile.vue')
+const AccountSettings = () => import('../views/AccountSettings.vue')
+const NotFound404 = () => import('../views/404.vue')
 // Middleware
 import auth from "../middleware/auth"
-import guest from "../middleware/guest"
+import guestOnly from "../middleware/guest"
 
 Vue.use(VueRouter)
 
@@ -15,22 +18,23 @@ const router = new VueRouter({
     mode: 'history',
 
     routes: [
-        // {
-        //     path: '/',
-        //     redirect: 'members',
-        // },
         {
             name: 'Members',
             path: '/members',
             alias: '/',
             component: Member,
-            meta: { keepAlive: true },
         },
         {
             name: 'Login',
             path: '/login',
             component: Login,
-            beforeEnter: guest,
+            beforeEnter: guestOnly,
+        },
+        {
+            name: 'Register',
+            path: '/daftar',
+            component: Register,
+            beforeEnter: guestOnly,
         },
         {
             name: 'MyProfile',
@@ -46,19 +50,14 @@ const router = new VueRouter({
             beforeEnter: auth,
         },
         {
-            name: 'Register',
-            path: '/daftar',
-            component: MyProfile,
+            name: '404',
+            path: '/404',
+            component: NotFound404
         },
-        // {
-        //     name: '404',
-        //     path: '/404',
-        //     component: NotFound404
-        // },
-        // {
-        //     path: '*',
-        //     redirect: '404'
-        // },
+        {
+            path: '*',
+            redirect: '404'
+        },
     ]
 })
 
