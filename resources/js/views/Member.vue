@@ -53,7 +53,7 @@
                     </template>
 
                     <template v-slot:item.actions="{ item }">
-                        <v-btn outlined small color="purple" @click="detailDialog = true">Details</v-btn>
+                        <v-btn outlined small color="green darken-2" @click="seeDetails(item)">Details</v-btn>
                     </template>
 
                 </v-data-table>
@@ -65,34 +65,26 @@
 
     <v-dialog
       v-model="detailDialog"
-      max-width="290"
+      width="700"
+      max-width="100%"
+      scrollable
     >
         <v-card>
-            <v-card-title class="headline">Use Google's location service?</v-card-title>
+            <v-card-title class="headline light-green white--text">Detail Anggota</v-card-title>
 
             <v-card-text>
-            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+                <v-container fluid>
+                    <v-row justify="center">
+                        <ProfileCard :profileData="currentProfileShow" :editMode="false"></ProfileCard>
+                    </v-row>
+                </v-container>
             </v-card-text>
 
-            <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn
-                color="green darken-1"
-                text
-                @click="detailDialog = false"
-            >
-                Disagree
-            </v-btn>
-
-            <v-btn
-                color="green darken-1"
-                text
-                @click="detailDialog = false"
-            >
-                Agree
-            </v-btn>
+            <v-card-actions class="light-green lighten-4">
+                <v-spacer></v-spacer>
+                <v-btn color="red" text @click="detailDialog = false">Close</v-btn>
             </v-card-actions>
+
         </v-card>
     </v-dialog>
 
@@ -101,6 +93,9 @@
 </template>
 
 <script>
+import ProfileCard from "../components/ProfileCard";
+
+
 export default {
     name: 'Members',
 
@@ -119,6 +114,7 @@ export default {
             search: null,
 
             detailDialog: false,
+            currentProfileShow: {}
         }
     },
 
@@ -133,12 +129,23 @@ export default {
                     this.members = data
                 })
                 .catch(err => console.log(err))
+        },
+
+
+        seeDetails(profileData) {
+            this.detailDialog = true
+            this.currentProfileShow = profileData
         }
     },
 
     
     created() {
         this.getUsers()
+    },
+
+
+    components: {
+        ProfileCard,
     }
 }
 </script>

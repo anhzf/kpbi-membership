@@ -2,7 +2,7 @@
 <v-container fluid>
     <v-row justify="center">
 
-        <ProfileCard :editMode="editMode" id="10"></ProfileCard>
+        <ProfileCard :editMode="editMode" :profileData="profileData" :isLoading="profileLoading"></ProfileCard>
 
     </v-row>
 
@@ -13,7 +13,7 @@
                 color="blue" dark
                 v-bind="attrs"
                 v-on="on"
-                @click="editMode ? save():editMode = true"
+                @click="editMode ? save() : editMode = true"
             >
                 <v-icon v-if="editMode">mdi-content-save</v-icon>
                 <v-icon v-else>mdi-pencil</v-icon>
@@ -37,16 +37,37 @@ export default {
 
     data() {
         return {
-            editMode: true,
+            editMode: false,
+            profileLoading: false,
+            profileData: {}
         }
     },
 
 
     methods: {
+        getProfileData() {
+            this.profileLoading = true
+            const data = window.axios.get('/api/kpbi/profile')
+                            .then(({data}) => {
+                                this.profileLoading = false
+                                console.log(data)
+                                return data
+                            })
+                            .catch(({data: err}) => err)
+
+            this.profileData = data
+        },
+
+
         save() {
             console.log('saved!')
             this.editMode = false
-        }
+        },
+    },
+
+
+    mounted() {
+        this.getProfileData()
     },
 
 

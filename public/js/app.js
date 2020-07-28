@@ -2223,6 +2223,199 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2494,64 +2687,99 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ProfileCard',
   props: {
-    id: {
-      "default": ''
+    profileData: {
+      type: Object,
+      required: true
     },
     editMode: {
+      type: Boolean,
+      "default": false
+    },
+    isLoading: {
       type: Boolean,
       "default": false
     }
   },
   data: function data() {
     return {
-      isLoading: false,
       jenjang: null,
       prodi: null,
       jurusan: null,
       fakultas: null,
-      pt: {},
+      pt: {
+        lengkap: null,
+        singkat: null
+      },
       status: null,
-      akreditasi_prodi: {},
+      akreditasi_prodi: {
+        akreditasi: null,
+        tanggal_akreditasi: null,
+        internasional: null
+      },
       akreditasi_pt: null,
       web_prodi: null,
-      alamat: {},
-      kaprodi: {},
+      alamat: {
+        alamat: null,
+        kota: null,
+        provinsi: null
+      },
+      kaprodi: {
+        nama: null,
+        email: null,
+        periode: {
+          mulai: null,
+          purna: null
+        }
+      },
       email_prodi: null,
       no_kantor: null
     };
   },
   methods: {
-    getProfile: function getProfile() {
+    fetchProfileData: function fetchProfileData() {
       var _this = this;
 
-      this.isLoading = true;
-      window.axios.get('/api/kpbi/profile/' + this.id).then(function (_ref) {
-        var data = _ref.data;
-        _this.jenjang = data.jenjang;
-        _this.prodi = data.nama_prodi;
-        _this.jurusan = data.jurusan;
-        _this.fakultas = data.fakultas;
-        _this.pt = data.pt;
-        _this.status = data.status;
-        _this.akreditasi_prodi = data.akreditasi_prodi;
-        _this.akreditasi_pt = data.akreditasi_pt;
-        _this.web_prodi = data.web_prodi;
-        _this.alamat = data.alamat_kampus;
-        _this.kaprodi = data.kaprodi;
-        _this.email_prodi = data.email_prodi;
-        _this.no_kantor = data.no_telp_prodi;
-        _this.isLoading = false;
-      })["catch"](function (err) {
-        return console.log(err);
-      });
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _yield$_this$profileD;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.profileData;
+
+              case 2:
+                _yield$_this$profileD = _context.sent;
+                _this.jenjang = _yield$_this$profileD.jenjang;
+                _this.prodi = _yield$_this$profileD.nama_prodi;
+                _this.jurusan = _yield$_this$profileD.jurusan;
+                _this.fakultas = _yield$_this$profileD.fakultas;
+                _this.pt = _yield$_this$profileD.pt;
+                _this.status = _yield$_this$profileD.status;
+                _this.akreditasi_prodi = _yield$_this$profileD.akreditasi_prodi;
+                _this.akreditasi_pt = _yield$_this$profileD.akreditasi_pt;
+                _this.web_prodi = _yield$_this$profileD.web_prodi;
+                _this.alamat = _yield$_this$profileD.alamat_kampus;
+                _this.kaprodi = _yield$_this$profileD.kaprodi;
+                _this.email_prodi = _yield$_this$profileD.email_prodi;
+                _this.no_kantor = _yield$_this$profileD.no_telp_prodi;
+
+              case 16:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   },
   mounted: function mounted() {
-    this.getProfile();
+    this.fetchProfileData();
   },
   watch: {
-    id: function id() {
-      this.getProfile();
+    profileData: function profileData() {
+      this.fetchProfileData();
     }
   }
 });
@@ -2688,6 +2916,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_ProfileCard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/ProfileCard */ "./resources/js/components/ProfileCard.vue");
 //
 //
 //
@@ -2782,14 +3011,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Members',
   data: function data() {
@@ -2821,7 +3043,8 @@ __webpack_require__.r(__webpack_exports__);
       members: [],
       isLoading: false,
       search: null,
-      detailDialog: false
+      detailDialog: false,
+      currentProfileShow: {}
     };
   },
   methods: {
@@ -2836,10 +3059,17 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         return console.log(err);
       });
+    },
+    seeDetails: function seeDetails(profileData) {
+      this.detailDialog = true;
+      this.currentProfileShow = profileData;
     }
   },
   created: function created() {
     this.getUsers();
+  },
+  components: {
+    ProfileCard: _components_ProfileCard__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
 });
 
@@ -2889,14 +3119,34 @@ __webpack_require__.r(__webpack_exports__);
   name: 'MyProfile',
   data: function data() {
     return {
-      editMode: true
+      editMode: false,
+      profileLoading: false,
+      profileData: {}
     };
   },
   methods: {
+    getProfileData: function getProfileData() {
+      var _this = this;
+
+      this.profileLoading = true;
+      var data = window.axios.get('/api/kpbi/profile').then(function (_ref) {
+        var data = _ref.data;
+        _this.profileLoading = false;
+        console.log(data);
+        return data;
+      })["catch"](function (_ref2) {
+        var err = _ref2.data;
+        return err;
+      });
+      this.profileData = data;
+    },
     save: function save() {
       console.log('saved!');
       this.editMode = false;
     }
+  },
+  mounted: function mounted() {
+    this.getProfileData();
   },
   components: {
     ProfileCard: _components_ProfileCard__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -22271,801 +22521,28 @@ var render = function() {
                     { attrs: { cols: "8" } },
                     [
                       _c(
-                        "v-row",
+                        "v-list-item",
                         [
                           _c(
-                            "v-col",
-                            { attrs: { cols: "4" } },
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          label: "Jenjang",
-                                          items: ["S1", "S2", "S3"],
-                                          "prepend-icon": "mdi-school",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.jenjang,
-                                          callback: function($$v) {
-                                            _vm.jenjang = $$v
-                                          },
-                                          expression: "jenjang"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
+                            "v-list-item-avatar",
+                            [_c("v-icon", [_vm._v("mdi-school")])],
                             1
                           ),
                           _vm._v(" "),
                           _c(
-                            "v-col",
-                            { attrs: { cols: "8" } },
+                            "v-list-item-content",
                             [
                               _vm.isLoading
                                 ? _c("v-skeleton-loader", {
                                     attrs: { type: "text" }
                                   })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Prodi",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.prodi,
-                                          callback: function($$v) {
-                                            _vm.prodi = $$v
-                                          },
-                                          expression: "prodi"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Jurusan",
-                                          "prepend-icon": "mdi-warehouse",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.jurusan,
-                                          callback: function($$v) {
-                                            _vm.jurusan = $$v
-                                          },
-                                          expression: "jurusan"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Fakultas",
-                                          "prepend-icon": "mdi-domain",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.fakultas,
-                                          callback: function($$v) {
-                                            _vm.fakultas = $$v
-                                          },
-                                          expression: "fakultas"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "9" } },
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label:
-                                            "Nama Lengkap Perguruan Tinggi",
-                                          "prepend-icon": "mdi-school-outline",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.pt.lengkap,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.pt, "lengkap", $$v)
-                                          },
-                                          expression: "pt.lengkap"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "3" } },
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Singkatan",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.pt.singkat,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.pt, "singkat", $$v)
-                                          },
-                                          expression: "pt.singkat"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          label: "Status Perguruan Tinggi",
-                                          items: ["Negeri", "Swasta"],
-                                          "prepend-icon": "mdi-shield-check",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.status,
-                                          callback: function($$v) {
-                                            _vm.status = $$v
-                                          },
-                                          expression: "status"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "6" } },
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Akreditasi Prodi",
-                                          "prepend-icon": "mdi-check-underline",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.akreditasi_prodi.akreditasi,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.akreditasi_prodi,
-                                              "akreditasi",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "akreditasi_prodi.akreditasi"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "6" } },
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Tanggal Akreditasi",
-                                          "prepend-icon": "mdi-calendar",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.akreditasi_prodi.tanggal,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.akreditasi_prodi,
-                                              "tanggal",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "akreditasi_prodi.tanggal"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Akreditasi Internasional",
-                                          "prepend-icon": "mdi-earth",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.akreditasi_prodi.internasional,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.akreditasi_prodi,
-                                              "internasional",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "akreditasi_prodi.internasional"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Alamat Web Prodi",
-                                          "prepend-icon": "mdi-web",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.web_prodi,
-                                          callback: function($$v) {
-                                            _vm.web_prodi = $$v
-                                          },
-                                          expression: "web_prodi"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Alamat Kampus",
-                                          "prepend-icon": "mdi-map-marker",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.alamat.alamat,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.alamat, "alamat", $$v)
-                                          },
-                                          expression: "alamat.alamat"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Kota/Kabupaten",
-                                          "prepend-icon": "mdi-map-marker",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.alamat.kota,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.alamat, "kota", $$v)
-                                          },
-                                          expression: "alamat.kota"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Provinsi",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.alamat.provinsi,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.alamat,
-                                              "provinsi",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "alamat.provinsi"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label:
-                                            "Nama Lengkap dan Gelar Kaprodi",
-                                          "prepend-icon": "mdi-account",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.kaprodi.nama,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.kaprodi, "nama", $$v)
-                                          },
-                                          expression: "kaprodi.nama"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label:
-                                            "Periode Jabatan Kaprodi (mulai)",
-                                          "prepend-icon": "mdi-calendar-clock",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.kaprodi.periode.mulai,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.kaprodi.periode,
-                                              "mulai",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "kaprodi.periode.mulai"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "(purna)",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.kaprodi.periode.purna,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.kaprodi.periode,
-                                              "purna",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "kaprodi.periode.purna"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Email Kaprodi",
-                                          "prepend-icon": "mdi-email",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.kaprodi.email,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.kaprodi, "email", $$v)
-                                          },
-                                          expression: "kaprodi.email"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Email Kaprodi",
-                                          "prepend-icon": "mdi-contacts",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.kaprodi.no,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.kaprodi, "no", $$v)
-                                          },
-                                          expression: "kaprodi.no"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Email Prodi",
-                                          "prepend-icon": "mdi-email",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.email_prodi,
-                                          callback: function($$v) {
-                                            _vm.email_prodi = $$v
-                                          },
-                                          expression: "email_prodi"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm.isLoading
-                                ? _c("v-skeleton-loader", {
-                                    attrs: { type: "text" }
-                                  })
-                                : _c(
-                                    "div",
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Nomer Telepon Kantor",
-                                          "prepend-icon": "mdi-phone",
-                                          dense: "",
-                                          outlined: ""
-                                        },
-                                        model: {
-                                          value: _vm.no_kantor,
-                                          callback: function($$v) {
-                                            _vm.no_kantor = $$v
-                                          },
-                                          expression: "no_kantor"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("v-list-item-title", [
+                                _vm._v(_vm._s(_vm.jenjang))
+                              ]),
+                              _vm._v(" "),
+                              _c("v-list-item-subtitle", [_vm._v("Jenjang")])
                             ],
                             1
                           )
@@ -23086,7 +22563,7 @@ var render = function() {
                           type: "image",
                           width: "125",
                           height: "125",
-                          loading: ""
+                          boilerplate: !_vm.isLoading
                         }
                       })
                     ],
@@ -23496,11 +22973,11 @@ var render = function() {
                                 attrs: {
                                   outlined: "",
                                   small: "",
-                                  color: "purple"
+                                  color: "green darken-2"
                                 },
                                 on: {
                                   click: function($event) {
-                                    _vm.detailDialog = true
+                                    return _vm.seeDetails(item)
                                   }
                                 }
                               },
@@ -23524,7 +23001,7 @@ var render = function() {
       _c(
         "v-dialog",
         {
-          attrs: { "max-width": "290" },
+          attrs: { width: "700", "max-width": "100%", scrollable: "" },
           model: {
             value: _vm.detailDialog,
             callback: function($$v) {
@@ -23537,45 +23014,56 @@ var render = function() {
           _c(
             "v-card",
             [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Use Google's location service?")
-              ]),
+              _c(
+                "v-card-title",
+                { staticClass: "headline light-green white--text" },
+                [_vm._v("Detail Anggota")]
+              ),
               _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v(
-                  "\r\n            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.\r\n            "
-                )
-              ]),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { fluid: "" } },
+                    [
+                      _c(
+                        "v-row",
+                        { attrs: { justify: "center" } },
+                        [
+                          _c("ProfileCard", {
+                            attrs: {
+                              profileData: _vm.currentProfileShow,
+                              editMode: false
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
               _c(
                 "v-card-actions",
+                { staticClass: "light-green lighten-4" },
                 [
                   _c("v-spacer"),
                   _vm._v(" "),
                   _c(
                     "v-btn",
                     {
-                      attrs: { color: "green darken-1", text: "" },
+                      attrs: { color: "red", text: "" },
                       on: {
                         click: function($event) {
                           _vm.detailDialog = false
                         }
                       }
                     },
-                    [_vm._v("\r\n                Disagree\r\n            ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.detailDialog = false
-                        }
-                      }
-                    },
-                    [_vm._v("\r\n                Agree\r\n            ")]
+                    [_vm._v("Close")]
                   )
                 ],
                 1
@@ -23619,7 +23107,15 @@ var render = function() {
       _c(
         "v-row",
         { attrs: { justify: "center" } },
-        [_c("ProfileCard", { attrs: { editMode: _vm.editMode, id: "10" } })],
+        [
+          _c("ProfileCard", {
+            attrs: {
+              editMode: _vm.editMode,
+              profileData: _vm.profileData,
+              isLoading: _vm.profileLoading
+            }
+          })
+        ],
         1
       ),
       _vm._v(" "),
@@ -82727,7 +82223,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 
-window.app = new Vue({
+var app = new Vue({
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
   vuetify: _plugins_vuetify__WEBPACK_IMPORTED_MODULE_2__["default"],
   render: function render(h) {

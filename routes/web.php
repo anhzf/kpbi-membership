@@ -1,9 +1,8 @@
 <?php
 
-use App\KPBI;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Arr;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +26,16 @@ Route::get('api/auth', function () {
     return response()->json(auth()->user() ? auth()->user() : ['error' => 'Belum login']);
 });
 Route::get('api/kpbi/profile', function () {
-    return response()->json(auth()->user() ? auth()->user()->kpbi_profile : ['error' => 'Belum login']);
+    if ($authenticatedUser = auth()->user()) {
+
+        $kpbi_profile = $authenticatedUser->kpbi_profile;
+        $res = Arr::dot($kpbi_profile->attributesToArray());
+
+    } else {
+        $res = ['error' => 'Belum login'];
+    }
+
+    return response()->json($res);
 });
 Route::get('api/kpbi/profile/{id}', function ($id) {
     return response()->json(User::find($id)->kpbi_profile);
