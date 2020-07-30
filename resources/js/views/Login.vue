@@ -4,7 +4,7 @@
         <v-row justify="center" align="stretch">
 
             <v-card width="320" class="elevation-4 mb-16">
-                <v-form @submit.prevent="$emit('login', {username, password})">
+                <v-form @submit.prevent="login">
                     
                     <v-card-title primary-title>
                         <v-container fluid>
@@ -55,8 +55,7 @@
 </template>
 
 <script>
-import csrf from "../components/csrf";
-
+import {Login} from "@/util/Auth";
 
 export default {
     name: 'Login',
@@ -69,5 +68,30 @@ export default {
             password: null,
         }
     },
+
+
+    methods: {
+        async login() {
+            // Set page state to Loading
+            this.$store.commit('contentLoading', true)
+            const loginData = {
+                name: this.username,
+                password: this.password,
+            }
+            const login = await Login(loginData)
+
+            // Set page state to finished Loading
+            this.$store.commit('contentLoading', false)
+            this.$emit('contentLoading', false)
+            if (login.success) {
+                // Notice to User
+                this.$emit('notice', {message: 'Login Berhasil!', type: 'success'})
+                // Redirect user
+                this.$router.push({name: 'MyProfile'})
+            } else {
+                this.$emit('noticeError', login)
+            }
+        }
+    }
 }
 </script>

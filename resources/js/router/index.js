@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 // use import() instead of default import statement to make lazy router-views 
 const Member = () => import('../views/Member.vue')
 const Login = () => import('../views/Login.vue')
@@ -8,11 +9,10 @@ const MyProfile = () => import('../views/MyProfile.vue')
 const AccountSettings = () => import('../views/AccountSettings.vue')
 const NotFound404 = () => import('../views/404.vue')
 // Middleware
-import auth from "../middleware/auth"
-import guestOnly from "../middleware/guest"
+import auth from '../middleware/auth'
+import guestOnly from '../middleware/guest'
 
 Vue.use(VueRouter)
-
 
 const router = new VueRouter({
     mode: 'history',
@@ -40,7 +40,6 @@ const router = new VueRouter({
             name: 'MyProfile',
             path: '/profil-saya',
             component: MyProfile,
-            meta: { keepAlive: true },
             beforeEnter: auth,
         },
         {
@@ -59,6 +58,16 @@ const router = new VueRouter({
             redirect: '404'
         },
     ]
+})
+
+router.beforeEach(async (to, from, next) => {
+    store.commit('contentLoading', true)
+    await store.dispatch('authenticate')
+    next()
+})
+// router.before
+router.afterEach((to, from) => {
+    store.commit('contentLoading', false)
 })
 
 export default router

@@ -1,33 +1,17 @@
-import axios from "axios";
-
-const authenticate = (async () => {
-    const authentication = (await axios('api/auth')).data
-    let isLoggedIn, userId, userEmail, userName
-
-    if ('error' in authentication) {
-        isLoggedIn = false
-        userId = userEmail = userName = null
-    } else {
-        isLoggedIn = true;
-        ({ id: userId, email: userEmail, name: userName } = authentication)
+export default async () => {
+    try {
+        const {data: authentication} = await window.axios('api/user')
+        return {
+            isLoggedIn: true,
+            ...authentication
+        }
+    } catch (error) {
+        return {
+            isLoggedIn: false,
+            message: error.message,
+            response: {...error.response},
+            request: {...error.request},
+            config: {...error.config},
+        }
     }
-
-    return { isLoggedIn, userId, userEmail, userName }
-})()
-
-export default authenticate
-
-// export default async () => {
-//     const authentication = (await axios('api/auth')).data
-//     let isLoggedIn, userId, userEmail, userName
-
-//     if ('error' in authentication) {
-//         isLoggedIn = false
-//         userId = userEmail = userName = null
-//     } else {
-//         isLoggedIn = true;
-//         ({ id: userId, email: userEmail, name: userName } = authentication)
-//     }
-
-//     return { isLoggedIn, userId, userEmail, userName }
-// }
+}

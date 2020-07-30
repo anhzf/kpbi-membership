@@ -15,9 +15,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::get('/user', 'KPBI\ProfileAPIController@getProfile')->middleware('api');
 Route::get('/users', 'KPBI\ProfileAPIController@getAllProfiles')->middleware('api');
+
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+Route::middleware('auth:api')->get('/kpbi/profile', function (Request $request) {
+    return $request->user()->kpbi_profile;
+});
+
+Route::group([
+    'prefix' => 'auth',
+    'namespace' => 'Auth\API'
+], function () {
+    Route::post('login', 'BasicController@login');
+    Route::post('signup', 'BasicController@signup');
+
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::post('logout', 'BasicController@logout');
+        Route::get('user', 'BasicController@user');
+    });
+});

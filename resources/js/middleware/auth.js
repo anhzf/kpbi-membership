@@ -1,7 +1,6 @@
-import authentication from "../util/authentication";
+import store from "../store";
 
-export default async function (to, from, next) {
-    const { isLoggedIn: isAuth } = await authentication
-    if (isAuth) next()
+export default function (to, from, next) {
+    if (store.getters.isLoggedIn) next()
     else next({ name: 'Login' })
 }

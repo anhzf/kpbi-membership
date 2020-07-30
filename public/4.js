@@ -150,7 +150,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.isLoading = false;
         _this.members = data;
       })["catch"](function (err) {
-        return console.log(err);
+        _this.isLoading = false;
+
+        _this.$emit('noticeError', err);
       });
     },
     seeDetails: function seeDetails(profileData) {

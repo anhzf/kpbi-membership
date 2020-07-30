@@ -1,6 +1,6 @@
 <template>
 
-    <v-navigation-drawer v-model="drawer" app class="elevation2">
+    <v-navigation-drawer v-model="value" app class="elevation2">
         <v-system-bar color="light-green lighten-2"></v-system-bar>
 
         <v-list>
@@ -63,7 +63,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item v-if="isLoggedIn" @click.stop="$emit('logout')">
+            <v-list-item v-if="isLoggedIn" @click.stop="logout">
                 <v-list-item-action>
                     <v-icon>mdi-exit-to-app</v-icon>
                 </v-list-item-action>
@@ -90,11 +90,13 @@
 </template>
 
 <script>
+import {Logout} from '@/util/Auth'
+
 export default {
     name: 'DrawerNavigation',
 
-
     props: {
+        value: Boolean,
         drawer: Boolean,
         isLoggedIn: Boolean,
         userName: {
@@ -106,5 +108,17 @@ export default {
             required: false,
         }
     },
+
+    methods: {        
+        async logout() {
+            this.$store.commit('contentLoading', true)
+            const logout = await Logout()
+            if (logout.success) {
+                this.$emit('notice',{message: 'Berhasil Log Out!'})
+                this.$router.push({name: 'Login'})
+            } 
+            this.$store.commit('contentLoading', false)
+        }
+    }
 }
 </script>

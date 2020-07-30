@@ -1,14 +1,16 @@
 require('./bootstrap')
-window.Vue = require('vue')
 
-
+import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
 import vuetify from './plugins/vuetify'
 
+import store from './store'
+import router from './router'
 
-const app = new Vue({
+
+window.app = new Vue({
     router,
+    store,
     vuetify,
     render: h => h(App)
 }).$mount('#app')

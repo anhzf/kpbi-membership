@@ -7,21 +7,22 @@
 
     </v-row>
 
-    <!-- <v-tooltip top>
+    <v-tooltip top>
         <template v-slot:activator="{on, attrs}">
             <v-fab-transition>
                 <v-btn
                     v-show="editMode"
-                    fab fixed bottom right color="blue" dark
+                    fab fixed bottom right color="green" dark
                     v-bind="attrs" v-on="on"
                     @click="save"
-                ><v-icon>mdi-content-save</v-icon>
+                    disabled
+                ><v-icon>mdi-check</v-icon>
                 </v-btn>
             </v-fab-transition>
         </template>
         <span>Save</span>
     </v-tooltip>
-     -->
+    
 </v-container>
 
 </template>
@@ -49,7 +50,6 @@ export default {
             const data = window.axios.get('/api/kpbi/profile')
                             .then(({data}) => {
                                 this.profileLoading = false
-                                console.log(data)
                                 return data
                             })
                             .catch(({data: err}) => err)

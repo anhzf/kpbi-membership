@@ -1,3 +1,9 @@
+const { default: config } = require('./config');
+
+const sessTokenConfigName = config.session.AUTH_TOKEN_NAME
+const SESSION_TOKEN = window.sessionStorage.getItem(sessTokenConfigName)
+
+
 window._ = require('lodash');
 
 /**
@@ -10,6 +16,7 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.baseURL = document.baseURI;
+window.axios.defaults.headers.common['Authorization'] = SESSION_TOKEN;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

@@ -128,7 +128,10 @@ export default {
                     this.isLoading = false
                     this.members = data
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    this.isLoading = false
+                    this.$emit('noticeError', err)
+                })
         },
 
 

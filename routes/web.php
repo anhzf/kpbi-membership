@@ -22,24 +22,28 @@ use Illuminate\Support\Facades\Route;
 // ]);
 
 // Route::get('/members', 'HomeController@members')->name('memberList');
-Route::get('api/auth', function () {
-    return response()->json(auth()->user() ? auth()->user() : ['error' => 'Belum login']);
-});
-Route::get('api/kpbi/profile', function (Request $request) {
-    if ($authenticatedUser = $request->user()) {
-        $kpbi_profile = $authenticatedUser->kpbi_profile;
-        $res = $kpbi_profile->attributesToArray();
-    } else $res = ['error' => 'Belum login'];
+// Route::group(['prefix' => 'api'], function() {
 
-    return response()->json($res);
-});
-Route::get('api/kpbi/profile/{id}', function ($id, User $user) {
-    return response()->json($user::find($id)->kpbi_profile);
-});
+//     Route::get('/auth', function () {
+//         return response()->json(auth()->user() ? auth()->user() : ['error' => 'Belum login']);
+//     });
+//     Route::get('/kpbi/profile', function (Request $request) {
+//         if ($authenticatedUser = $request->user()) {
+//             $kpbi_profile = $authenticatedUser->kpbi_profile;
+//             $res = $kpbi_profile->attributesToArray();
+//         } else $res = ['error' => 'Belum login'];
+    
+//         return response()->json($res);
+//     });
+//     Route::get('/kpbi/profile/{id}', function ($id, User $user) {
+//         return response()->json($user::find($id)->kpbi_profile);
+//     });
 
-Route::post('/login', 'Auth\LoginController@login');
-Route::post('/logout', 'Auth\LoginController@logout');
-Route::post('/register', 'KPBI\RegisterController@register');
+// });
+
+// Route::post('/login', 'Auth\LoginController@login');
+// Route::post('/logout', 'Auth\LoginController@logout');
+// Route::post('/register', 'KPBI\RegisterController@register');
 
 
 // Route::get('/register', 'KPBI\RegisterController@showRegisterForm')->name('register');

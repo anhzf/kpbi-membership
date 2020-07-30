@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 
 class ProfileAPIController extends Controller
 {
-    public function getProfile(/* $id,  */Request $request)
+    public function getProfile(Request $request)
     {
         if ($user = User::find($request->id)) {
             return $user->kpbi_profile;
         }
 
-        return response(['error' => 'didn\'t find any match user'], 404);
+        return response()->json(['error' => 'didn\'t find any match user'], 404);
     }
 
     public function getAllProfiles()

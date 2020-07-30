@@ -5,35 +5,32 @@
         <v-container fluid>
             <v-row>
 
-                <v-col cols="8">
-                    <v-list-item v-for="(item, index) in form" :key="index" rounded ripple>
+                <v-col cols="12" sm="9" order="1" order-sm="0">
+                    <template v-for="(item, index) in form">
+                        <v-list-item>
 
-                        <v-list-item-avatar v-if="'icon' in item">
-                            <v-icon v-text="item.icon"></v-icon>
-                        </v-list-item-avatar>
+                            <v-list-item-avatar v-if="'icon' in item">
+                                <v-icon v-text="item.icon"></v-icon>
+                            </v-list-item-avatar>
 
-                        <v-list-item-content v-if="Array.isArray(item.value)">
-                            <v-row>
+                            <v-list-item-content v-if="Array.isArray(item.value)">
+                                <v-row>
+                                    <v-col v-for="(subItem, subIndex) in item.value" :key="subIndex">
+                                        <ProfileField :item="subItem" :editMode="editMode"></ProfileField>
+                                    </v-col>
+                                </v-row>
+                            </v-list-item-content>
 
-                                <v-col v-for="(subItem, subIndex) in item.value" :key="subIndex">
+                            <v-list-item-content v-else>
+                                <ProfileField :item="item" :editMode="editMode"></ProfileField>
+                            </v-list-item-content>
 
-                                    <v-list-item-subtitle>{{ subItem.label }}</v-list-item-subtitle>
-                                    <v-list-item-title>{{ subItem.value }}</v-list-item-title>
-                                </v-col>
-
-                            </v-row>
-                        </v-list-item-content>
-
-                        <v-list-item-content v-else>
-                            
-                            <v-list-item-subtitle>{{ item.label }}</v-list-item-subtitle>
-                            <v-list-item-title>{{ item.value }}</v-list-item-title>
-                        </v-list-item-content>
-
-                    </v-list-item>
+                        </v-list-item>
+                        <v-divider v-if="editMode"></v-divider>
+                    </template>
                 </v-col>
                 
-                <v-col cols="4">
+                <v-col cols="12" sm="3">
                     <v-skeleton-loader
                         type="image"
                         width="125" height="125"
@@ -49,6 +46,9 @@
 </template>
 
 <script>
+import ProfileField from "./ProfileField";
+
+
 export default {
     name: 'ProfileCard',
 
@@ -69,38 +69,6 @@ export default {
     data() {
         return {
             form: [],
-
-            // jenjang: null,
-            // prodi: null,
-            // jurusan: null,
-            // fakultas: null,
-            // pt: {
-            //     lengkap: null,
-            //     singkat: null,
-            // },
-            // status: null,
-            // akreditasi_prodi: {
-            //     akreditasi: null,
-            //     tanggal_akreditasi: null,
-            //     internasional: null,
-            // },
-            // akreditasi_pt: null,
-            // web_prodi: null,
-            // alamat: {
-            //     alamat: null,
-            //     kota: null,
-            //     provinsi: null,
-            // },
-            // kaprodi: {
-            //     nama: null,
-            //     email: null,
-            //     periode: {
-            //         mulai: null,
-            //         purna: null,
-            //     }
-            // },
-            // email_prodi: null,
-            // no_kantor: null,
         }
     },
 
@@ -160,6 +128,7 @@ export default {
                     label: 'Status Perguruan Tinggi',
                     value: status,
                     icon: 'mdi-shield-check',
+                    choices: ['Negeri', 'Swasta']
                 },
                 {
                     icon: 'mdi-check-underline',
@@ -244,6 +213,11 @@ export default {
                     icon: 'mdi-phone',
                 },
             ]
+        },
+
+
+        save() {
+            console.log('saved!')
         }
     },
 
@@ -257,6 +231,11 @@ export default {
         profileData() {
             this.fetchProfileData()
         }
+    },
+
+
+    components: {
+        ProfileField
     }
 }
 </script>

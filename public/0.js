@@ -11,6 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ProfileField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileField */ "./resources/js/components/ProfileField.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -64,9 +65,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ProfileCard',
   props: {
@@ -84,38 +83,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      form: [] // jenjang: null,
-      // prodi: null,
-      // jurusan: null,
-      // fakultas: null,
-      // pt: {
-      //     lengkap: null,
-      //     singkat: null,
-      // },
-      // status: null,
-      // akreditasi_prodi: {
-      //     akreditasi: null,
-      //     tanggal_akreditasi: null,
-      //     internasional: null,
-      // },
-      // akreditasi_pt: null,
-      // web_prodi: null,
-      // alamat: {
-      //     alamat: null,
-      //     kota: null,
-      //     provinsi: null,
-      // },
-      // kaprodi: {
-      //     nama: null,
-      //     email: null,
-      //     periode: {
-      //         mulai: null,
-      //         purna: null,
-      //     }
-      // },
-      // email_prodi: null,
-      // no_kantor: null,
-
+      form: []
     };
   },
   methods: {
@@ -181,7 +149,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }, {
                   label: 'Status Perguruan Tinggi',
                   value: status,
-                  icon: 'mdi-shield-check'
+                  icon: 'mdi-shield-check',
+                  choices: ['Negeri', 'Swasta']
                 }, {
                   icon: 'mdi-check-underline',
                   value: [{
@@ -252,6 +221,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    save: function save() {
+      console.log('saved!');
     }
   },
   mounted: function mounted() {
@@ -261,6 +233,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     profileData: function profileData() {
       this.fetchProfileData();
     }
+  },
+  components: {
+    ProfileField: _ProfileField__WEBPACK_IMPORTED_MODULE_1__["default"]
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileField.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ProfileField.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'ProfileField',
+  props: {
+    editMode: Boolean,
+    item: Object
   }
 });
 
@@ -304,77 +317,89 @@ var render = function() {
                 [
                   _c(
                     "v-col",
-                    { attrs: { cols: "8" } },
-                    _vm._l(_vm.form, function(item, index) {
-                      return _c(
-                        "v-list-item",
-                        { key: index, attrs: { rounded: "", ripple: "" } },
-                        [
-                          "icon" in item
-                            ? _c(
-                                "v-list-item-avatar",
-                                [
-                                  _c("v-icon", {
-                                    domProps: { textContent: _vm._s(item.icon) }
-                                  })
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          Array.isArray(item.value)
-                            ? _c(
-                                "v-list-item-content",
-                                [
-                                  _c(
-                                    "v-row",
-                                    _vm._l(item.value, function(
-                                      subItem,
-                                      subIndex
-                                    ) {
-                                      return _c(
-                                        "v-col",
-                                        { key: subIndex },
-                                        [
-                                          _c("v-list-item-subtitle", [
-                                            _vm._v(_vm._s(subItem.label))
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("v-list-item-title", [
-                                            _vm._v(_vm._s(subItem.value))
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    }),
+                    {
+                      attrs: {
+                        cols: "12",
+                        sm: "9",
+                        order: "1",
+                        "order-sm": "0"
+                      }
+                    },
+                    [
+                      _vm._l(_vm.form, function(item, index) {
+                        return [
+                          _c(
+                            "v-list-item",
+                            [
+                              "icon" in item
+                                ? _c(
+                                    "v-list-item-avatar",
+                                    [
+                                      _c("v-icon", {
+                                        domProps: {
+                                          textContent: _vm._s(item.icon)
+                                        }
+                                      })
+                                    ],
                                     1
                                   )
-                                ],
-                                1
-                              )
-                            : _c(
-                                "v-list-item-content",
-                                [
-                                  _c("v-list-item-subtitle", [
-                                    _vm._v(_vm._s(item.label))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("v-list-item-title", [
-                                    _vm._v(_vm._s(item.value))
-                                  ])
-                                ],
-                                1
-                              )
-                        ],
-                        1
-                      )
-                    }),
-                    1
+                                : _vm._e(),
+                              _vm._v(" "),
+                              Array.isArray(item.value)
+                                ? _c(
+                                    "v-list-item-content",
+                                    [
+                                      _c(
+                                        "v-row",
+                                        _vm._l(item.value, function(
+                                          subItem,
+                                          subIndex
+                                        ) {
+                                          return _c(
+                                            "v-col",
+                                            { key: subIndex },
+                                            [
+                                              _c("ProfileField", {
+                                                attrs: {
+                                                  item: subItem,
+                                                  editMode: _vm.editMode
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        }),
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _c(
+                                    "v-list-item-content",
+                                    [
+                                      _c("ProfileField", {
+                                        attrs: {
+                                          item: item,
+                                          editMode: _vm.editMode
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _vm.editMode ? _c("v-divider") : _vm._e()
+                        ]
+                      })
+                    ],
+                    2
                   ),
                   _vm._v(" "),
                   _c(
                     "v-col",
-                    { attrs: { cols: "4" } },
+                    { attrs: { cols: "12", sm: "3" } },
                     [
                       _c("v-skeleton-loader", {
                         staticClass: "mx-auto",
@@ -399,6 +424,61 @@ var render = function() {
       )
     ],
     1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileField.vue?vue&type=template&id=31de6c3c&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ProfileField.vue?vue&type=template&id=31de6c3c& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("v-list-item-subtitle", [_vm._v(_vm._s(_vm.item.label))]),
+      _vm._v(" "),
+      _vm.editMode
+        ? [
+            "choices" in _vm.item
+              ? _c("v-select", {
+                  attrs: { items: _vm.item.choices },
+                  model: {
+                    value: _vm.item.value,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "value", $$v)
+                    },
+                    expression: "item.value"
+                  }
+                })
+              : _c("v-text-field", {
+                  model: {
+                    value: _vm.item.value,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "value", $$v)
+                    },
+                    expression: "item.value"
+                  }
+                })
+          ]
+        : _vm._e()
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -472,6 +552,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileCard_vue_vue_type_template_id_23caba84___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileCard_vue_vue_type_template_id_23caba84___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ProfileField.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/ProfileField.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ProfileField_vue_vue_type_template_id_31de6c3c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProfileField.vue?vue&type=template&id=31de6c3c& */ "./resources/js/components/ProfileField.vue?vue&type=template&id=31de6c3c&");
+/* harmony import */ var _ProfileField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileField.vue?vue&type=script&lang=js& */ "./resources/js/components/ProfileField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ProfileField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ProfileField_vue_vue_type_template_id_31de6c3c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ProfileField_vue_vue_type_template_id_31de6c3c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ProfileField.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ProfileField.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/ProfileField.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ProfileField.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ProfileField.vue?vue&type=template&id=31de6c3c&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/ProfileField.vue?vue&type=template&id=31de6c3c& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileField_vue_vue_type_template_id_31de6c3c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ProfileField.vue?vue&type=template&id=31de6c3c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileField.vue?vue&type=template&id=31de6c3c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileField_vue_vue_type_template_id_31de6c3c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileField_vue_vue_type_template_id_31de6c3c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

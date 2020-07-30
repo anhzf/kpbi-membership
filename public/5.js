@@ -38,6 +38,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'MyProfile',
@@ -56,7 +57,6 @@ __webpack_require__.r(__webpack_exports__);
       var data = window.axios.get('/api/kpbi/profile').then(function (_ref) {
         var data = _ref.data;
         _this.profileLoading = false;
-        console.log(data);
         return data;
       })["catch"](function (_ref2) {
         var err = _ref2.data;
@@ -110,6 +110,64 @@ var render = function() {
           })
         ],
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-tooltip",
+        {
+          attrs: { top: "" },
+          scopedSlots: _vm._u([
+            {
+              key: "activator",
+              fn: function(ref) {
+                var on = ref.on
+                var attrs = ref.attrs
+                return [
+                  _c(
+                    "v-fab-transition",
+                    [
+                      _c(
+                        "v-btn",
+                        _vm._g(
+                          _vm._b(
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.editMode,
+                                  expression: "editMode"
+                                }
+                              ],
+                              attrs: {
+                                fab: "",
+                                fixed: "",
+                                bottom: "",
+                                right: "",
+                                color: "green",
+                                dark: "",
+                                disabled: ""
+                              },
+                              on: { click: _vm.save }
+                            },
+                            "v-btn",
+                            attrs,
+                            false
+                          ),
+                          on
+                        ),
+                        [_c("v-icon", [_vm._v("mdi-check")])],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            }
+          ])
+        },
+        [_vm._v(" "), _c("span", [_vm._v("Save")])]
       )
     ],
     1

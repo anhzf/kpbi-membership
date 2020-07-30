@@ -1,9 +1,15 @@
 <template>
-
+<Maintenance></Maintenance>
 </template>
 
 <script>
-export default {
+import Maintenance from "./Maintenance";
 
+
+export default {
+    name: 'AccountSettings',
+    components: {
+        Maintenance
+    }
 }
 </script>
