@@ -1,6 +1,5 @@
 <?php
 
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,14 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/users', 'KPBI\ProfileAPIController@getAllProfiles')->middleware('api');
-
+Route::group([
+    'prefix' => 'kpbi',
+    'namespace' => 'KPBI'
+], function () {
+    
+    Route::get('/profile', 'ProfileAPIController@get')->middleware('auth:api');
+    Route::put('/profile', 'ProfileAPIController@update')->middleware('auth:api');
+    Route::get('/profiles', 'ProfileAPIController@getAll')->middleware('api');
+    
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
-Route::middleware('auth:api')->get('/kpbi/profile', function (Request $request) {
-    return $request->user()->kpbi_profile;
 });
 
 Route::group([

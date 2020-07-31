@@ -47,7 +47,6 @@
                     fixed-header
                     height="450"
                 >
-
                     <template v-slot:item.web_prodi="{ item }">
                         <a :href="item.web_prodi" target="_blank">{{ item.web_prodi }}</a>
                     </template>
@@ -123,7 +122,7 @@ export default {
         getUsers() {
             this.isLoading = true
 
-            window.axios.get('/api/users')
+            window.axios.get('/api/kpbi/profiles')
                 .then(({data}) => {
                     this.isLoading = false
                     this.members = data

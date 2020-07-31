@@ -103,7 +103,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Members',
@@ -145,7 +144,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.isLoading = true;
-      window.axios.get('/api/users').then(function (_ref) {
+      window.axios.get('/api/kpbi/profiles').then(function (_ref) {
         var data = _ref.data;
         _this.isLoading = false;
         _this.members = data;

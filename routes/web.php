@@ -1,7 +1,6 @@
 <?php
 
-use App\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 
 // Auth::routes([
 //     'register' => false,
@@ -48,15 +46,15 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/register', 'KPBI\RegisterController@showRegisterForm')->name('register');
 
-Route::group(['prefix' => 'my-profile', 'as' => 'profile'], function () {
-    Route::get('/', 'DashboardController@myProfile');
-    Route::post('/', 'DashboardController@saveProfile')->name(':update');
-});
+// Route::group(['prefix' => 'my-profile', 'as' => 'profile'], function () {
+//     Route::get('/', 'DashboardController@myProfile');
+//     Route::post('/', 'DashboardController@saveProfile')->name(':update');
+// });
 
-Route::group(['prefix' => 'my-account', 'as' => 'account'], function () {
-    Route::get('/', 'DashboardController@myAccount');
-    Route::post('/change-password', 'DashboardController@changePassword')->name(':change-password');
-});
+// Route::group(['prefix' => 'my-account', 'as' => 'account'], function () {
+//     Route::get('/', 'DashboardController@myAccount');
+//     Route::post('/change-password', 'DashboardController@changePassword')->name(':change-password');
+// });
 
 
 Route::get('/{vue_capture?}', function () {

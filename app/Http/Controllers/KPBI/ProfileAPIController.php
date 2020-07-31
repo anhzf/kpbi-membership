@@ -10,16 +10,12 @@ use Illuminate\Http\Request;
 
 class ProfileAPIController extends Controller
 {
-    public function getProfile(Request $request)
+    public function get(Request $request)
     {
-        if ($user = User::find($request->id)) {
-            return $user->kpbi_profile;
-        }
-
-        return response()->json(['error' => 'didn\'t find any match user'], 404);
+        return $request->user()->kpbi_profile;
     }
 
-    public function getAllProfiles()
+    public function getAll()
     {
         $users = User::all();
 
@@ -39,5 +35,21 @@ class ProfileAPIController extends Controller
         }
         
         return response()->json($members);
+    }
+
+    public function update(Request $request)
+    {
+        if (KPBI::save_info($request->all() + ['user_id' => $request->user()->id]))
+            $res = [
+                'success' => true,
+                'message' => 'Profile updated!'
+            ];
+        else
+            $res = [
+                'success' => false,
+                'message' => '❌ something wrong!',
+            ];
+
+        return response()->json($res);
     }
 }

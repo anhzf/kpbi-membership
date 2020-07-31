@@ -9,18 +9,15 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_ProfileCard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/ProfileCard */ "./resources/js/components/ProfileCard.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_ProfileCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/ProfileCard */ "./resources/js/components/ProfileCard.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -44,7 +41,6 @@ __webpack_require__.r(__webpack_exports__);
   name: 'MyProfile',
   data: function data() {
     return {
-      editMode: true,
       profileLoading: false,
       profileData: {}
     };
@@ -53,26 +49,86 @@ __webpack_require__.r(__webpack_exports__);
     getProfileData: function getProfileData() {
       var _this = this;
 
-      this.profileLoading = true;
-      var data = window.axios.get('/api/kpbi/profile').then(function (_ref) {
-        var data = _ref.data;
-        _this.profileLoading = false;
-        return data;
-      })["catch"](function (_ref2) {
-        var err = _ref2.data;
-        return err;
-      });
-      this.profileData = data;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.profileLoading = true;
+                data = window.axios.get('/api/kpbi/profile').then(function (_ref) {
+                  var data = _ref.data;
+                  _this.profileLoading = false;
+                  return data;
+                })["catch"](function (_ref2) {
+                  var err = _ref2.data;
+                  return err;
+                });
+                _context.next = 4;
+                return data;
+
+              case 4:
+                _this.profileData = _context.sent;
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     },
-    save: function save() {
-      console.log('saved!');
+    save: function save(data) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var update;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this2.$store.commit('contentLoading', true);
+
+                _context2.prev = 1;
+                _context2.next = 4;
+                return window.axios.put('/api/kpbi/profile', data);
+
+              case 4:
+                update = _context2.sent;
+
+                _this2.$emit('notice', {
+                  message: update.data.message,
+                  type: 'success'
+                });
+
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](1);
+
+                _this2.$emit('noticeError', _context2.t0);
+
+              case 11:
+                _this2.getProfileData();
+
+                _this2.$store.commit('contentLoading', false);
+
+              case 13:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[1, 8]]);
+      }))();
     }
   },
   mounted: function mounted() {
     this.getProfileData();
   },
   components: {
-    ProfileCard: _components_ProfileCard__WEBPACK_IMPORTED_MODULE_0__["default"]
+    ProfileCard: _components_ProfileCard__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 });
 
@@ -103,71 +159,14 @@ var render = function() {
         [
           _c("ProfileCard", {
             attrs: {
-              editMode: _vm.editMode,
+              "can-edit": true,
               profileData: _vm.profileData,
               isLoading: _vm.profileLoading
-            }
+            },
+            on: { "profile-update": _vm.save }
           })
         ],
         1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-tooltip",
-        {
-          attrs: { top: "" },
-          scopedSlots: _vm._u([
-            {
-              key: "activator",
-              fn: function(ref) {
-                var on = ref.on
-                var attrs = ref.attrs
-                return [
-                  _c(
-                    "v-fab-transition",
-                    [
-                      _c(
-                        "v-btn",
-                        _vm._g(
-                          _vm._b(
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.editMode,
-                                  expression: "editMode"
-                                }
-                              ],
-                              attrs: {
-                                fab: "",
-                                fixed: "",
-                                bottom: "",
-                                right: "",
-                                color: "green",
-                                dark: "",
-                                disabled: ""
-                              },
-                              on: { click: _vm.save }
-                            },
-                            "v-btn",
-                            attrs,
-                            false
-                          ),
-                          on
-                        ),
-                        [_c("v-icon", [_vm._v("mdi-check")])],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ]
-              }
-            }
-          ])
-        },
-        [_vm._v(" "), _c("span", [_vm._v("Save")])]
       )
     ],
     1

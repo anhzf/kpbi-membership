@@ -3,25 +3,14 @@
 
     <v-row justify="center">
 
-        <ProfileCard :editMode="editMode" :profileData="profileData" :isLoading="profileLoading"></ProfileCard>
+        <ProfileCard
+            :can-edit="true"
+            :profileData="profileData"
+            :isLoading="profileLoading"
+            @profile-update="save"
+        ></ProfileCard>
 
     </v-row>
-
-    <v-tooltip top>
-        <template v-slot:activator="{on, attrs}">
-            <v-fab-transition>
-                <v-btn
-                    v-show="editMode"
-                    fab fixed bottom right color="green" dark
-                    v-bind="attrs" v-on="on"
-                    @click="save"
-                    disabled
-                ><v-icon>mdi-check</v-icon>
-                </v-btn>
-            </v-fab-transition>
-        </template>
-        <span>Save</span>
-    </v-tooltip>
     
 </v-container>
 
@@ -34,18 +23,15 @@ import ProfileCard from "../components/ProfileCard";
 export default {
     name: 'MyProfile',
 
-
     data() {
         return {
-            editMode: true,
             profileLoading: false,
             profileData: {}
         }
     },
 
-
     methods: {
-        getProfileData() {
+        async getProfileData() {
             this.profileLoading = true
             const data = window.axios.get('/api/kpbi/profile')
                             .then(({data}) => {
@@ -54,20 +40,25 @@ export default {
                             })
                             .catch(({data: err}) => err)
 
-            this.profileData = data
+            this.profileData = await data
         },
 
-
-        save() {
-            console.log('saved!')
+        async save(data) {
+            this.$store.commit('contentLoading', true)
+            try {
+                const update = await window.axios.put('/api/kpbi/profile', data)
+                this.$emit('notice', {message: update.data.message, type: 'success'})
+            } catch (err) {
+                this.$emit('noticeError', err)
+            }
+            this.getProfileData()
+            this.$store.commit('contentLoading', false)
         },
     },
-
 
     mounted() {
         this.getProfileData()
     },
-
 
     components: {
         ProfileCard,

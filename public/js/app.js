@@ -2123,7 +2123,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var flashes = Array.prototype.slice.call(arguments).map(function (_ref) {
         var message = _ref.message,
             _ref$color = _ref.color,
-            color = _ref$color === void 0 ? 'lime darken-1' : _ref$color,
+            color = _ref$color === void 0 ? undefined : _ref$color,
             _ref$type = _ref.type,
             type = _ref$type === void 0 ? undefined : _ref$type;
         return {
@@ -81722,7 +81722,7 @@ var Member = function Member() {
 };
 
 var Login = function Login() {
-  return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/Login.vue */ "./resources/js/views/Login.vue"));
+  return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ../views/Login.vue */ "./resources/js/views/Login.vue"));
 };
 
 var Register = function Register() {
@@ -81738,7 +81738,7 @@ var AccountSettings = function AccountSettings() {
 };
 
 var NotFound404 = function NotFound404() {
-  return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ../views/404.vue */ "./resources/js/views/404.vue"));
+  return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/404.vue */ "./resources/js/views/404.vue"));
 }; // Middleware
 
 
@@ -81805,8 +81805,7 @@ router.beforeEach( /*#__PURE__*/function () {
   return function (_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
-}()); // router.before
-
+}());
 router.afterEach(function (to, from) {
   _store__WEBPACK_IMPORTED_MODULE_3__["default"].commit('contentLoading', false);
 });

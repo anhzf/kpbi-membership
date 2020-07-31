@@ -31,10 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Use tailwind as paginator UI
-        Paginator::useTailwind();
-
-        
         // Override the email notification for verifying email
         VerifyEmail::toMailUsing(function ($notifiable) {
             $verifyUrl = URL::temporarySignedRoute(

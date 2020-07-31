@@ -65,7 +65,6 @@ router.beforeEach(async (to, from, next) => {
     await store.dispatch('authenticate')
     next()
 })
-// router.before
 router.afterEach((to, from) => {
     store.commit('contentLoading', false)
 })

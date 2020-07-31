@@ -65,7 +65,7 @@ export default {
         flash() {
             const flashes = [...arguments].map((
                     {
-                        message, color = 'lime darken-1', type = undefined
+                        message, color = undefined, type = undefined
                     }
                 ) => {
                 return {
