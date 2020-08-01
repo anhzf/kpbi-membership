@@ -18,11 +18,9 @@ Route::group([
     'prefix' => 'kpbi',
     'namespace' => 'KPBI'
 ], function () {
-    
     Route::get('/profile', 'ProfileAPIController@get')->middleware('auth:api');
     Route::put('/profile', 'ProfileAPIController@update')->middleware('auth:api');
-    Route::get('/profiles', 'ProfileAPIController@getAll')->middleware('api');
-    
+    Route::get('/profiles', 'ProfileAPIController@getAll');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -34,11 +32,9 @@ Route::group([
     'namespace' => 'Auth\API'
 ], function () {
     Route::post('login', 'BasicController@login');
-    Route::post('signup', 'BasicController@signup');
+    Route::post('register', 'RegisterController@register');
 
-    Route::group([
-        'middleware' => 'auth:api'
-    ], function () {
+    Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'BasicController@logout');
         Route::get('user', 'BasicController@user');
     });

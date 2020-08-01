@@ -1,4 +1,5 @@
-import config from "@/config";
+import config from '@/config';
+import store from '@/store'
 
 function updateToken(newTokenType, newToken) {
     // Set Token to Browser Session
@@ -52,6 +53,24 @@ async function Logout(finallyCB = null) {
     }
 }
 
+async function Register(registerData, finallyCB = null) {
+    try {
+        const {success, message} = await axios.post('/api/auth/register', {...registerData, _token: store.state.csrfToken}).finally(any => finallyCB?.(any))
+
+        if (success) {
+            return { success, message }
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            response: {...error.response},
+            request: {...error.request},
+            config: {...error.config},
+        }
+    }
+}
+
 export {
-    updateToken, Login, Logout
+    updateToken, Login, Logout, Register,
 }

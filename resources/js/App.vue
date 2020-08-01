@@ -77,26 +77,6 @@ export default {
             this.flashes.push(...flashes)
         },
 
-        // register(data) {
-            //     this.isContentLoading = true
-
-            //     const registerData = {
-            //         kaprodi: { email: data.email_kaprodi },
-            //         email_prodi: data.email_prodi,
-            //         jenjang: data.jenjang,
-            //         nama_prodi: data.nama_prodi,
-            //         pt: {
-            //             lengkap: data.pt.lengkap,
-            //             singkat: data.pt.singkat,
-            //         },
-            //         _token: this.webToken,
-            //     }
-
-            //     window.axios.post('/register', registerData)
-            //         .then((data) => {
-            //             this.isContentLoading = false
-            //         }).catch(err => this.axiosErrorMessageHandler(err))
-        // },
 
         axiosErrorMessageHandler() {
             const messages = [];
@@ -110,7 +90,6 @@ export default {
             })
             messages.forEach(msg => this.flash({message: msg, type: 'error', color: 'red'}))
         }
-
     },
 
 

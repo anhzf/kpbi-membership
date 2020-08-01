@@ -9,6 +9,15 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_Auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/util/Auth */ "./resources/js/util/Auth.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -72,6 +81,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Register',
   data: function data() {
@@ -91,6 +101,63 @@ __webpack_require__.r(__webpack_exports__);
         return /.+@.+\..+/.test(v) || 'E-mail tidak valid';
       }
     };
+  },
+  methods: {
+    register: function register() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var registerData, register;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.$store.commit('contentLoading', true);
+
+                registerData = {
+                  kaprodi: {
+                    email: _this.email_kaprodi
+                  },
+                  email_prodi: _this.email_prodi,
+                  jenjang: _this.jenjang,
+                  nama_prodi: _this.nama_prodi,
+                  pt: {
+                    lengkap: _this.pt.lengkap,
+                    singkat: _this.pt.singkat
+                  }
+                };
+                _context.next = 4;
+                return Object(_util_Auth__WEBPACK_IMPORTED_MODULE_1__["Register"])(registerData);
+
+              case 4:
+                register = _context.sent;
+
+                // Set page state to finished Loading
+                _this.$store.commit('contentLoading', false);
+
+                if (register.success) {
+                  // Notice to User
+                  _this.$emit('notice', {
+                    message: register.message,
+                    type: 'success'
+                  }); // Redirect user
+
+
+                  _this.$router.push({
+                    name: 'MyProfile'
+                  });
+                } else {
+                  _this.$emit('noticeError', register);
+                }
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
   }
 });
 
@@ -132,13 +199,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.$emit("register", {
-                        jenjang: _vm.jenjang,
-                        nama_prodi: _vm.nama_prodi,
-                        pt: _vm.pt,
-                        email_prodi: _vm.email_prodi,
-                        email_kaprodi: _vm.email_kaprodi
-                      })
+                      return _vm.register($event)
                     }
                   }
                 },

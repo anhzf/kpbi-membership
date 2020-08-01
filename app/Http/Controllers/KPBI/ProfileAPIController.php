@@ -24,8 +24,10 @@ class ProfileAPIController extends Controller
         });
 
         $fullfilledData = $members->filter(function($member) {
-            return !(KPBI::requiredDataValidator($member->attributesToArray())
-                ->fails());
+            if ($member instanceof KPBI) {
+                return !(KPBI::requiredDataValidator($member->attributesToArray())
+                    ->fails());
+            }
         });
 
         $members = array_values($fullfilledData->toArray());

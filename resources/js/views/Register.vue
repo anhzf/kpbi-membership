@@ -4,7 +4,7 @@
         <v-row justify="center" align="stretch">
 
             <v-card width="100%" max-width="650" class="elevation-4 mb-16">
-                <v-form @submit.prevent="$emit('register', {jenjang, nama_prodi, pt, email_prodi, email_kaprodi})">
+                <v-form @submit.prevent="register">
                     
                     <v-card-title primary-title>Daftar Anggota</v-card-title>
                     
@@ -62,10 +62,10 @@
 </template>
 
 <script>
+import { Register } from '@/util/Auth'
+
 export default {
     name: 'Register',
-
-
     data() {
         return {
             jenjang: null,
@@ -80,5 +80,34 @@ export default {
             emailRules: v => /.+@.+\..+/.test(v) || 'E-mail tidak valid',
         }
     },
+    methods: {
+        async register() {
+            this.$store.commit('contentLoading', true)
+
+            const registerData = {
+                kaprodi: { email: this.email_kaprodi },
+                email_prodi: this.email_prodi,
+                jenjang: this.jenjang,
+                nama_prodi: this.nama_prodi,
+                pt: {
+                    lengkap: this.pt.lengkap,
+                    singkat: this.pt.singkat,
+                },
+            }
+
+            const register = await Register(registerData)
+
+            // Set page state to finished Loading
+            this.$store.commit('contentLoading', false)
+            if (register.success) {
+                // Notice to User
+                this.$emit('notice', {message: register.message, type: 'success'})
+                // Redirect user
+                this.$router.push({name: 'MyProfile'})
+            } else {
+                this.$emit('noticeError', register)
+            }
+        },
+    }
 }
 </script>

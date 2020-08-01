@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth\API;
 
-use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,41 +10,14 @@ use Carbon\Carbon;
 class BasicController extends Controller
 {
     /**
-     * Create user
-     *
-     * @param  [string] name
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
-     * @return [string] message
-     */
-    public function signup(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
-        ]);
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ]);
-        $user->save();
-        return response()->json([
-            'message' => 'Successfully created user!'
-        ], 201);
-    }
-
-    /**
      * Login user and create token
      *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [boolean] remember_me
-     * @return [string] access_token
-     * @return [string] token_type
-     * @return [string] expires_at
+     * @param  String $email
+     * @param  String $password
+     * @param  Boolean $remember_me
+     * @return String $access_token
+     * @return String $token_type
+     * @return String $expires_at
      */
     public function login(Request $request)
     {
@@ -79,7 +51,7 @@ class BasicController extends Controller
     /**
      * Logout user (Revoke the token)
      *
-     * @return [string] message
+     * @return String message
      */
     public function logout(Request $request)
     {

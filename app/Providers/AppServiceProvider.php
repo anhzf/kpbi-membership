@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use App\Helper\FlashMsg;
+// use App\Helper\FlashMsg;
 use App\Mail\RegisterKPBI;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -48,9 +47,10 @@ class AppServiceProvider extends ServiceProvider
 
                 $notifiable->delete();
                 
-                FlashMsg::add('error', __('Akun anda belum terdaftar'));
-                
-                return redirect()->route('register'); 
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda belum terdaftar sebagai anggota'
+                ], 401); 
             }
 
             return (new RegisterKPBI($verifyUrl, $notifiable))

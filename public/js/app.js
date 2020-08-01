@@ -2136,24 +2136,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       (_this$flashes = this.flashes).push.apply(_this$flashes, _toConsumableArray(flashes));
     },
-    // register(data) {
-    //     this.isContentLoading = true
-    //     const registerData = {
-    //         kaprodi: { email: data.email_kaprodi },
-    //         email_prodi: data.email_prodi,
-    //         jenjang: data.jenjang,
-    //         nama_prodi: data.nama_prodi,
-    //         pt: {
-    //             lengkap: data.pt.lengkap,
-    //             singkat: data.pt.singkat,
-    //         },
-    //         _token: this.webToken,
-    //     }
-    //     window.axios.post('/register', registerData)
-    //         .then((data) => {
-    //             this.isContentLoading = false
-    //         }).catch(err => this.axiosErrorMessageHandler(err))
-    // },
     axiosErrorMessageHandler: function axiosErrorMessageHandler() {
       var _this = this;
 
@@ -81905,7 +81887,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
 /*!***********************************!*\
   !*** ./resources/js/util/Auth.js ***!
   \***********************************/
-/*! exports provided: updateToken, Login, Logout */
+/*! exports provided: updateToken, Login, Logout, Register */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -81913,9 +81895,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateToken", function() { return updateToken; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Login", function() { return Login; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Logout", function() { return Logout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Register", function() { return Register; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/config */ "./resources/js/config.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/store */ "./resources/js/store.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -81927,6 +81911,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -82057,6 +82042,71 @@ function _Logout() {
     }, _callee2, null, [[1, 9]]);
   }));
   return _Logout.apply(this, arguments);
+}
+
+function Register(_x2) {
+  return _Register.apply(this, arguments);
+}
+
+function _Register() {
+  _Register = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(registerData) {
+    var finallyCB,
+        _yield$axios$post$fin4,
+        success,
+        message,
+        _args3 = arguments;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            finallyCB = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : null;
+            _context3.prev = 1;
+            _context3.next = 4;
+            return axios.post('/api/auth/register', _objectSpread(_objectSpread({}, registerData), {}, {
+              _token: _store__WEBPACK_IMPORTED_MODULE_2__["default"].state.csrfToken
+            }))["finally"](function (any) {
+              return finallyCB === null || finallyCB === void 0 ? void 0 : finallyCB(any);
+            });
+
+          case 4:
+            _yield$axios$post$fin4 = _context3.sent;
+            success = _yield$axios$post$fin4.success;
+            message = _yield$axios$post$fin4.message;
+
+            if (!success) {
+              _context3.next = 9;
+              break;
+            }
+
+            return _context3.abrupt("return", {
+              success: success,
+              message: message
+            });
+
+          case 9:
+            _context3.next = 14;
+            break;
+
+          case 11:
+            _context3.prev = 11;
+            _context3.t0 = _context3["catch"](1);
+            return _context3.abrupt("return", {
+              success: false,
+              message: _context3.t0.message,
+              response: _objectSpread({}, _context3.t0.response),
+              request: _objectSpread({}, _context3.t0.request),
+              config: _objectSpread({}, _context3.t0.config)
+            });
+
+          case 14:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[1, 11]]);
+  }));
+  return _Register.apply(this, arguments);
 }
 
 
