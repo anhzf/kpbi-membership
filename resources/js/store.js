@@ -12,6 +12,7 @@ const store = new Vuex.Store({
             id: null,
             name: null,
             email: null,
+            verified: null,
         },
         isContentLoading: false,
         csrfToken: document.querySelector('meta[name=csrf-token]').content,
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
         userId: state => state.Authentication.id,
         userEmail: state => state.Authentication.email,
         userName: state => state.Authentication.name,
+        userVerified: state => state.Authentication.verified,
     }
 })
 

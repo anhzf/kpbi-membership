@@ -1,6 +1,6 @@
 <template>
 
-    <v-navigation-drawer v-model="value" app class="elevation2">
+    <v-navigation-drawer :value="value" @input="$emit('input', $event)" app class="elevation2">
         <v-system-bar color="light-green lighten-2"></v-system-bar>
 
         <v-list>

@@ -19,13 +19,6 @@ use Illuminate\Support\Facades\Route;
 //     'verify' => true,
 // ]);
 
-Route::group([
-    'prefix' => 'verify',
-    'as' => 'verification'
-], function () {
-    Route::post(''); // verification.verify url
-});
-
 Route::get('/{vue_capture?}', function () {
     return view('vue.app');
 })->where('vue_capture', '[\/\w\.-]*');

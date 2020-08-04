@@ -96,14 +96,15 @@ export default {
             }
 
             const register = await Register(registerData)
-
             // Set page state to finished Loading
             this.$store.commit('contentLoading', false)
+            console.log(register)
             if (register.success) {
                 // Notice to User
                 this.$emit('notice', {message: register.message, type: 'success'})
+                this.$emit('notice', {message: 'Silahkan coba login untuk melanjutkan'})
                 // Redirect user
-                this.$router.push({name: 'MyProfile'})
+                this.$router.push({name: 'Login'})
             } else {
                 this.$emit('noticeError', register)
             }

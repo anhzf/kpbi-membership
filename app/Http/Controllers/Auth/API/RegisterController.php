@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth\API;
 use App\User;
 use App\KPBI;
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -39,8 +38,9 @@ class RegisterController extends Controller
 
         $this->validator($data)->validate();
         // Trigger an event
-        event(new Registered($user = $this->create($data)));
+        // event(new Registered($user = $this->create($data)));
         
+        $user = $this->create($data);
         // Register as KPBI Member
         $this->KPBIRegister($request, $user);
 

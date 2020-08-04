@@ -339,7 +339,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _yield$_this$profileD, _yield$_this$profileD2, _yield$_this$profileD3, _yield$_this$profileD4, _yield$_this$profileD5, _yield$_this$profileD6;
+        var _yield$_this$profileD, _yield$_this$profileD2, _yield$_this$profileD3, _yield$_this$profileD4, _yield$_this$profileD5, _yield$_this$profileD6, _yield$_this$profileD7, _yield$_this$profileD8, _yield$_this$profileD9, _yield$_this$profileD10, _yield$_this$profileD11, _yield$_this$profileD12, _yield$_this$profileD13, _yield$_this$profileD14, _yield$_this$profileD15, _yield$_this$profileD16, _yield$_this$profileD17, _yield$_this$profileD18, _yield$_this$profileD19, _yield$_this$profileD20, _yield$_this$profileD21, _yield$_this$profileD22, _yield$_this$profileD23, _yield$_this$profileD24, _yield$_this$profileD25, _yield$_this$profileD26, _yield$_this$profileD27, _yield$_this$profileD28;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
@@ -352,37 +352,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 _yield$_this$profileD = _context.sent;
-                _this.jenjang.value = _yield$_this$profileD.jenjang;
-                _this.nama_prodi = _yield$_this$profileD.nama_prodi;
-                _this.jurusan = _yield$_this$profileD.jurusan;
-                _this.fakultas = _yield$_this$profileD.fakultas;
-                _yield$_this$profileD2 = _yield$_this$profileD.pt;
-                _this.ptSingkat = _yield$_this$profileD2.singkat;
-                _this.ptLengkap = _yield$_this$profileD2.lengkap;
-                _this.status = _yield$_this$profileD.status;
-                _yield$_this$profileD3 = _yield$_this$profileD.akreditasi_prodi;
-                _this.akreditasiProdi = _yield$_this$profileD3.akreditasi;
-                _this.tanggalAkreditasiProdi = _yield$_this$profileD3.tanggal;
-                _this.internasionalAkreditasiProdi = _yield$_this$profileD3.internasional;
-                _this.akreditasi_pt = _yield$_this$profileD.akreditasi_pt;
-                _this.web_prodi = _yield$_this$profileD.web_prodi;
-                _yield$_this$profileD4 = _yield$_this$profileD.alamat_kampus;
-                _this.alamat = _yield$_this$profileD4.alamat;
-                _this.kotaAlamat = _yield$_this$profileD4.kota;
-                _this.provinsiAlamat = _yield$_this$profileD4.provinsi;
-                _yield$_this$profileD5 = _yield$_this$profileD.kaprodi;
-                _this.namaKaprodi = _yield$_this$profileD5.nama;
-                _this.noKaprodi = _yield$_this$profileD5.no;
-                _this.emailKaprodi = _yield$_this$profileD5.email;
-                _yield$_this$profileD6 = _yield$_this$profileD5.periode;
-                _this.periodeMulaiKaprodi = _yield$_this$profileD6.mulai;
-                _this.periodePurnaKaprodi = _yield$_this$profileD6.purna;
-                _this.email_prodi = _yield$_this$profileD.email_prodi;
-                _this.no_telp_prodi = _yield$_this$profileD.no_telp_prodi;
+                _yield$_this$profileD2 = _yield$_this$profileD.jenjang;
+                _this.jenjang.value = _yield$_this$profileD2 === void 0 ? null : _yield$_this$profileD2;
+                _yield$_this$profileD3 = _yield$_this$profileD.nama_prodi;
+                _this.nama_prodi = _yield$_this$profileD3 === void 0 ? null : _yield$_this$profileD3;
+                _yield$_this$profileD4 = _yield$_this$profileD.jurusan;
+                _this.jurusan = _yield$_this$profileD4 === void 0 ? null : _yield$_this$profileD4;
+                _yield$_this$profileD5 = _yield$_this$profileD.fakultas;
+                _this.fakultas = _yield$_this$profileD5 === void 0 ? null : _yield$_this$profileD5;
+                _yield$_this$profileD6 = _yield$_this$profileD.pt;
+                _yield$_this$profileD7 = _yield$_this$profileD6.singkat;
+                _this.ptSingkat = _yield$_this$profileD7 === void 0 ? null : _yield$_this$profileD7;
+                _yield$_this$profileD8 = _yield$_this$profileD6.lengkap;
+                _this.ptLengkap = _yield$_this$profileD8 === void 0 ? null : _yield$_this$profileD8;
+                _yield$_this$profileD9 = _yield$_this$profileD.status;
+                _this.status = _yield$_this$profileD9 === void 0 ? null : _yield$_this$profileD9;
+                _yield$_this$profileD10 = _yield$_this$profileD.akreditasi_prodi;
+                _yield$_this$profileD11 = _yield$_this$profileD10.akreditasi;
+                _this.akreditasiProdi = _yield$_this$profileD11 === void 0 ? null : _yield$_this$profileD11;
+                _yield$_this$profileD12 = _yield$_this$profileD10.tanggal;
+                _this.tanggalAkreditasiProdi = _yield$_this$profileD12 === void 0 ? null : _yield$_this$profileD12;
+                _yield$_this$profileD13 = _yield$_this$profileD10.internasional;
+                _this.internasionalAkreditasiProdi = _yield$_this$profileD13 === void 0 ? null : _yield$_this$profileD13;
+                _yield$_this$profileD14 = _yield$_this$profileD.akreditasi_pt;
+                _this.akreditasi_pt = _yield$_this$profileD14 === void 0 ? null : _yield$_this$profileD14;
+                _yield$_this$profileD15 = _yield$_this$profileD.web_prodi;
+                _this.web_prodi = _yield$_this$profileD15 === void 0 ? null : _yield$_this$profileD15;
+                _yield$_this$profileD16 = _yield$_this$profileD.alamat_kampus;
+                _yield$_this$profileD17 = _yield$_this$profileD16.alamat;
+                _this.alamat = _yield$_this$profileD17 === void 0 ? null : _yield$_this$profileD17;
+                _yield$_this$profileD18 = _yield$_this$profileD16.kota;
+                _this.kotaAlamat = _yield$_this$profileD18 === void 0 ? null : _yield$_this$profileD18;
+                _yield$_this$profileD19 = _yield$_this$profileD16.provinsi;
+                _this.provinsiAlamat = _yield$_this$profileD19 === void 0 ? null : _yield$_this$profileD19;
+                _yield$_this$profileD20 = _yield$_this$profileD.kaprodi;
+                _yield$_this$profileD21 = _yield$_this$profileD20.nama;
+                _this.namaKaprodi = _yield$_this$profileD21 === void 0 ? null : _yield$_this$profileD21;
+                _yield$_this$profileD22 = _yield$_this$profileD20.no;
+                _this.noKaprodi = _yield$_this$profileD22 === void 0 ? null : _yield$_this$profileD22;
+                _yield$_this$profileD23 = _yield$_this$profileD20.email;
+                _this.emailKaprodi = _yield$_this$profileD23 === void 0 ? null : _yield$_this$profileD23;
+                _yield$_this$profileD24 = _yield$_this$profileD20.periode;
+                _yield$_this$profileD24 = _yield$_this$profileD24 === void 0 ? {
+                  mulai: _this.periodeMulaiKaprodi = null,
+                  purna: _this.periodePurnaKaprodi = null
+                } : _yield$_this$profileD24;
+                _yield$_this$profileD25 = _yield$_this$profileD24.mulai;
+                _this.periodeMulaiKaprodi = _yield$_this$profileD25 === void 0 ? null : _yield$_this$profileD25;
+                _yield$_this$profileD26 = _yield$_this$profileD24.purna;
+                _this.periodePurnaKaprodi = _yield$_this$profileD26 === void 0 ? null : _yield$_this$profileD26;
+                _yield$_this$profileD27 = _yield$_this$profileD.email_prodi;
+                _this.email_prodi = _yield$_this$profileD27 === void 0 ? null : _yield$_this$profileD27;
+                _yield$_this$profileD28 = _yield$_this$profileD.no_telp_prodi;
+                _this.no_telp_prodi = _yield$_this$profileD28 === void 0 ? null : _yield$_this$profileD28;
 
                 _this.$store.commit('contentLoading', false);
 
-              case 32:
+              case 55:
               case "end":
                 return _context.stop();
             }
@@ -391,40 +417,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     updateProfile: function updateProfile() {
+      var _mulai$purna, _mulai$purna$mulai, _mulai$purna$purna;
+
       this.editMode = false;
       this.$emit('profile-update', {
-        jenjang: this.jenjang.value,
-        nama_prodi: this.nama_prodi,
-        jurusan: this.jurusan,
-        fakultas: this.fakultas,
+        jenjang: this.jenjang.value = null,
+        nama_prodi: this.nama_prodi = null,
+        jurusan: this.jurusan = null,
+        fakultas: this.fakultas = null,
         pt: {
-          singkat: this.ptSingkat,
-          lengkap: this.ptLengkap
+          singkat: this.ptSingkat = null,
+          lengkap: this.ptLengkap = null
         },
-        status: this.status,
+        status: this.status = null,
         akreditasi_prodi: {
-          akreditasi: this.akreditasiProdi,
-          tanggal: this.tanggalAkreditasiProdi,
-          internasional: this.internasionalAkreditasiProdi
+          akreditasi: this.akreditasiProdi = null,
+          tanggal: this.tanggalAkreditasiProdi = null,
+          internasional: this.internasionalAkreditasiProdi = null
         },
-        akreditasi_pt: this.akreditasi_pt,
-        web_prodi: this.web_prodi,
+        akreditasi_pt: this.akreditasi_pt = null,
+        web_prodi: this.web_prodi = null,
         alamat_kampus: {
-          alamat: this.alamat,
-          kota: this.kotaAlamat,
-          provinsi: this.provinsiAlamat
+          alamat: this.alamat = null,
+          kota: this.kotaAlamat = null,
+          provinsi: this.provinsiAlamat = null
         },
         kaprodi: {
-          nama: this.namaKaprodi,
-          no: this.noKaprodi,
-          email: this.emailKaprodi,
-          periode: {
-            mulai: this.periodeMulaiKaprodi,
-            purna: this.periodePurnaKaprodi
-          }
+          nama: this.namaKaprodi = null,
+          no: this.noKaprodi = null,
+          email: this.emailKaprodi = null,
+          periode: (_mulai$purna = {
+            mulai: this.periodeMulaiKaprodi = null,
+            purna: this.periodePurnaKaprodi = null
+          }, _mulai$purna$mulai = _mulai$purna.mulai, this.periodeMulaiKaprodi = _mulai$purna$mulai === void 0 ? null : _mulai$purna$mulai, _mulai$purna$purna = _mulai$purna.purna, this.periodePurnaKaprodi = _mulai$purna$purna === void 0 ? null : _mulai$purna$purna, _mulai$purna)
         },
-        email_prodi: this.email_prodi,
-        no_telp_prodi: this.no_telp_prodi
+        email_prodi: this.email_prodi = null,
+        no_telp_prodi: this.no_telp_prodi = null
       });
     }
   },

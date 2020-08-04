@@ -1,5 +1,5 @@
 <template>
-<v-app>
+<v-app :style="$store.state.isContentLoading ? { 'cursor': 'wait' }:{}">
 
     <DrawerNavigation
         v-model="drawer"
@@ -11,14 +11,12 @@
     
     <div class="flash-alert__wrapper mx-sm-10 px-4 pt-4">
         <v-scale-transition group>
-            <v-alert
+            <flash-message
                 v-for="({message, color, type}, index) in flashes" :key="index"
-                v-show="flashes[index].show"
-                dismissible close-icon="mdi-close"
-                :type="type" :color="color" border="left" elevation="7"
-                colored-border
-            ><span v-html="message"></span>
-            </v-alert>
+                :type="type"
+                :color="color"
+                :message="message"
+            ></flash-message>
         </v-scale-transition>
     </div>
 
@@ -37,6 +35,7 @@
 <script>
 import DrawerNavigation from "./components/DrawerNavigation";
 import NavigationBar from "./components/NavigationBar";
+import FlashMessage from "./components/FlashMessage";
 
 export default {
     data() {
@@ -64,14 +63,9 @@ export default {
     methods: {
         flash() {
             const flashes = [...arguments].map((
-                    {
-                        message, color = undefined, type = undefined
-                    }
+                    { message, color = undefined, type = undefined }
                 ) => {
-                return {
-                    show: true,
-                    message, color, type
-                }
+                return { message, color, type }
             })
 
             this.flashes.push(...flashes)
@@ -94,8 +88,7 @@ export default {
 
 
     components: {
-        DrawerNavigation,
-        NavigationBar,
+        DrawerNavigation, NavigationBar, FlashMessage
     }
 }
 </script>

@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../store'
+import store from './store'
 // use import() instead of default import statement to make lazy router-views 
-const Member = () => import('../views/Member.vue')
-const Login = () => import('../views/Login.vue')
-const Register = () => import('../views/Register.vue')
-const MyProfile = () => import('../views/MyProfile.vue')
-const AccountSettings = () => import('../views/AccountSettings.vue')
-const NotFound404 = () => import('../views/404.vue')
+const Member = () => import('./views/Member.vue')
+const Login = () => import('./views/Login.vue')
+const Register = () => import('./views/Register.vue')
+const Verify = () => import('./views/Verify.vue')
+const MyProfile = () => import('./views/MyProfile.vue')
+const AccountSettings = () => import('./views/AccountSettings.vue')
+const NotFound404 = () => import('./views/404.vue')
 // Middleware
-import auth from '../middleware/auth'
-import guestOnly from '../middleware/guest'
+import {auth, emailVerified , guestOnly} from './Middleware'
 
 Vue.use(VueRouter)
 
@@ -37,10 +37,16 @@ const router = new VueRouter({
             beforeEnter: guestOnly,
         },
         {
+            name: 'Verify',
+            path: '/verify/:id?',
+            component: Verify,
+            beforeEnter: auth,
+        },
+        {
             name: 'MyProfile',
             path: '/profil-saya',
             component: MyProfile,
-            beforeEnter: auth,
+            beforeEnter: emailVerified,
         },
         {
             name: 'AccountSettings',

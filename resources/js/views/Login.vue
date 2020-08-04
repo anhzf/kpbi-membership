@@ -87,7 +87,7 @@ export default {
                 // Notice to User
                 this.$emit('notice', {message: 'Login Berhasil!', type: 'success'})
                 // Redirect user
-                this.$router.push({name: 'MyProfile'})
+                this.$router.push(this.$route.query.redirect ??  {name: 'AccountSettings'})
             } else {
                 this.$emit('noticeError', login)
             }

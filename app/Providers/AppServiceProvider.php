@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-// use App\Helper\FlashMsg;
+use App\User;
 use App\Mail\RegisterKPBI;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Carbon;
@@ -31,17 +31,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Override the email notification for verifying email
-        VerifyEmail::toMailUsing(function ($notifiable) {
+        VerifyEmail::toMailUsing(function (User $notifiable) {
             $verifyUrl = URL::temporarySignedRoute(
                 'verification.verify',
-                Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-                [
+                Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)), [
                     'id' => $notifiable->getKey(),
                     'hash' => sha1($notifiable->getEmailForVerification()),
-                ]
-            );
+                ]);
 
-            // Check if 
             if (is_null($user_profile = $notifiable->kpbi_profile)) {
                 Auth::logout();
 

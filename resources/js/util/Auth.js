@@ -55,8 +55,9 @@ async function Logout(finallyCB = null) {
 
 async function Register(registerData, finallyCB = null) {
     try {
-        const {success, message} = await axios.post('/api/auth/register', {...registerData, _token: store.state.csrfToken}).finally(any => finallyCB?.(any))
+        const {data: {success, message}} = await axios.post('/api/auth/register', {...registerData, _token: store.state.csrfToken}).finally(any => finallyCB?.(any))
 
+        console.log({ success, message });
         if (success) {
             return { success, message }
         }
