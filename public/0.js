@@ -417,42 +417,40 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     updateProfile: function updateProfile() {
-      var _mulai$purna, _mulai$purna$mulai, _mulai$purna$purna;
-
       this.editMode = false;
       this.$emit('profile-update', {
-        jenjang: this.jenjang.value = null,
-        nama_prodi: this.nama_prodi = null,
-        jurusan: this.jurusan = null,
-        fakultas: this.fakultas = null,
+        jenjang: this.jenjang.value,
+        nama_prodi: this.nama_prodi,
+        jurusan: this.jurusan,
+        fakultas: this.fakultas,
         pt: {
-          singkat: this.ptSingkat = null,
-          lengkap: this.ptLengkap = null
+          singkat: this.ptSingkat,
+          lengkap: this.ptLengkap
         },
-        status: this.status = null,
+        status: this.status,
         akreditasi_prodi: {
-          akreditasi: this.akreditasiProdi = null,
-          tanggal: this.tanggalAkreditasiProdi = null,
-          internasional: this.internasionalAkreditasiProdi = null
+          akreditasi: this.akreditasiProdi,
+          tanggal: this.tanggalAkreditasiProdi,
+          internasional: this.internasionalAkreditasiProdi
         },
-        akreditasi_pt: this.akreditasi_pt = null,
-        web_prodi: this.web_prodi = null,
+        akreditasi_pt: this.akreditasi_pt,
+        web_prodi: this.web_prodi,
         alamat_kampus: {
-          alamat: this.alamat = null,
-          kota: this.kotaAlamat = null,
-          provinsi: this.provinsiAlamat = null
+          alamat: this.alamat,
+          kota: this.kotaAlamat,
+          provinsi: this.provinsiAlamat
         },
         kaprodi: {
-          nama: this.namaKaprodi = null,
-          no: this.noKaprodi = null,
-          email: this.emailKaprodi = null,
-          periode: (_mulai$purna = {
-            mulai: this.periodeMulaiKaprodi = null,
-            purna: this.periodePurnaKaprodi = null
-          }, _mulai$purna$mulai = _mulai$purna.mulai, this.periodeMulaiKaprodi = _mulai$purna$mulai === void 0 ? null : _mulai$purna$mulai, _mulai$purna$purna = _mulai$purna.purna, this.periodePurnaKaprodi = _mulai$purna$purna === void 0 ? null : _mulai$purna$purna, _mulai$purna)
+          nama: this.namaKaprodi,
+          no: this.noKaprodi,
+          email: this.emailKaprodi,
+          periode: {
+            mulai: this.periodeMulaiKaprodi,
+            purna: this.periodePurnaKaprodi
+          }
         },
-        email_prodi: this.email_prodi = null,
-        no_telp_prodi: this.no_telp_prodi = null
+        email_prodi: this.email_prodi,
+        no_telp_prodi: this.no_telp_prodi
       });
     }
   },

@@ -135,8 +135,8 @@ export default {
 
 
         seeDetails(profileData) {
-            this.detailDialog = true
             this.currentProfileShow = profileData
+            this.detailDialog = true
         }
     },
 
