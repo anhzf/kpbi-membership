@@ -1,6 +1,6 @@
 export default async () => {
     try {
-        const {data: authentication} = await window.axios('api/user')
+        const {data: authentication} = await window.axios('api/auth/user')
         return {
             isLoggedIn: true,
             ...authentication

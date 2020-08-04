@@ -27,24 +27,16 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/profiles', 'ProfileAPIController@getAll');
     });
 
-    Route::middleware('auth:api')->get('/user', function (Request $request) {
-        $user = $request->user();
-        return response()->json($user->toArray() + ['verified' => $user->hasVerifiedEmail()]);
-    });
-
-    // Route::get('tes', function (Request $request) {
-    // })->middleware('auth:api');
-
     Route::group([
         'prefix' => 'auth',
         'namespace' => 'Auth\API'
     ], function () {
-        Route::post('login', 'BasicController@login');
-        Route::post('register', 'RegisterController@register');
-        
+        Route::post('/login', 'BasicController@login');
+        Route::post('/register', 'RegisterController@register');
+
         Route::group(['middleware' => 'auth:api'], function () {
-            Route::post('logout', 'BasicController@logout');
-            Route::get('user', 'BasicController@user');
+            Route::post('/logout', 'BasicController@logout');
+            Route::get('/user', 'BasicController@user');
         });
     });
 });

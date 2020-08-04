@@ -68,6 +68,7 @@ class BasicController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        return response()->json($user->toArray() + ['verified' => $user->hasVerifiedEmail()]);
     }
 }
