@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -47,6 +48,12 @@ class LoginController extends Controller
     {
         return view('home.login');
     }
+
+
+    // public function login(Request $request)
+    // {
+    //     dd($request->all());
+    // }
 
     public function username()
     {
