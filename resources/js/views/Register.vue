@@ -63,6 +63,7 @@
 
 <script>
 import { Register } from '@/util/Auth'
+import { required as requiredRules, email as emailRules } from "@/util/Validator";
 
 export default {
     name: 'Register',
@@ -76,8 +77,7 @@ export default {
             },
             email_prodi: null,
             email_kaprodi: null,
-            requiredRules: v => !!v || 'wajib diisi',
-            emailRules: v => /.+@.+\..+/.test(v) || 'E-mail tidak valid',
+            requiredRules, emailRules
         }
     },
     methods: {

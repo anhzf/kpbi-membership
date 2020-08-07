@@ -40,7 +40,11 @@
                     <v-row class="px-6" align="center">
                         <v-col sm="3" class="grey--text text--darken-1">Password</v-col>
                         <v-col class="text-right">
-                            <v-btn text small color="grey darken-2" @click="$emit('notice', {message: 'Fitur ini masih dalam tahap konstruksi'})">
+                            <v-btn
+                                text small
+                                color="grey darken-2"
+                                @click="showChangePasswordDialog = !showChangePasswordDialog"
+                            >
                                 <v-icon small>mdi-pencil</v-icon>
                                 Ubah password
                             </v-btn>
@@ -50,12 +54,23 @@
             </v-list-item>
         </v-list>
     </v-card>
+    <change-password-dialog
+        v-model="showChangePasswordDialog"
+        @notice="$emit('notice', $event)"
+        @noticeError="$emit('noticeError', $event)"
+    />
 </v-row>
 </template>
 
 <script>
+import ChangePasswordDialog from "@/components/ChangePasswordDialog";
+import { required } from '@/util/Validator';
+
 export default {
     name: 'AccountSettings',
+    data: () => ({
+        showChangePasswordDialog: false,
+    }),
     computed: {
         verified() { return this.$store.getters.userVerified }
     },
@@ -69,7 +84,10 @@ export default {
                 this.$emit('noticeError', err)
             }
             this.$store.commit('contentLoading', false)
-        }
+        },
+    },
+    components: {
+        ChangePasswordDialog
     }
 }
 </script>

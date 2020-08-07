@@ -32,3 +32,7 @@ mix.js('resources/js/app.js', 'public/js').vuetify()
 
 if (mix.inProduction())
     mix.version()
+
+if (process.env.SILENT)
+    mix.disableNotifications()
+    

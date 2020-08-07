@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class BasicController extends Controller
 {
@@ -70,5 +72,39 @@ class BasicController extends Controller
     {
         $user = $request->user();
         return response()->json($user->toArray() + ['verified' => $user->hasVerifiedEmail()]);
+    }
+
+    /**
+     * Change Password
+     *
+     * @return [json] user object
+     */
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'oldPassword' => 'required',
+            'newPassword' => 'required|confirmed|min:6',
+        ]);
+
+        if (!Hash::check($request->get('oldPassword'), $user->password)) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Password lama yang dimasukkan tidak cocok!'
+                ],
+                400
+            );
+        }
+
+        $user->update([
+            'password' => Hash::make($request->get('newPassword'))
+        ]);
+
+        if ($user->save()) {
+            return response()->json(['success' => true, 'message' => __('Password berhasil diubah!')]);
+        }
+
+        return response()->json(['success' => false, 'message' => __('Error! Terjadi kesalahan!')], 400);
     }
 }
