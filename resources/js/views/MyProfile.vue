@@ -2,6 +2,9 @@
 <v-container fluid>
 
     <v-row justify="center">
+        <h1 class="text-h5 my-6">{{ pageTitle }}</h1>
+    </v-row>
+    <v-row justify="center">
 
         <ProfileCard
             :can-edit="true"
@@ -27,6 +30,12 @@ export default {
         return {
             profileLoading: false,
             profileData: {}
+        }
+    },
+
+    computed: {
+        pageTitle() {
+            return `${this.profileData.jenjang ?? ''} ${this.profileData.nama_prodi ?? ''} ${this.profileData.pt?.lengkap ?? ''}`
         }
     },
 

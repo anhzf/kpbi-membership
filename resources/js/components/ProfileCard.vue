@@ -7,8 +7,8 @@
 
                 <v-col cols="12" sm="8" order="1" order-sm="0">
 
-                    <profile-list-item>
-                        <v-row v-if="editMode">
+                    <profile-list-item v-if="editMode">
+                        <v-row>
                             <v-col cols="3">
                                 <profile-list-item-content
                                     label="Jenjang"
@@ -25,12 +25,6 @@
                                 ></profile-list-item-content>
                             </v-col>
                         </v-row>
-                        <template v-else>
-                            <v-list-item-title>
-                                <h1 class="text-h5">{{ jenjang.value }} {{ nama_prodi }} {{ ptLengkap }}</h1>
-                                <v-divider></v-divider>
-                            </v-list-item-title>
-                        </template>
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-warehouse">
@@ -49,8 +43,8 @@
                         ></profile-list-item-content>
                     </profile-list-item>
                     
-                    <profile-list-item icon="mdi-school">
-                        <v-row v-if="editMode">
+                    <profile-list-item v-if="editMode" icon="mdi-school">
+                        <v-row>
                             <v-col>
                                 <profile-list-item-content
                                     label="Nama Perguruan Tinggi (lengkap)"
@@ -66,10 +60,6 @@
                                 ></profile-list-item-content>
                             </v-col>
                         </v-row>
-                        <template v-else>
-                            <v-list-item-subtitle>Perguruan Tinggi</v-list-item-subtitle>
-                            <v-list-item-title>{{ ptLengkap }} ({{ ptSingkat }})</v-list-item-title>
-                        </template>
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-check-underline">
@@ -91,7 +81,7 @@
                         </v-row>
                     </profile-list-item>
                     
-                    <profile-list-item icon="mdi-earth">
+                    <profile-list-item icon="mdi-earth" v-if="internasionalAkreditasiProdi || editMode">
                         <profile-list-item-content
                             label="Akreditasi Internasional"
                             v-model="internasionalAkreditasiProdi"

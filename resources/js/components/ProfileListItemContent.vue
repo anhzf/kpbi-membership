@@ -16,7 +16,7 @@
                 <v-text-field v-else :value="value" @input="$emit('input', $event)"></v-text-field>
             </template>
 
-            <v-tooltip bottom v-else open-delay="1000">
+            <v-tooltip bottom v-else open-delay="300">
                 <template v-slot:activator="{on, attrs}">
                     <v-list-item-title v-bind="attrs" v-on="on">{{ value }}</v-list-item-title>
                 </template>

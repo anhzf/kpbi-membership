@@ -277,16 +277,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -605,11 +595,11 @@ var render = function() {
                       }
                     },
                     [
-                      _c(
-                        "profile-list-item",
-                        [
-                          _vm.editMode
-                            ? _c(
+                      _vm.editMode
+                        ? _c(
+                            "profile-list-item",
+                            [
+                              _c(
                                 "v-row",
                                 [
                                   _c(
@@ -656,28 +646,10 @@ var render = function() {
                                 ],
                                 1
                               )
-                            : [
-                                _c(
-                                  "v-list-item-title",
-                                  [
-                                    _c("h1", { staticClass: "text-h5" }, [
-                                      _vm._v(
-                                        _vm._s(_vm.jenjang.value) +
-                                          " " +
-                                          _vm._s(_vm.nama_prodi) +
-                                          " " +
-                                          _vm._s(_vm.ptLengkap)
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("v-divider")
-                                  ],
-                                  1
-                                )
-                              ]
-                        ],
-                        2
-                      ),
+                            ],
+                            1
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "profile-list-item",
@@ -721,12 +693,12 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "profile-list-item",
-                        { attrs: { icon: "mdi-school" } },
-                        [
-                          _vm.editMode
-                            ? _c(
+                      _vm.editMode
+                        ? _c(
+                            "profile-list-item",
+                            { attrs: { icon: "mdi-school" } },
+                            [
+                              _c(
                                 "v-row",
                                 [
                                   _c(
@@ -772,23 +744,10 @@ var render = function() {
                                 ],
                                 1
                               )
-                            : [
-                                _c("v-list-item-subtitle", [
-                                  _vm._v("Perguruan Tinggi")
-                                ]),
-                                _vm._v(" "),
-                                _c("v-list-item-title", [
-                                  _vm._v(
-                                    _vm._s(_vm.ptLengkap) +
-                                      " (" +
-                                      _vm._s(_vm.ptSingkat) +
-                                      ")"
-                                  )
-                                ])
-                              ]
-                        ],
-                        2
-                      ),
+                            ],
+                            1
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "profile-list-item",
@@ -843,26 +802,28 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "profile-list-item",
-                        { attrs: { icon: "mdi-earth" } },
-                        [
-                          _c("profile-list-item-content", {
-                            attrs: {
-                              label: "Akreditasi Internasional",
-                              "edit-mode": _vm.editMode
-                            },
-                            model: {
-                              value: _vm.internasionalAkreditasiProdi,
-                              callback: function($$v) {
-                                _vm.internasionalAkreditasiProdi = $$v
-                              },
-                              expression: "internasionalAkreditasiProdi"
-                            }
-                          })
-                        ],
-                        1
-                      ),
+                      _vm.internasionalAkreditasiProdi || _vm.editMode
+                        ? _c(
+                            "profile-list-item",
+                            { attrs: { icon: "mdi-earth" } },
+                            [
+                              _c("profile-list-item-content", {
+                                attrs: {
+                                  label: "Akreditasi Internasional",
+                                  "edit-mode": _vm.editMode
+                                },
+                                model: {
+                                  value: _vm.internasionalAkreditasiProdi,
+                                  callback: function($$v) {
+                                    _vm.internasionalAkreditasiProdi = $$v
+                                  },
+                                  expression: "internasionalAkreditasiProdi"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "profile-list-item",
@@ -1430,7 +1391,7 @@ var render = function() {
               : _c(
                   "v-tooltip",
                   {
-                    attrs: { bottom: "", "open-delay": "1000" },
+                    attrs: { bottom: "", "open-delay": "300" },
                     scopedSlots: _vm._u([
                       {
                         key: "activator",

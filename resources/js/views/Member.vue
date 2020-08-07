@@ -69,12 +69,12 @@
       scrollable
     >
         <v-card>
-            <v-card-title class="headline light-green white--text">Detail Anggota</v-card-title>
+            <v-card-title class="light-green white--text">{{ dialogTitle }}</v-card-title>
 
             <v-card-text>
                 <v-container fluid>
                     <v-row justify="center">
-                        <ProfileCard :profileData="currentProfileShow" :editMode="false"></ProfileCard>
+                        <profile-card :profileData="currentProfileShow" :editMode="false"></profile-card>
                     </v-row>
                 </v-container>
             </v-card-text>
@@ -117,6 +117,12 @@ export default {
         }
     },
 
+    computed: {
+        dialogTitle() {
+            const profileData = this.currentProfileShow;
+            return `${profileData.jenjang ?? ''} ${profileData.nama_prodi ?? ''} ${profileData.pt?.lengkap ?? ''}`
+        }
+    },
 
     methods: {
         getUsers() {
@@ -133,18 +139,15 @@ export default {
                 })
         },
 
-
-        seeDetails(profileData) {
-            this.currentProfileShow = profileData
+        async seeDetails(profileData) {
+            this.currentProfileShow = await profileData
             this.detailDialog = true
         }
     },
-
     
     created() {
         this.getUsers()
     },
-
 
     components: {
         ProfileCard,
