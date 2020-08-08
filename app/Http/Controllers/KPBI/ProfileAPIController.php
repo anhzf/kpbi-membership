@@ -12,7 +12,14 @@ class ProfileAPIController extends Controller
 {
     public function get(Request $request)
     {
-        return $request->user()->kpbi_profile;
+        $res = $request->user()->kpbi_profile->attributesToArray();
+
+        if (KPBI::requiredDataValidator($res)->fails()) {
+            $res['warn'] = __('Profil KPBI anda belum lengkap. Silahkan lengkapi profil keanggotaan KPBI...');
+        }
+
+        // return $request->user()->kpbi_profile;
+        return response()->json($res);
     }
 
     public function getAll()

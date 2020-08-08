@@ -48,6 +48,8 @@ export default {
             try {
                 const {data} = await window.axios('/api/kpbi/profile')
                 this.profileData = data
+                if ('warn' in data)
+                    this.$emit('notice', {message: data.warn,type: 'warning'})
             } catch (err) {
                 this.$emit('noticeError', err)                
             }
