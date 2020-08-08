@@ -76,6 +76,7 @@
                             label="Akreditasi Perguruan Tinggi"
                             v-model="akreditasi_pt"
                             :edit-mode="editMode"
+                            :choices="['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi']"
                         />
                     </profile-list-item>
                     
@@ -94,7 +95,7 @@
                                     label="Tanggal Akreditasi"
                                     v-model="tanggalAkreditasiProdi"
                                     :edit-mode="editMode"
-                                    type="date-picker"
+                                    type="date"
                                 />
                             </v-col>
                         </v-row>

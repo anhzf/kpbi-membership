@@ -588,35 +588,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'profile-list-item-content',
   props: {
@@ -640,12 +611,6 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       "default": false
     }
-  },
-  data: function data() {
-    return {
-      dtPickerId: Math.random().toString(36).substring(2, 15),
-      dtPickerDialogShow: false
-    };
   }
 });
 
@@ -948,7 +913,7 @@ var render = function() {
                                     attrs: {
                                       label: "Tanggal Akreditasi",
                                       "edit-mode": _vm.editMode,
-                                      type: "date-picker"
+                                      type: "date"
                                     },
                                     model: {
                                       value: _vm.tanggalAkreditasiProdi,
@@ -1554,137 +1519,14 @@ var render = function() {
                           }
                         }
                       })
-                    : [
-                        _vm.type === "date-picker"
-                          ? _c(
-                              "v-dialog",
-                              {
-                                ref: _vm.dtPickerId,
-                                attrs: {
-                                  "return-value": _vm.value,
-                                  persistent: "",
-                                  width: "290px"
-                                },
-                                on: {
-                                  "update:returnValue": function($event) {
-                                    _vm.value = $event
-                                  },
-                                  "update:return-value": function($event) {
-                                    _vm.value = $event
-                                  }
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var on = ref.on
-                                        var attrs = ref.attrs
-                                        return [
-                                          _c(
-                                            "v-text-field",
-                                            _vm._g(
-                                              _vm._b(
-                                                {
-                                                  attrs: { readonly: "" },
-                                                  model: {
-                                                    value: _vm.value,
-                                                    callback: function($$v) {
-                                                      _vm.value = $$v
-                                                    },
-                                                    expression: "value"
-                                                  }
-                                                },
-                                                "v-text-field",
-                                                attrs,
-                                                false
-                                              ),
-                                              on
-                                            )
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  false,
-                                  994217306
-                                ),
-                                model: {
-                                  value: _vm.dtPickerDialogShow,
-                                  callback: function($$v) {
-                                    _vm.dtPickerDialogShow = $$v
-                                  },
-                                  expression: "dtPickerDialogShow"
-                                }
-                              },
-                              [
-                                _vm._v(" "),
-                                _vm.dtPickerDialogShow
-                                  ? _c(
-                                      "v-date-picker",
-                                      {
-                                        attrs: { "full-width": "" },
-                                        model: {
-                                          value: _vm.value,
-                                          callback: function($$v) {
-                                            _vm.value = $$v
-                                          },
-                                          expression: "value"
-                                        }
-                                      },
-                                      [
-                                        _c("v-spacer"),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              text: "",
-                                              color: "primary"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                _vm.dtPickerDialogShow = false
-                                              }
-                                            }
-                                          },
-                                          [_vm._v("Cancel")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              text: "",
-                                              color: "primary"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.$refs[
-                                                  _vm.dtPickerId
-                                                ].save(_vm.value)
-                                              }
-                                            }
-                                          },
-                                          [_vm._v("OK")]
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  : _vm._e()
-                              ],
-                              1
-                            )
-                          : _c("v-text-field", {
-                              attrs: { type: _vm.type, value: _vm.value },
-                              on: {
-                                input: function($event) {
-                                  return _vm.$emit("input", $event)
-                                }
-                              }
-                            })
-                      ]
+                    : _c("v-text-field", {
+                        attrs: { type: _vm.type, value: _vm.value },
+                        on: {
+                          input: function($event) {
+                            return _vm.$emit("input", $event)
+                          }
+                        }
+                      })
                 ]
               : _c(
                   "v-tooltip",
