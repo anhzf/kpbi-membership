@@ -48,7 +48,8 @@ class ProfileAPIController extends Controller
 
     public function update(Request $request)
     {
-        if (KPBI::save_info($request->all() + ['user_id' => $request->user()->id]))
+        // Use FIRST_ATTEMPT to prevent unsaved changes when not fulfilled
+        if (KPBI::save_info($request->all() + ['user_id' => $request->user()->id], KPBI::FIRST_ATTEMPT))
             $res = [
                 'success' => true,
                 'message' => 'Profile updated!'
