@@ -139,8 +139,8 @@ export default {
                 })
         },
 
-        async seeDetails(profileData) {
-            this.currentProfileShow = await profileData
+        seeDetails(profileData) {
+            this.currentProfileShow = profileData
             this.detailDialog = true
         }
     },

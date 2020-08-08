@@ -34,6 +34,9 @@ export default {
     },
 
     computed: {
+        currentUserId() {
+            return this.$store.getters.userId
+        },
         pageTitle() {
             return `${this.profileData.jenjang ?? ''} ${this.profileData.nama_prodi ?? ''} ${this.profileData.pt?.lengkap ?? ''}`
         }
@@ -42,14 +45,13 @@ export default {
     methods: {
         async getProfileData() {
             this.profileLoading = true
-            const data = window.axios.get('/api/kpbi/profile')
-                            .then(({data}) => {
-                                this.profileLoading = false
-                                return data
-                            })
-                            .catch(({data: err}) => err)
-
-            this.profileData = await data
+            try {
+                const {data} = await window.axios('/api/kpbi/profile')
+                this.profileData = data
+            } catch (err) {
+                this.$emit('noticeError', err)                
+            }
+            this.profileLoading = false
         },
 
         async save(data) {
@@ -67,6 +69,12 @@ export default {
 
     mounted() {
         this.getProfileData()
+    },
+
+    watch: {
+        currentUserId() {
+            this.getProfileData()
+        }
     },
 
     components: {

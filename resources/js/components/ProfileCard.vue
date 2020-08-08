@@ -81,7 +81,7 @@
                         </v-row>
                     </profile-list-item>
                     
-                    <profile-list-item icon="mdi-earth" v-if="internasionalAkreditasiProdi || editMode">
+                    <profile-list-item icon="mdi-earth" v-if="(internasionalAkreditasiProdi && (internasionalAkreditasiProdi == '-')) || editMode">
                         <profile-list-item-content
                             label="Akreditasi Internasional"
                             v-model="internasionalAkreditasiProdi"
@@ -213,6 +213,7 @@
                             label="Website Prodi"
                             v-model="web_prodi"
                             :edit-mode="editMode"
+                            type="link"
                         ></profile-list-item-content>
                     </profile-list-item>
                 </v-col>
@@ -321,20 +322,20 @@ export default {
                 pt: {
                     singkat: this.ptSingkat = null,
                     lengkap: this.ptLengkap = null,
-                },
+                } = { singkat: this.ptSingkat = null, lengkap: this.ptLengkap = null },
                 status: this.status = null,
                 akreditasi_prodi: {
                     akreditasi: this.akreditasiProdi = null,
                     tanggal: this.tanggalAkreditasiProdi = null,
                     internasional: this.internasionalAkreditasiProdi = null,
-                },
+                } = { akreditasi: this.akreditasiProdi = null, tanggal: this.tanggalAkreditasiProdi = null, internasional: this.internasionalAkreditasiProdi = null },
                 akreditasi_pt: this.akreditasi_pt = null,
                 web_prodi: this.web_prodi = null,
                 alamat_kampus: {
                     alamat: this.alamat = null,
                     kota: this.kotaAlamat = null,
                     provinsi: this.provinsiAlamat = null,
-                },
+                } = { alamat: this.alamat = null, kota: this.kotaAlamat = null, provinsi: this.provinsiAlamat = null },
                 kaprodi: {
                     nama: this.namaKaprodi = null,
                     no: this.noKaprodi = null,
@@ -343,7 +344,7 @@ export default {
                         mulai: this.periodeMulaiKaprodi = null,
                         purna: this.periodePurnaKaprodi = null,
                     } = { mulai: this.periodeMulaiKaprodi = null, purna: this.periodePurnaKaprodi = null },
-                },
+                } = { nama: this.namaKaprodi = null, no: this.noKaprodi = null, email: this.emailKaprodi = null, periode: { mulai: this.periodeMulaiKaprodi = null, purna: this.periodePurnaKaprodi = null, } = { mulai: this.periodeMulaiKaprodi = null, purna: this.periodePurnaKaprodi = null } },
                 email_prodi: this.email_prodi = null,
                 no_telp_prodi: this.no_telp_prodi = null,
             } = await this.profileData)
@@ -391,13 +392,15 @@ export default {
         }
     },
 
+    mounted() {
+        this.fetchProfileData()
+    },
 
     watch: {
         profileData() {
             this.fetchProfileData()
         }
     },
-
 
     components: {
         ProfileListItem,

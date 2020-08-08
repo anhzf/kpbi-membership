@@ -277,6 +277,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -329,6 +330,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _mulai$purna, _mulai$purna$mulai, _mulai$purna$purna;
+
         var _yield$_this$profileD, _yield$_this$profileD2, _yield$_this$profileD3, _yield$_this$profileD4, _yield$_this$profileD5, _yield$_this$profileD6, _yield$_this$profileD7, _yield$_this$profileD8, _yield$_this$profileD9, _yield$_this$profileD10, _yield$_this$profileD11, _yield$_this$profileD12, _yield$_this$profileD13, _yield$_this$profileD14, _yield$_this$profileD15, _yield$_this$profileD16, _yield$_this$profileD17, _yield$_this$profileD18, _yield$_this$profileD19, _yield$_this$profileD20, _yield$_this$profileD21, _yield$_this$profileD22, _yield$_this$profileD23, _yield$_this$profileD24, _yield$_this$profileD25, _yield$_this$profileD26, _yield$_this$profileD27, _yield$_this$profileD28;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -351,6 +354,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _yield$_this$profileD5 = _yield$_this$profileD.fakultas;
                 _this.fakultas = _yield$_this$profileD5 === void 0 ? null : _yield$_this$profileD5;
                 _yield$_this$profileD6 = _yield$_this$profileD.pt;
+                _yield$_this$profileD6 = _yield$_this$profileD6 === void 0 ? {
+                  singkat: _this.ptSingkat = null,
+                  lengkap: _this.ptLengkap = null
+                } : _yield$_this$profileD6;
                 _yield$_this$profileD7 = _yield$_this$profileD6.singkat;
                 _this.ptSingkat = _yield$_this$profileD7 === void 0 ? null : _yield$_this$profileD7;
                 _yield$_this$profileD8 = _yield$_this$profileD6.lengkap;
@@ -358,6 +365,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _yield$_this$profileD9 = _yield$_this$profileD.status;
                 _this.status = _yield$_this$profileD9 === void 0 ? null : _yield$_this$profileD9;
                 _yield$_this$profileD10 = _yield$_this$profileD.akreditasi_prodi;
+                _yield$_this$profileD10 = _yield$_this$profileD10 === void 0 ? {
+                  akreditasi: _this.akreditasiProdi = null,
+                  tanggal: _this.tanggalAkreditasiProdi = null,
+                  internasional: _this.internasionalAkreditasiProdi = null
+                } : _yield$_this$profileD10;
                 _yield$_this$profileD11 = _yield$_this$profileD10.akreditasi;
                 _this.akreditasiProdi = _yield$_this$profileD11 === void 0 ? null : _yield$_this$profileD11;
                 _yield$_this$profileD12 = _yield$_this$profileD10.tanggal;
@@ -369,6 +381,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _yield$_this$profileD15 = _yield$_this$profileD.web_prodi;
                 _this.web_prodi = _yield$_this$profileD15 === void 0 ? null : _yield$_this$profileD15;
                 _yield$_this$profileD16 = _yield$_this$profileD.alamat_kampus;
+                _yield$_this$profileD16 = _yield$_this$profileD16 === void 0 ? {
+                  alamat: _this.alamat = null,
+                  kota: _this.kotaAlamat = null,
+                  provinsi: _this.provinsiAlamat = null
+                } : _yield$_this$profileD16;
                 _yield$_this$profileD17 = _yield$_this$profileD16.alamat;
                 _this.alamat = _yield$_this$profileD17 === void 0 ? null : _yield$_this$profileD17;
                 _yield$_this$profileD18 = _yield$_this$profileD16.kota;
@@ -376,6 +393,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _yield$_this$profileD19 = _yield$_this$profileD16.provinsi;
                 _this.provinsiAlamat = _yield$_this$profileD19 === void 0 ? null : _yield$_this$profileD19;
                 _yield$_this$profileD20 = _yield$_this$profileD.kaprodi;
+                _yield$_this$profileD20 = _yield$_this$profileD20 === void 0 ? {
+                  nama: _this.namaKaprodi = null,
+                  no: _this.noKaprodi = null,
+                  email: _this.emailKaprodi = null,
+                  periode: (_mulai$purna = {
+                    mulai: _this.periodeMulaiKaprodi = null,
+                    purna: _this.periodePurnaKaprodi = null
+                  }, _mulai$purna$mulai = _mulai$purna.mulai, _this.periodeMulaiKaprodi = _mulai$purna$mulai === void 0 ? null : _mulai$purna$mulai, _mulai$purna$purna = _mulai$purna.purna, _this.periodePurnaKaprodi = _mulai$purna$purna === void 0 ? null : _mulai$purna$purna, _mulai$purna)
+                } : _yield$_this$profileD20;
                 _yield$_this$profileD21 = _yield$_this$profileD20.nama;
                 _this.namaKaprodi = _yield$_this$profileD21 === void 0 ? null : _yield$_this$profileD21;
                 _yield$_this$profileD22 = _yield$_this$profileD20.no;
@@ -398,7 +424,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$store.commit('contentLoading', false);
 
-              case 55:
+              case 59:
               case "end":
                 return _context.stop();
             }
@@ -443,6 +469,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         no_telp_prodi: this.no_telp_prodi
       });
     }
+  },
+  mounted: function mounted() {
+    this.fetchProfileData();
   },
   watch: {
     profileData: function profileData() {
@@ -501,6 +530,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -802,7 +837,9 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _vm.internasionalAkreditasiProdi || _vm.editMode
+                      (_vm.internasionalAkreditasiProdi &&
+                        _vm.internasionalAkreditasiProdi == "-") ||
+                      _vm.editMode
                         ? _c(
                             "profile-list-item",
                             { attrs: { icon: "mdi-earth" } },
@@ -1164,7 +1201,8 @@ var render = function() {
                           _c("profile-list-item-content", {
                             attrs: {
                               label: "Website Prodi",
-                              "edit-mode": _vm.editMode
+                              "edit-mode": _vm.editMode,
+                              type: "link"
                             },
                             model: {
                               value: _vm.web_prodi,
@@ -1388,32 +1426,46 @@ var render = function() {
                         }
                       })
                 ]
-              : _c(
-                  "v-tooltip",
-                  {
-                    attrs: { bottom: "", "open-delay": "300" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "activator",
-                        fn: function(ref) {
-                          var on = ref.on
-                          var attrs = ref.attrs
-                          return [
-                            _c(
-                              "v-list-item-title",
-                              _vm._g(
-                                _vm._b({}, "v-list-item-title", attrs, false),
-                                on
-                              ),
-                              [_vm._v(_vm._s(_vm.value))]
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  },
-                  [_vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.value))])]
-                )
+              : [
+                  _vm.value && _vm.value !== "-"
+                    ? _c(
+                        "v-tooltip",
+                        {
+                          attrs: { bottom: "", "open-delay": "300" },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var on = ref.on
+                                  var attrs = ref.attrs
+                                  return [
+                                    _c(
+                                      "v-list-item-title",
+                                      _vm._g(
+                                        _vm._b(
+                                          {},
+                                          "v-list-item-title",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [_vm._v(_vm._s(_vm.value))]
+                                    )
+                                  ]
+                                }
+                              }
+                            ],
+                            null,
+                            false,
+                            2280146265
+                          )
+                        },
+                        [_vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.value))])]
+                      )
+                    : _vm._e()
+                ]
           ]
     ],
     2

@@ -10,7 +10,7 @@ const MyProfile = () => import('./views/MyProfile.vue')
 const AccountSettings = () => import('./views/AccountSettings.vue')
 const NotFound404 = () => import('./views/404.vue')
 // Middleware
-import {auth, emailVerified , guestOnly} from './Middleware'
+import {auth, emailVerified , guestOnly} from './util/Middleware'
 
 Vue.use(VueRouter)
 

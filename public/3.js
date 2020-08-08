@@ -1,1 +1,132 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{SJBf:function(t,e,i){"use strict";var a=i("o0o1"),o=i.n(a),l={name:"profile-list-item",props:{icon:{type:String,required:!1}}},n=i("KHd+"),r=Object(n.a)(l,(function(){var t=this.$createElement,e=this._self._c||t;return e("v-list-item",[this.icon?e("v-list-item-avatar",[e("v-icon",{domProps:{textContent:this._s(this.icon)}})],1):this._e(),this._v(" "),e("v-list-item-content",[this._t("default")],2)],1)}),[],!1,null,null,null).exports,s={name:"profile-list-item-content",props:{editMode:{type:Boolean,default:!1},label:String,value:String,choices:{type:Array,required:!1}}},d=Object(n.a)(s,(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("div",[i("v-list-item-subtitle",[t._v(t._s(t.label))]),t._v(" "),t.$store.state.isContentLoading?i("v-skeleton-loader",{attrs:{type:"text"}}):[t.editMode?[t.choices?i("v-select",{attrs:{items:t.choices,value:t.value},on:{change:function(e){return t.$emit("input",e)}}}):i("v-text-field",{attrs:{value:t.value},on:{input:function(e){return t.$emit("input",e)}}})]:i("v-tooltip",{attrs:{bottom:"","open-delay":"300"},scopedSlots:t._u([{key:"activator",fn:function(e){var a=e.on,o=e.attrs;return[i("v-list-item-title",t._g(t._b({},"v-list-item-title",o,!1),a),[t._v(t._s(t.value))])]}}])},[t._v(" "),i("span",[t._v(t._s(t.value))])])]],2)}),[],!1,null,null,null).exports;function c(t,e,i,a,o,l,n){try{var r=t[l](n),s=r.value}catch(t){return void i(t)}r.done?e(s):Promise.resolve(s).then(a,o)}var u={name:"ProfileCard",props:{profileData:{required:!0},canEdit:{type:Boolean,default:!1},isLoading:{type:Boolean,default:!1}},data:function(){return{editMode:!1,jenjang:{value:null,choices:["S1","S2","S3"]},nama_prodi:null,jurusan:null,fakultas:null,ptLengkap:null,ptSingkat:null,status:null,akreditasiProdi:null,tanggalAkreditasiProdi:null,internasionalAkreditasiProdi:null,akreditasi_pt:null,email_prodi:null,no_telp_prodi:null,web_prodi:null,alamat:null,kotaAlamat:null,provinsiAlamat:null,namaKaprodi:null,noKaprodi:null,emailKaprodi:null,periodeMulaiKaprodi:null,periodePurnaKaprodi:null}},methods:{fetchProfileData:function(){var t,e=this;return(t=o.a.mark((function t(){var i,a,l,n,r,s,d,c,u,p,v,m,f,_,k,h,g,b,x,P,w,K,M,j,A,S,y,L;return o.a.wrap((function(t){for(;;)switch(t.prev=t.next){case 0:return e.$store.commit("contentLoading",!0),t.next=3,e.profileData;case 3:i=t.sent,a=i.jenjang,e.jenjang.value=void 0===a?null:a,l=i.nama_prodi,e.nama_prodi=void 0===l?null:l,n=i.jurusan,e.jurusan=void 0===n?null:n,r=i.fakultas,e.fakultas=void 0===r?null:r,s=i.pt,d=s.singkat,e.ptSingkat=void 0===d?null:d,c=s.lengkap,e.ptLengkap=void 0===c?null:c,u=i.status,e.status=void 0===u?null:u,p=i.akreditasi_prodi,v=p.akreditasi,e.akreditasiProdi=void 0===v?null:v,m=p.tanggal,e.tanggalAkreditasiProdi=void 0===m?null:m,f=p.internasional,e.internasionalAkreditasiProdi=void 0===f?null:f,_=i.akreditasi_pt,e.akreditasi_pt=void 0===_?null:_,k=i.web_prodi,e.web_prodi=void 0===k?null:k,h=i.alamat_kampus,g=h.alamat,e.alamat=void 0===g?null:g,b=h.kota,e.kotaAlamat=void 0===b?null:b,x=h.provinsi,e.provinsiAlamat=void 0===x?null:x,P=i.kaprodi,w=P.nama,e.namaKaprodi=void 0===w?null:w,K=P.no,e.noKaprodi=void 0===K?null:K,M=P.email,e.emailKaprodi=void 0===M?null:M,j=void 0===(j=P.periode)?{mulai:e.periodeMulaiKaprodi=null,purna:e.periodePurnaKaprodi=null}:j,A=j.mulai,e.periodeMulaiKaprodi=void 0===A?null:A,S=j.purna,e.periodePurnaKaprodi=void 0===S?null:S,y=i.email_prodi,e.email_prodi=void 0===y?null:y,L=i.no_telp_prodi,e.no_telp_prodi=void 0===L?null:L,e.$store.commit("contentLoading",!1);case 55:case"end":return t.stop()}}),t)})),function(){var e=this,i=arguments;return new Promise((function(a,o){var l=t.apply(e,i);function n(t){c(l,a,o,n,r,"next",t)}function r(t){c(l,a,o,n,r,"throw",t)}n(void 0)}))})()},updateProfile:function(){this.editMode=!1,this.$emit("profile-update",{jenjang:this.jenjang.value,nama_prodi:this.nama_prodi,jurusan:this.jurusan,fakultas:this.fakultas,pt:{singkat:this.ptSingkat,lengkap:this.ptLengkap},status:this.status,akreditasi_prodi:{akreditasi:this.akreditasiProdi,tanggal:this.tanggalAkreditasiProdi,internasional:this.internasionalAkreditasiProdi},akreditasi_pt:this.akreditasi_pt,web_prodi:this.web_prodi,alamat_kampus:{alamat:this.alamat,kota:this.kotaAlamat,provinsi:this.provinsiAlamat},kaprodi:{nama:this.namaKaprodi,no:this.noKaprodi,email:this.emailKaprodi,periode:{mulai:this.periodeMulaiKaprodi,purna:this.periodePurnaKaprodi}},email_prodi:this.email_prodi,no_telp_prodi:this.no_telp_prodi})}},watch:{profileData:function(){this.fetchProfileData()}},components:{ProfileListItem:r,ProfileListItemContent:d}},p=Object(n.a)(u,(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("v-card",{attrs:{loading:t.isLoading,width:"100%","max-width":"650",elevation:"4"}},[i("v-card-text",[i("v-container",{attrs:{fluid:""}},[i("v-row",[i("v-col",{attrs:{cols:"12",sm:"8",order:"1","order-sm":"0"}},[t.editMode?i("profile-list-item",[i("v-row",[i("v-col",{attrs:{cols:"3"}},[i("profile-list-item-content",{attrs:{label:"Jenjang",choices:t.jenjang.choices,"edit-mode":t.editMode},model:{value:t.jenjang.value,callback:function(e){t.$set(t.jenjang,"value",e)},expression:"jenjang.value"}})],1),t._v(" "),i("v-col",[i("profile-list-item-content",{attrs:{label:"Nama prodi","edit-mode":t.editMode},model:{value:t.nama_prodi,callback:function(e){t.nama_prodi=e},expression:"nama_prodi"}})],1)],1)],1):t._e(),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-warehouse"}},[i("profile-list-item-content",{attrs:{label:"Jurusan","edit-mode":t.editMode},model:{value:t.jurusan,callback:function(e){t.jurusan=e},expression:"jurusan"}})],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-domain"}},[i("profile-list-item-content",{attrs:{label:"Fakultas","edit-mode":t.editMode},model:{value:t.fakultas,callback:function(e){t.fakultas=e},expression:"fakultas"}})],1),t._v(" "),t.editMode?i("profile-list-item",{attrs:{icon:"mdi-school"}},[i("v-row",[i("v-col",[i("profile-list-item-content",{attrs:{label:"Nama Perguruan Tinggi (lengkap)","edit-mode":t.editMode},model:{value:t.ptLengkap,callback:function(e){t.ptLengkap=e},expression:"ptLengkap"}})],1),t._v(" "),i("v-col",[i("profile-list-item-content",{attrs:{label:"(singkat)","edit-mode":t.editMode},model:{value:t.ptSingkat,callback:function(e){t.ptSingkat=e},expression:"ptSingkat"}})],1)],1)],1):t._e(),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-check-underline"}},[i("v-row",[i("v-col",[i("profile-list-item-content",{attrs:{label:"Akreditasi Prodi","edit-mode":t.editMode},model:{value:t.akreditasiProdi,callback:function(e){t.akreditasiProdi=e},expression:"akreditasiProdi"}})],1),t._v(" "),i("v-col",[i("profile-list-item-content",{attrs:{label:"Tanggal Akreditasi","edit-mode":t.editMode},model:{value:t.tanggalAkreditasiProdi,callback:function(e){t.tanggalAkreditasiProdi=e},expression:"tanggalAkreditasiProdi"}})],1)],1)],1),t._v(" "),t.internasionalAkreditasiProdi||t.editMode?i("profile-list-item",{attrs:{icon:"mdi-earth"}},[i("profile-list-item-content",{attrs:{label:"Akreditasi Internasional","edit-mode":t.editMode},model:{value:t.internasionalAkreditasiProdi,callback:function(e){t.internasionalAkreditasiProdi=e},expression:"internasionalAkreditasiProdi"}})],1):t._e(),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-map"}},[i("profile-list-item-content",{attrs:{label:"Alamat Kampus","edit-mode":t.editMode},model:{value:t.alamat,callback:function(e){t.alamat=e},expression:"alamat"}}),t._v(" "),i("profile-list-item-content",{attrs:{label:"Kota/Kabupaten","edit-mode":t.editMode},model:{value:t.kotaAlamat,callback:function(e){t.kotaAlamat=e},expression:"kotaAlamat"}}),t._v(" "),i("profile-list-item-content",{attrs:{label:"Provinsi","edit-mode":t.editMode},model:{value:t.provinsiAlamat,callback:function(e){t.provinsiAlamat=e},expression:"provinsiAlamat"}})],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-email"}},[i("profile-list-item-content",{attrs:{label:"Email Prodi","edit-mode":t.editMode},model:{value:t.email_prodi,callback:function(e){t.email_prodi=e},expression:"email_prodi"}})],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-phone"}},[i("profile-list-item-content",{attrs:{label:"Nomer Telpon Kantor","edit-mode":t.editMode},model:{value:t.no_telp_prodi,callback:function(e){t.no_telp_prodi=e},expression:"no_telp_prodi"}})],1)],1),t._v(" "),i("v-col",{attrs:{cols:"12",sm:"4"}},[i("v-row",[i("v-skeleton-loader",{staticClass:"mx-auto",attrs:{type:"image",width:"125",height:"125",boilerplate:!t.isLoading}})],1),t._v(" "),i("v-row",[i("v-col",{attrs:{cols:"12"}},[i("h2",{staticClass:"text-caption text-center"},[t._v(t._s(t.ptLengkap)+" ("+t._s(t.ptSingkat)+")")]),t._v(" "),i("v-row",{attrs:{dense:""}},[i("v-col",{attrs:{cols:"6"}},[i("h2",{staticClass:"text-caption text-right"},[t._v("Akreditasi")])]),t._v(" "),i("v-col",{attrs:{cols:"6"}},[i("h2",{staticClass:"text-subtitle-2 text-left"},[t._v(t._s(t.akreditasi_pt))])])],1),t._v(" "),i("v-row",{attrs:{dense:""}},[i("v-col",{attrs:{cols:"6"}},[i("h2",{staticClass:"text-caption text-right"},[t._v("Status PT")])]),t._v(" "),i("v-col",{attrs:{cols:"6"}},[i("h2",{staticClass:"text-subtitle-2 text-left"},[t._v(t._s(t.status))])])],1)],1)],1)],1)],1),t._v(" "),i("v-row",[i("v-col",{attrs:{cols:"12",sm:"8",order:"1","order-sm":"0"}},[i("v-divider"),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-account"}},[i("profile-list-item-content",{attrs:{label:"Kaprodi","edit-mode":t.editMode},model:{value:t.namaKaprodi,callback:function(e){t.namaKaprodi=e},expression:"namaKaprodi"}})],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-calendar-clock"}},[i("v-row",[i("v-col",[i("profile-list-item-content",{attrs:{label:"Mulai menjabat","edit-mode":t.editMode},model:{value:t.periodeMulaiKaprodi,callback:function(e){t.periodeMulaiKaprodi=e},expression:"periodeMulaiKaprodi"}})],1),t._v(" "),i("v-col",[i("profile-list-item-content",{attrs:{label:"Akhir jabatan","edit-mode":t.editMode},model:{value:t.periodePurnaKaprodi,callback:function(e){t.periodePurnaKaprodi=e},expression:"periodePurnaKaprodi"}})],1)],1)],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-email"}},[i("profile-list-item-content",{attrs:{label:"Email Kaprodi","edit-mode":t.editMode},model:{value:t.emailKaprodi,callback:function(e){t.emailKaprodi=e},expression:"emailKaprodi"}})],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-phone"}},[i("profile-list-item-content",{attrs:{label:"Nomor HP Kaprodi","edit-mode":t.editMode},model:{value:t.noKaprodi,callback:function(e){t.noKaprodi=e},expression:"noKaprodi"}})],1),t._v(" "),i("profile-list-item",{attrs:{icon:"mdi-web"}},[i("profile-list-item-content",{attrs:{label:"Website Prodi","edit-mode":t.editMode},model:{value:t.web_prodi,callback:function(e){t.web_prodi=e},expression:"web_prodi"}})],1)],1),t._v(" "),i("v-col",{attrs:{cols:"12",sm:"4"}},[i("v-skeleton-loader",{staticClass:"mx-auto",attrs:{type:"image",width:"125",height:"125",boilerplate:!t.isLoading}})],1)],1)],1)],1),t._v(" "),t.canEdit?i("v-tooltip",{attrs:{top:""},scopedSlots:t._u([{key:"activator",fn:function(e){var a=e.on,o=e.attrs;return[i("v-fab-transition",[t.editMode?i("v-btn",t._g(t._b({attrs:{fab:"",fixed:"",bottom:"",right:"",color:"green",dark:""},on:{click:t.updateProfile}},"v-btn",o,!1),a),[i("v-icon",[t._v("mdi-check")])],1):i("v-btn",t._g(t._b({attrs:{fab:"",fixed:"",bottom:"",right:"",color:"blue",dark:""},on:{click:function(e){t.editMode=!0}}},"v-btn",o,!1),a),[i("v-icon",[t._v("mdi-pencil")])],1)],1)]}}],null,!1,3567779843)},[t._v(" "),t.editMode?i("span",[t._v("Save")]):i("span",[t._v("Edit")])]):t._e()],1)}),[],!1,null,null,null);e.a=p.exports},e19l:function(t,e,i){"use strict";i.r(e);var a=i("o0o1"),o=i.n(a);function l(t,e,i,a,o,l,n){try{var r=t[l](n),s=r.value}catch(t){return void i(t)}r.done?e(s):Promise.resolve(s).then(a,o)}var n={name:"Members",data:function(){return{headers:[{text:"#",value:"no",sortable:!1},{text:"JENJANG",align:"start",sortable:!0,value:"jenjang"},{text:"PRODI",value:"nama_prodi"},{text:"PERGURUAN TINGGI",value:"pt.lengkap"},{text:"WEBSITE PRODI",value:"web_prodi",sortable:!1},{text:"AKSI",value:"actions",sortable:!1}],members:[],isLoading:!1,search:null,detailDialog:!1,currentProfileShow:{}}},computed:{dialogTitle:function(){var t,e,i,a,o=this.currentProfileShow;return"".concat(null!==(t=o.jenjang)&&void 0!==t?t:""," ").concat(null!==(e=o.nama_prodi)&&void 0!==e?e:""," ").concat(null!==(i=null===(a=o.pt)||void 0===a?void 0:a.lengkap)&&void 0!==i?i:"")}},methods:{getUsers:function(){var t=this;this.isLoading=!0,window.axios.get("/api/kpbi/profiles").then((function(e){var i=e.data;t.isLoading=!1,t.members=i})).catch((function(e){t.isLoading=!1,t.$emit("noticeError",e)}))},seeDetails:function(t){var e,i=this;return(e=o.a.mark((function e(){return o.a.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,t;case 2:i.currentProfileShow=e.sent,i.detailDialog=!0;case 4:case"end":return e.stop()}}),e)})),function(){var t=this,i=arguments;return new Promise((function(a,o){var n=e.apply(t,i);function r(t){l(n,a,o,r,s,"next",t)}function s(t){l(n,a,o,r,s,"throw",t)}r(void 0)}))})()}},created:function(){this.getUsers()},components:{ProfileCard:i("SJBf").a}},r=i("KHd+"),s=Object(r.a)(n,(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("v-container",{attrs:{fluid:""}},[i("v-row",{attrs:{justify:"start",align:"stretch"}},[i("v-col",[i("v-card",{attrs:{elevation:"3"}},[i("v-card-title",{staticClass:"px-8 py-3"},[i("v-tooltip",{attrs:{bottom:""},scopedSlots:t._u([{key:"activator",fn:function(e){var a=e.on,o=e.attrs;return[i("v-btn",t._g(t._b({attrs:{loading:t.isLoading,disabled:t.isLoading,fab:"",icon:""},on:{click:function(e){return e.stopPropagation(),t.getUsers(e)}}},"v-btn",o,!1),a),[i("v-icon",[t._v("mdi-refresh")])],1)]}}])},[t._v(" "),i("span",[t._v("Refresh Data")])]),t._v(" "),i("h1",{staticClass:"text-h5"},[t._v("Anggota KPBI")]),t._v(" "),i("v-spacer"),t._v(" "),i("v-text-field",{attrs:{"append-icon":"mdi-magnify",label:"Search","single-line":"","hide-details":""},model:{value:t.search,callback:function(e){t.search=e},expression:"search"}})],1),t._v(" "),i("v-data-table",{attrs:{headers:t.headers,items:t.members,search:t.search,loading:t.isLoading,"fixed-header":"",height:"450"},scopedSlots:t._u([{key:"item.web_prodi",fn:function(e){var a=e.item;return[i("a",{attrs:{href:a.web_prodi,target:"_blank"}},[t._v(t._s(a.web_prodi))])]}},{key:"item.actions",fn:function(e){var a=e.item;return[i("v-btn",{attrs:{outlined:"",small:"",color:"green darken-2"},on:{click:function(e){return t.seeDetails(a)}}},[t._v("Details")])]}}])})],1)],1)],1),t._v(" "),i("v-dialog",{attrs:{width:"700","max-width":"100%",scrollable:""},model:{value:t.detailDialog,callback:function(e){t.detailDialog=e},expression:"detailDialog"}},[i("v-card",[i("v-card-title",{staticClass:"light-green white--text"},[t._v(t._s(t.dialogTitle))]),t._v(" "),i("v-card-text",[i("v-container",{attrs:{fluid:""}},[i("v-row",{attrs:{justify:"center"}},[i("profile-card",{attrs:{profileData:t.currentProfileShow,editMode:!1}})],1)],1)],1),t._v(" "),i("v-card-actions",{staticClass:"light-green lighten-4"},[i("v-spacer"),t._v(" "),i("v-btn",{attrs:{color:"red",text:""},on:{click:function(e){t.detailDialog=!1}}},[t._v("Close")])],1)],1)],1)],1)}),[],!1,null,null,null);e.default=s.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[3],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/404.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/404.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'NotFound404'
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/404.vue?vue&type=template&id=d215c3ee&":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/404.vue?vue&type=template&id=d215c3ee& ***!
+  \*************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { staticClass: "fill-height", attrs: { fluid: "" } },
+    [
+      _c("v-row", { attrs: { justify: "center", align: "center" } }, [
+        _c("h1", { staticClass: "text-h1" }, [
+          _vm._v("Halaman tidak ditemukan >.<")
+        ])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/404.vue":
+/*!************************************!*\
+  !*** ./resources/js/views/404.vue ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _404_vue_vue_type_template_id_d215c3ee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./404.vue?vue&type=template&id=d215c3ee& */ "./resources/js/views/404.vue?vue&type=template&id=d215c3ee&");
+/* harmony import */ var _404_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./404.vue?vue&type=script&lang=js& */ "./resources/js/views/404.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _404_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _404_vue_vue_type_template_id_d215c3ee___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _404_vue_vue_type_template_id_d215c3ee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/404.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/404.vue?vue&type=script&lang=js&":
+/*!*************************************************************!*\
+  !*** ./resources/js/views/404.vue?vue&type=script&lang=js& ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./404.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/404.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/404.vue?vue&type=template&id=d215c3ee&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/views/404.vue?vue&type=template&id=d215c3ee& ***!
+  \*******************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_d215c3ee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./404.vue?vue&type=template&id=d215c3ee& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/404.vue?vue&type=template&id=d215c3ee&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_d215c3ee___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_d215c3ee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

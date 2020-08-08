@@ -1,6 +1,13 @@
 <template>
     <v-container fluid class="fill-height">
-        
+
+        <v-row
+            v-if="$route.query.message"
+            justify="center"
+        >
+            <h5 class="text-h5">{{ $route.query.message }}</h5>
+        </v-row>
+
         <v-row justify="center" align="stretch">
 
             <v-card width="320" class="elevation-4 mb-16">

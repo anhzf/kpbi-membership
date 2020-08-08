@@ -39,14 +39,16 @@ class RegisterController extends Controller
         $this->validator($data)->validate();
         // Trigger an event
         // event(new Registered($user = $this->create($data)));
-        
+
         $user = $this->create($data);
         // Register as KPBI Member
         $this->KPBIRegister($request, $user);
 
+        $user->sendEmailVerificationNotification();
+
         return response()->json([
             'success' => true,
-            'message' => 'Selamat! Akun anda telah terdaftar!'
+            'message' => 'Selamat! Akun anda telah terdaftar! Silahkan cek email ' . $user->getEmailForVerification() . ' untuk verifikasi!'
         ]);
     }
 

@@ -73,7 +73,7 @@ class VerificationController extends Controller
             return $response;
         }
 
-        return response()->json(['success' => true, 'message' => 'Akun anda berhasil telah terverifikasi!'], 202);
+        return response()->json(['success' => true, 'message' => 'Akun anda telah berhasil diverifikasi!'], 202);
     }
 
     /**
@@ -106,7 +106,7 @@ class VerificationController extends Controller
 
         return response()->json([
                 'success' => true,
-                'message' => "email sent to {$request->user()->getEmailForVerification()}"
+                'message' => "Email telah dikirim ke {$request->user()->getEmailForVerification()}"
             ], 202);
     }
 }
