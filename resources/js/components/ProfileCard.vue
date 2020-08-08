@@ -15,24 +15,24 @@
                                     v-model="jenjang.value"
                                     :choices="jenjang.choices"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                />
                             </v-col>
                             <v-col>
                                 <profile-list-item-content
                                     label="Nama prodi"
                                     v-model="nama_prodi"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                />
                             </v-col>
                         </v-row>
                     </profile-list-item>
                     
-                    <profile-list-item icon="mdi-warehouse">
+                    <profile-list-item icon="mdi-warehouse" v-if="(jurusan && (jurusan !== '-')) || editMode">
                         <profile-list-item-content
                             label="Jurusan"
                             v-model="jurusan"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-domain">
@@ -40,7 +40,7 @@
                             label="Fakultas"
                             v-model="fakultas"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item v-if="editMode" icon="mdi-school">
@@ -50,16 +50,33 @@
                                     label="Nama Perguruan Tinggi (lengkap)"
                                     v-model="ptLengkap"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                />
                             </v-col>
                             <v-col>
                                 <profile-list-item-content
                                     label="(singkat)"
                                     v-model="ptSingkat"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                />
                             </v-col>
                         </v-row>
+                    </profile-list-item>
+
+                    <profile-list-item icon="mdi-checkbox-marked-circle-outline" v-if="editMode">
+                        <profile-list-item-content
+                            label="Status Perguruan Tinggi"
+                            v-model="status"
+                            :edit-mode="editMode"
+                            :choices="['Negeri', 'Swasta']"
+                        />
+                    </profile-list-item>
+
+                    <profile-list-item icon="mdi-check-underline" v-if="editMode">
+                        <profile-list-item-content
+                            label="Akreditasi Perguruan Tinggi"
+                            v-model="akreditasi_pt"
+                            :edit-mode="editMode"
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-check-underline">
@@ -69,24 +86,26 @@
                                     label="Akreditasi Prodi"
                                     v-model="akreditasiProdi"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                    :choices="['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi']"
+                                />
                             </v-col>
                             <v-col>
                                 <profile-list-item-content
                                     label="Tanggal Akreditasi"
                                     v-model="tanggalAkreditasiProdi"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                    type="date-picker"
+                                />
                             </v-col>
                         </v-row>
                     </profile-list-item>
                     
-                    <profile-list-item icon="mdi-earth" v-if="(internasionalAkreditasiProdi && (internasionalAkreditasiProdi == '-')) || editMode">
+                    <profile-list-item icon="mdi-earth" v-if="(internasionalAkreditasiProdi && (internasionalAkreditasiProdi !== '-')) || editMode">
                         <profile-list-item-content
-                            label="Akreditasi Internasional"
+                            label="Akreditasi/Sertifikasi Internasional"
                             v-model="internasionalAkreditasiProdi"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-map">
@@ -94,17 +113,17 @@
                             label="Alamat Kampus"
                             v-model="alamat"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                         <profile-list-item-content
                             label="Kota/Kabupaten"
                             v-model="kotaAlamat"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                         <profile-list-item-content
                             label="Provinsi"
                             v-model="provinsiAlamat"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-email">
@@ -112,7 +131,7 @@
                             label="Email Prodi"
                             v-model="email_prodi"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-phone">
@@ -120,7 +139,7 @@
                             label="Nomer Telpon Kantor"
                             v-model="no_telp_prodi"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
 
                 </v-col>
@@ -136,7 +155,7 @@
                     <v-row>
                         <v-col cols="12">
 
-                            <h2 class="text-caption text-center">{{ ptLengkap }} ({{ ptSingkat }})</h2>
+                            <h2 class="text-caption text-center font-weight-bold">{{ ptLengkap }} ({{ ptSingkat }})</h2>
 
                             <v-row dense>
                                 <v-col cols="6">
@@ -170,7 +189,7 @@
                             label="Kaprodi"
                             v-model="namaKaprodi"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-calendar-clock">
@@ -180,14 +199,16 @@
                                     label="Mulai menjabat"
                                     v-model="periodeMulaiKaprodi"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                    type="number"
+                                />
                             </v-col>
                             <v-col>
                                 <profile-list-item-content
                                     label="Akhir jabatan"
                                     v-model="periodePurnaKaprodi"
                                     :edit-mode="editMode"
-                                ></profile-list-item-content>
+                                    type="number"
+                                />
                             </v-col>
                         </v-row>
                     </profile-list-item>
@@ -197,7 +218,7 @@
                             label="Email Kaprodi"
                             v-model="emailKaprodi"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-phone">
@@ -205,7 +226,7 @@
                             label="Nomor HP Kaprodi"
                             v-model="noKaprodi"
                             :edit-mode="editMode"
-                        ></profile-list-item-content>
+                        />
                     </profile-list-item>
                     
                     <profile-list-item icon="mdi-web">
@@ -213,8 +234,8 @@
                             label="Website Prodi"
                             v-model="web_prodi"
                             :edit-mode="editMode"
-                            type="link"
-                        ></profile-list-item-content>
+                            type="url" hyperlink
+                        />
                     </profile-list-item>
                 </v-col>
                 

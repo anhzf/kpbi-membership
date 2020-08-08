@@ -45,7 +45,7 @@
                     :search="search"
                     :loading="isLoading"
                     fixed-header
-                    height="450"
+                    height="65vh"
                 >
                     <template v-slot:item.web_prodi="{ item }">
                         <a :href="item.web_prodi" target="_blank">{{ item.web_prodi }}</a>

@@ -278,6 +278,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -565,6 +586,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'profile-list-item-content',
   props: {
@@ -573,11 +625,27 @@ __webpack_require__.r(__webpack_exports__);
       "default": false
     },
     label: String,
+    type: {
+      required: false,
+      type: String,
+      "default": 'text'
+    },
     value: String,
     choices: {
       type: Array,
       required: false
+    },
+    hyperlink: {
+      required: false,
+      type: Boolean,
+      "default": false
     }
+  },
+  data: function data() {
+    return {
+      dtPickerId: Math.random().toString(36).substring(2, 15),
+      dtPickerDialogShow: false
+    };
   }
 });
 
@@ -686,26 +754,28 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _c(
-                        "profile-list-item",
-                        { attrs: { icon: "mdi-warehouse" } },
-                        [
-                          _c("profile-list-item-content", {
-                            attrs: {
-                              label: "Jurusan",
-                              "edit-mode": _vm.editMode
-                            },
-                            model: {
-                              value: _vm.jurusan,
-                              callback: function($$v) {
-                                _vm.jurusan = $$v
-                              },
-                              expression: "jurusan"
-                            }
-                          })
-                        ],
-                        1
-                      ),
+                      (_vm.jurusan && _vm.jurusan !== "-") || _vm.editMode
+                        ? _c(
+                            "profile-list-item",
+                            { attrs: { icon: "mdi-warehouse" } },
+                            [
+                              _c("profile-list-item-content", {
+                                attrs: {
+                                  label: "Jurusan",
+                                  "edit-mode": _vm.editMode
+                                },
+                                model: {
+                                  value: _vm.jurusan,
+                                  callback: function($$v) {
+                                    _vm.jurusan = $$v
+                                  },
+                                  expression: "jurusan"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "profile-list-item",
@@ -784,6 +854,57 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
+                      _vm.editMode
+                        ? _c(
+                            "profile-list-item",
+                            {
+                              attrs: {
+                                icon: "mdi-checkbox-marked-circle-outline"
+                              }
+                            },
+                            [
+                              _c("profile-list-item-content", {
+                                attrs: {
+                                  label: "Status Perguruan Tinggi",
+                                  "edit-mode": _vm.editMode,
+                                  choices: ["Negeri", "Swasta"]
+                                },
+                                model: {
+                                  value: _vm.status,
+                                  callback: function($$v) {
+                                    _vm.status = $$v
+                                  },
+                                  expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.editMode
+                        ? _c(
+                            "profile-list-item",
+                            { attrs: { icon: "mdi-check-underline" } },
+                            [
+                              _c("profile-list-item-content", {
+                                attrs: {
+                                  label: "Akreditasi Perguruan Tinggi",
+                                  "edit-mode": _vm.editMode
+                                },
+                                model: {
+                                  value: _vm.akreditasi_pt,
+                                  callback: function($$v) {
+                                    _vm.akreditasi_pt = $$v
+                                  },
+                                  expression: "akreditasi_pt"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c(
                         "profile-list-item",
                         { attrs: { icon: "mdi-check-underline" } },
@@ -797,7 +918,16 @@ var render = function() {
                                   _c("profile-list-item-content", {
                                     attrs: {
                                       label: "Akreditasi Prodi",
-                                      "edit-mode": _vm.editMode
+                                      "edit-mode": _vm.editMode,
+                                      choices: [
+                                        "A",
+                                        "B",
+                                        "C",
+                                        "Unggul",
+                                        "Baik Sekali",
+                                        "Baik",
+                                        "Belum Terakreditasi"
+                                      ]
                                     },
                                     model: {
                                       value: _vm.akreditasiProdi,
@@ -817,7 +947,8 @@ var render = function() {
                                   _c("profile-list-item-content", {
                                     attrs: {
                                       label: "Tanggal Akreditasi",
-                                      "edit-mode": _vm.editMode
+                                      "edit-mode": _vm.editMode,
+                                      type: "date-picker"
                                     },
                                     model: {
                                       value: _vm.tanggalAkreditasiProdi,
@@ -838,7 +969,7 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       (_vm.internasionalAkreditasiProdi &&
-                        _vm.internasionalAkreditasiProdi == "-") ||
+                        _vm.internasionalAkreditasiProdi !== "-") ||
                       _vm.editMode
                         ? _c(
                             "profile-list-item",
@@ -846,7 +977,7 @@ var render = function() {
                             [
                               _c("profile-list-item-content", {
                                 attrs: {
-                                  label: "Akreditasi Internasional",
+                                  label: "Akreditasi/Sertifikasi Internasional",
                                   "edit-mode": _vm.editMode
                                 },
                                 model: {
@@ -985,7 +1116,10 @@ var render = function() {
                             [
                               _c(
                                 "h2",
-                                { staticClass: "text-caption text-center" },
+                                {
+                                  staticClass:
+                                    "text-caption text-center font-weight-bold"
+                                },
                                 [
                                   _vm._v(
                                     _vm._s(_vm.ptLengkap) +
@@ -1112,7 +1246,8 @@ var render = function() {
                                   _c("profile-list-item-content", {
                                     attrs: {
                                       label: "Mulai menjabat",
-                                      "edit-mode": _vm.editMode
+                                      "edit-mode": _vm.editMode,
+                                      type: "number"
                                     },
                                     model: {
                                       value: _vm.periodeMulaiKaprodi,
@@ -1132,7 +1267,8 @@ var render = function() {
                                   _c("profile-list-item-content", {
                                     attrs: {
                                       label: "Akhir jabatan",
-                                      "edit-mode": _vm.editMode
+                                      "edit-mode": _vm.editMode,
+                                      type: "number"
                                     },
                                     model: {
                                       value: _vm.periodePurnaKaprodi,
@@ -1202,7 +1338,8 @@ var render = function() {
                             attrs: {
                               label: "Website Prodi",
                               "edit-mode": _vm.editMode,
-                              type: "link"
+                              type: "url",
+                              hyperlink: ""
                             },
                             model: {
                               value: _vm.web_prodi,
@@ -1417,55 +1554,194 @@ var render = function() {
                           }
                         }
                       })
-                    : _c("v-text-field", {
-                        attrs: { value: _vm.value },
-                        on: {
-                          input: function($event) {
-                            return _vm.$emit("input", $event)
-                          }
-                        }
-                      })
-                ]
-              : [
-                  _vm.value && _vm.value !== "-"
-                    ? _c(
-                        "v-tooltip",
-                        {
-                          attrs: { bottom: "", "open-delay": "300" },
-                          scopedSlots: _vm._u(
-                            [
+                    : [
+                        _vm.type === "date-picker"
+                          ? _c(
+                              "v-dialog",
                               {
-                                key: "activator",
-                                fn: function(ref) {
-                                  var on = ref.on
-                                  var attrs = ref.attrs
-                                  return [
-                                    _c(
-                                      "v-list-item-title",
-                                      _vm._g(
-                                        _vm._b(
-                                          {},
-                                          "v-list-item-title",
-                                          attrs,
-                                          false
+                                ref: _vm.dtPickerId,
+                                attrs: {
+                                  "return-value": _vm.value,
+                                  persistent: "",
+                                  width: "290px"
+                                },
+                                on: {
+                                  "update:returnValue": function($event) {
+                                    _vm.value = $event
+                                  },
+                                  "update:return-value": function($event) {
+                                    _vm.value = $event
+                                  }
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "activator",
+                                      fn: function(ref) {
+                                        var on = ref.on
+                                        var attrs = ref.attrs
+                                        return [
+                                          _c(
+                                            "v-text-field",
+                                            _vm._g(
+                                              _vm._b(
+                                                {
+                                                  attrs: { readonly: "" },
+                                                  model: {
+                                                    value: _vm.value,
+                                                    callback: function($$v) {
+                                                      _vm.value = $$v
+                                                    },
+                                                    expression: "value"
+                                                  }
+                                                },
+                                                "v-text-field",
+                                                attrs,
+                                                false
+                                              ),
+                                              on
+                                            )
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  false,
+                                  994217306
+                                ),
+                                model: {
+                                  value: _vm.dtPickerDialogShow,
+                                  callback: function($$v) {
+                                    _vm.dtPickerDialogShow = $$v
+                                  },
+                                  expression: "dtPickerDialogShow"
+                                }
+                              },
+                              [
+                                _vm._v(" "),
+                                _vm.dtPickerDialogShow
+                                  ? _c(
+                                      "v-date-picker",
+                                      {
+                                        attrs: { "full-width": "" },
+                                        model: {
+                                          value: _vm.value,
+                                          callback: function($$v) {
+                                            _vm.value = $$v
+                                          },
+                                          expression: "value"
+                                        }
+                                      },
+                                      [
+                                        _c("v-spacer"),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: {
+                                              text: "",
+                                              color: "primary"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.dtPickerDialogShow = false
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Cancel")]
                                         ),
-                                        on
-                                      ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: {
+                                              text: "",
+                                              color: "primary"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.$refs[
+                                                  _vm.dtPickerId
+                                                ].save(_vm.value)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("OK")]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ],
+                              1
+                            )
+                          : _c("v-text-field", {
+                              attrs: { type: _vm.type, value: _vm.value },
+                              on: {
+                                input: function($event) {
+                                  return _vm.$emit("input", $event)
+                                }
+                              }
+                            })
+                      ]
+                ]
+              : _c(
+                  "v-tooltip",
+                  {
+                    attrs: { bottom: "", "open-delay": "300" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _vm.hyperlink
+                              ? _c(
+                                  "v-list-item-title",
+                                  _vm._g(
+                                    _vm._b(
+                                      {},
+                                      "v-list-item-title",
+                                      attrs,
+                                      false
+                                    ),
+                                    on
+                                  ),
+                                  [
+                                    _c(
+                                      "a",
+                                      {
+                                        attrs: {
+                                          href: _vm.value,
+                                          target: "_blank"
+                                        }
+                                      },
                                       [_vm._v(_vm._s(_vm.value))]
                                     )
                                   ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            2280146265
-                          )
-                        },
-                        [_vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.value))])]
-                      )
-                    : _vm._e()
-                ]
+                                )
+                              : _c(
+                                  "v-list-item-title",
+                                  _vm._g(
+                                    _vm._b(
+                                      {},
+                                      "v-list-item-title",
+                                      attrs,
+                                      false
+                                    ),
+                                    on
+                                  ),
+                                  [_vm._v(_vm._s(_vm.value))]
+                                )
+                          ]
+                        }
+                      }
+                    ])
+                  },
+                  [_vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.value))])]
+                )
           ]
     ],
     2
