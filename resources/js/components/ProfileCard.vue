@@ -12,8 +12,8 @@
                             <v-col cols="3">
                                 <profile-list-item-content
                                     label="Jenjang"
-                                    v-model="jenjang.value"
-                                    :choices="jenjang.choices"
+                                    v-model="jenjang"
+                                    :choices="['S1','S2','S3']"
                                     :edit-mode="editMode"
                                 />
                             </v-col>
@@ -146,12 +146,12 @@
                 </v-col>
                 
                 <v-col cols="12" sm="4">
-                    <v-row>
-                        <v-skeleton-loader
-                            type="image"
-                            width="125" height="125"
-                            :boilerplate="!isLoading" class="mx-auto"
-                        ></v-skeleton-loader>
+                    <v-row justify="center">
+                        <editable-image
+                            :src="ptImg" :editable="editMode"
+                            width="125px" height="125px"
+                            @image:changed="updatePTImg"
+                        />
                     </v-row>
                     <v-row>
                         <v-col cols="12">
@@ -241,11 +241,13 @@
                 </v-col>
                 
                 <v-col cols="12" sm="4">
-                    <v-skeleton-loader
-                        type="image"
-                        width="125" height="125"
-                        :boilerplate="!isLoading" class="mx-auto"
-                    ></v-skeleton-loader>
+                    <v-row justify="center">
+                        <editable-image
+                            :src="kaprodiImg" :editable="editMode"
+                            width="125px" height="125px"
+                            @image:changed="updateKaprodiImg"
+                        />
+                    </v-row>
                 </v-col>
 
             </v-row>
@@ -282,7 +284,7 @@
 <script>
 import ProfileListItem from "./ProfileListItem";
 import ProfileListItemContent from "./ProfileListItemContent";
-
+import EditableImage from "./editableImage";
 
 export default {
     name: 'ProfileCard',
@@ -304,15 +306,13 @@ export default {
     data() {
         return {
             editMode: false,
-            jenjang: {
-                value: null,
-                choices: ['S1', 'S2', 'S3'],
-            },
+            jenjang: null,
             nama_prodi: null,
             jurusan: null,
             fakultas: null,
             ptLengkap: null,
             ptSingkat: null,
+            ptImg: null,
             status: null,
             akreditasiProdi: null,
             tanggalAkreditasiProdi: null,
@@ -327,8 +327,11 @@ export default {
             namaKaprodi: null,
             noKaprodi: null,
             emailKaprodi: null,
+            kaprodiImg: null,
             periodeMulaiKaprodi: null,
             periodePurnaKaprodi: null,
+            newPTImg: null,
+            newKaprodiImg: null,
         }
     },
 
@@ -337,7 +340,7 @@ export default {
             this.$store.commit('contentLoading', true);
 
             ({
-                jenjang: this.jenjang.value = null,
+                jenjang: this.jenjang = null,
                 nama_prodi: this.nama_prodi = null,
                 jurusan: this.jurusan = null,
                 fakultas: this.fakultas = null,
@@ -369,48 +372,65 @@ export default {
                 } = { nama: this.namaKaprodi = null, no: this.noKaprodi = null, email: this.emailKaprodi = null, periode: { mulai: this.periodeMulaiKaprodi = null, purna: this.periodePurnaKaprodi = null, } = { mulai: this.periodeMulaiKaprodi = null, purna: this.periodePurnaKaprodi = null } },
                 email_prodi: this.email_prodi = null,
                 no_telp_prodi: this.no_telp_prodi = null,
+                ptImg_src: this.ptImg = null,
+                kaprodiImg_src: this.kaprodiImg = null,
             } = await this.profileData)
 
             this.$store.commit('contentLoading', false)
         },
 
-
         updateProfile() {
             this.editMode = false
             this.$emit('profile-update', {
-                jenjang: this.jenjang.value,
-                nama_prodi: this.nama_prodi,
-                jurusan: this.jurusan,
-                fakultas: this.fakultas,
-                pt: {
-                    singkat: this.ptSingkat,
-                    lengkap: this.ptLengkap,
-                },
-                status: this.status,
-                akreditasi_prodi: {
-                    akreditasi: this.akreditasiProdi,
-                    tanggal: this.tanggalAkreditasiProdi,
-                    internasional: this.internasionalAkreditasiProdi,
-                },
-                akreditasi_pt: this.akreditasi_pt,
-                web_prodi: this.web_prodi,
-                alamat_kampus: {
-                    alamat: this.alamat,
-                    kota: this.kotaAlamat,
-                    provinsi: this.provinsiAlamat,
-                },
-                kaprodi: {
-                    nama: this.namaKaprodi,
-                    no: this.noKaprodi,
-                    email: this.emailKaprodi,
-                    periode: {
-                        mulai: this.periodeMulaiKaprodi,
-                        purna: this.periodePurnaKaprodi,
+                bio: {
+                    jenjang: this.jenjang,
+                    nama_prodi: this.nama_prodi,
+                    jurusan: this.jurusan,
+                    fakultas: this.fakultas,
+                    pt: {
+                        singkat: this.ptSingkat,
+                        lengkap: this.ptLengkap,
                     },
+                    status: this.status,
+                    akreditasi_prodi: {
+                        akreditasi: this.akreditasiProdi,
+                        tanggal: this.tanggalAkreditasiProdi,
+                        internasional: this.internasionalAkreditasiProdi,
+                    },
+                    akreditasi_pt: this.akreditasi_pt,
+                    web_prodi: this.web_prodi,
+                    alamat_kampus: {
+                        alamat: this.alamat,
+                        kota: this.kotaAlamat,
+                        provinsi: this.provinsiAlamat,
+                    },
+                    kaprodi: {
+                        nama: this.namaKaprodi,
+                        no: this.noKaprodi,
+                        email: this.emailKaprodi,
+                        periode: {
+                            mulai: this.periodeMulaiKaprodi,
+                            purna: this.periodePurnaKaprodi,
+                        },
+                    },
+                    email_prodi: this.email_prodi,
+                    no_telp_prodi: this.no_telp_prodi,
                 },
-                email_prodi: this.email_prodi,
-                no_telp_prodi: this.no_telp_prodi,
+                newImg: {
+                    pt: this.newPTImg,
+                    kaprodi: this.newKaprodiImg
+                }
             })
+        },
+
+        updatePTImg({file, base64}) {
+            this.ptImg = base64
+            this.newPTImg = file
+        },
+
+        updateKaprodiImg({file, base64}) {
+            this.kaprodiImg = base64
+            this.newKaprodiImg = file
         }
     },
 
@@ -426,7 +446,8 @@ export default {
 
     components: {
         ProfileListItem,
-        ProfileListItemContent
+        ProfileListItemContent,
+        EditableImage,
     }
 }
 </script>

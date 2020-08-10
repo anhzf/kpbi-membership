@@ -34,7 +34,29 @@ class KPBI extends Model
 
     public function account()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(\App\User::class);
+    }
+
+    public function getptImgPublicPathAttribute()
+    {
+        if ($media = Media::find($this->pt_icon)) {
+            return $media->publicPath;            
+        }
+    }
+
+    public function getkaprodiImgPublicPathAttribute()
+    {
+        if ($media = Media::find($this->kaprodi_img)) {
+            return $media->publicPath;            
+        }
+    }
+
+    public function toArray()
+    {
+        return $this->attributesToArray() + [
+            'ptImg_src' => $this->ptImgPublicPath,
+            'kaprodiImg_src' => $this->kaprodiImgPublicPath
+        ];
     }
 
     /**

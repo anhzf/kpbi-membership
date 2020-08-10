@@ -51,10 +51,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'email' => $this->email,
         ];
     }
-
     
     public function kpbi_profile()
     {
-        return $this->hasOne('App\KPBI');
+        return $this->hasOne(\App\KPBI::class, 'user_id');
+    }
+
+    public function mediaCollections()
+    {
+        return $this->hasMany(\App\Media::class, 'owner_id');
     }
 }

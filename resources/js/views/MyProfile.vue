@@ -56,13 +56,38 @@ export default {
             this.profileLoading = false
         },
 
-        async save(data) {
+        async save({bio, newImg}) {
             this.$store.commit('contentLoading', true)
+            // Update Biodata
             try {
-                const update = await window.axios.put('/api/kpbi/profile', data)
+                const update = await window.axios.put('/api/kpbi/profile', bio)
                 this.$emit('notice', {message: update.data.message, type: 'success'})
             } catch (err) {
                 this.$emit('noticeError', err)
+            }
+            // Upload PT image
+            if (newImg.pt) {
+                const uploaded = new FormData()
+                uploaded.append('pt_img', newImg.pt)
+                try {
+                    const upload = await window.axios.post('/api/kpbi/profile/pt-image', uploaded, {
+                        'Content-Type': 'multipart/form-data'
+                    })
+                } catch (err) {
+                    this.$emit('noticeError', err)
+                }
+            }
+            // Upload Kaprodi image
+            if (newImg.kaprodi) {
+                const uploaded = new FormData()
+                uploaded.append('kaprodi_img', newImg.kaprodi)
+                try {
+                    const upload = await window.axios.post('/api/kpbi/profile/kaprodi-image', uploaded, {
+                        'Content-Type': 'multipart/form-data'
+                    })
+                } catch (err) {
+                    this.$emit('noticeError', err)
+                }
             }
             this.getProfileData()
             this.$store.commit('contentLoading', false)

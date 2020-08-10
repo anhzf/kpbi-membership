@@ -11,13 +11,11 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{on, attrs}">
                             <v-btn
-                                @click.stop="getUsers"
+                                fab icon
+                                v-bind="attrs" v-on="on"
                                 :loading="isLoading"
                                 :disabled="isLoading"
-                                v-bind="attrs"
-                                v-on="on"
-                                fab
-                                icon
+                                @click.stop="getUsers"
                             >
                                 <v-icon>mdi-refresh</v-icon>
                             </v-btn>
@@ -33,8 +31,7 @@
                         v-model="search"
                         append-icon="mdi-magnify"
                         label="Search"
-                        single-line
-                        hide-details
+                        single-line hide-details
                     ></v-text-field>
                     
                 </v-card-title>
@@ -125,18 +122,17 @@ export default {
     },
 
     methods: {
-        getUsers() {
+        async getUsers() {
             this.isLoading = true
 
-            window.axios.get('/api/kpbi/profiles')
-                .then(({data}) => {
-                    this.isLoading = false
-                    this.members = data
-                })
-                .catch(err => {
-                    this.isLoading = false
-                    this.$emit('noticeError', err)
-                })
+            try {
+                const {data: members} = await window.axios('/api/kpbi/profiles')
+                this.members = members
+            } catch (err) {
+                this.$emit('noticeError', err)
+            }
+
+            this.isLoading = false
         },
 
         seeDetails(profileData) {

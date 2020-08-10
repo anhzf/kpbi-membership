@@ -15,7 +15,9 @@ class CreateKpbiMemberTable extends Migration
     {
         Schema::create('kpbi_member', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->nullable();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->nullable();
             $table->string('jenjang')->nullable();
             $table->text('nama_prodi')->nullable();
             $table->text('jurusan')->nullable();
