@@ -18,7 +18,7 @@ export default {
             }
 
             try {
-                const verify = await window.axios.post(app.$route.fullPath)
+                const verify = await window.axios.post(this.$route.fullPath)
                 this.$emit('notice', {message: verify.data.message, type: 'success'})
                 this.$router.push({name: 'AccountSettings'})
             } catch (err) {

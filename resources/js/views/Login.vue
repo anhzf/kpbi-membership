@@ -82,25 +82,20 @@ export default {
 
     methods: {
         async login() {
-            // Set page state to Loading
             this.$store.commit('contentLoading', true)
             const loginData = {
                 name: this.username,
                 password: this.password,
             }
-            const login = await Login(loginData)
-
-            // Set page state to finished Loading
+            try {
+                const login = await Login(loginData)
+                this.$emit('notice', {message: 'Login Berhasil!', type: 'success'})
+                this.$router.push(this.$route.query.redirect ??  {name: 'AccountSettings'})
+            } catch (err) {
+                this.$emit('noticeError', err)
+            }
             this.$store.commit('contentLoading', false)
             this.$emit('contentLoading', false)
-            if (login.success) {
-                // Notice to User
-                this.$emit('notice', {message: 'Login Berhasil!', type: 'success'})
-                // Redirect user
-                this.$router.push(this.$route.query.redirect ??  {name: 'AccountSettings'})
-            } else {
-                this.$emit('noticeError', login)
-            }
         }
     }
 }
