@@ -1,6 +1,11 @@
 <template>
 
-<v-card :loading="isLoading" width="100%" max-width="650" elevation="4">
+<v-card
+    width="100%" max-width="650"
+    :style="cardStyle"
+    :loading="isLoading"
+    elevation="4"
+>
     <v-card-text>
         <v-container fluid>
             <v-row>
@@ -332,6 +337,14 @@ export default {
             periodePurnaKaprodi: null,
             newPTImg: null,
             newKaprodiImg: null,
+            cardStyle: {
+                background: 'url("./img/ICON_KPBI.png")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: '50%',
+                backgroundSize: '70%',
+                backgroundColor: '#ffffffd9',
+                backgroundBlendMode: 'color',
+            }
         }
     },
 

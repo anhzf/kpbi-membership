@@ -4,6 +4,8 @@ import store from './store'
 // use import() instead of default import statement to make lazy router-views 
 const Member = () => import('./views/Member.vue')
 const Login = () => import('./views/Login.vue')
+const ForgotPassword = () => import('./views/ForgotPassword.vue')
+const ResetPassword = () => import('./views/ResetPassword.vue')
 const Register = () => import('./views/Register.vue')
 const Verify = () => import('./views/Verify.vue')
 const MyProfile = () => import('./views/MyProfile.vue')
@@ -28,6 +30,18 @@ const router = new VueRouter({
             name: 'Login',
             path: '/login',
             component: Login,
+            beforeEnter: guestOnly,
+        },
+        {
+            name: 'ForgotPassword',
+            path: '/forgot-password',
+            component: ForgotPassword,
+            beforeEnter: guestOnly,
+        },
+        {
+            name: 'ResetPassword',
+            path: '/reset/:hashed?',
+            component: ResetPassword,
             beforeEnter: guestOnly,
         },
         {

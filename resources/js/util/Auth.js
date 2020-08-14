@@ -4,9 +4,9 @@ import store from '@/store'
 function updateToken(newTokenType, newToken) {
     // Set Token to Browser Session
     const sessTokenName = config.session.AUTH_TOKEN_NAME
-    window.sessionStorage.setItem(sessTokenName, `${newTokenType} ${newToken}`)
+    window.localStorage.setItem(sessTokenName, `${newTokenType} ${newToken}`)
     // Set axios default header
-    const SESSION_TOKEN = window.sessionStorage.getItem(sessTokenName)
+    const SESSION_TOKEN = window.localStorage.getItem(sessTokenName)
     window.axios.defaults.headers.common['Authorization'] = SESSION_TOKEN;
     return true
 }

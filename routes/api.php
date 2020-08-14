@@ -22,16 +22,10 @@ Route::group(['prefix' => 'api'], function () {
     ], function () {
         Route::get('/profile', 'ProfileAPIController@get')->middleware('auth:api');
         Route::put('/profile', 'ProfileAPIController@update')->middleware('auth:api');
-        // Route::get('/profile/pt-image/{id}', 'ProfileAPIController@getPTimg');
         Route::post('/profile/pt-image', 'ProfileAPIController@uploadPTimg')->middleware('auth:api');
         Route::post('/profile/kaprodi-image', 'ProfileAPIController@uploadKaprodiimg')->middleware('auth:api');
         Route::get('/profiles', 'ProfileAPIController@getAll');
     });
-
-    // Route::get('/tes', function (Request $request) {
-    //     $media = Auth::user()->kpbi_profile;
-    //     dd($media, $media->ptImgPublicPath);
-    // })->middleware('auth:api');
 
     Route::group([
         'prefix' => 'auth',
@@ -46,7 +40,11 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('/logout', 'BasicController@logout');
         });
     });
+
+    Route::post('/forgot-password', 'Auth\API\ForgotPassword');
 });
+
+Route::post('/reset/{username}', 'Auth\API\ResetPassword')->name('password.reset');
 
 Route::group([
     'prefix' => 'verify',

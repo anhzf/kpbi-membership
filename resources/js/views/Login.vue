@@ -35,7 +35,7 @@
                             placeholder="(ex. S2 PBIO UNS)"
                             v-model="username"
                             solo
-                        ></v-text-field>
+                        />
                         <v-text-field
                             :type="showPassword ? 'text' : 'password'"
                             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -44,12 +44,15 @@
                             v-model="password"
                             solo
                             @click:append="showPassword = !showPassword"
-                        ></v-text-field>
+                        />
 
                     </v-card-text>
 
                     <v-card-actions class="px-4">
-                        <router-link :to="{name: 'Register'}" class="text-caption">Daftar menjadi anggota</router-link>
+                        <div class="d-flex flex-column">
+                            <router-link :to="{ name: 'ForgotPassword' }" class="text-caption">Lupa password? klik disini</router-link>
+                            <router-link :to="{name: 'Register'}" class="text-caption">Daftar menjadi anggota</router-link>
+                        </div>
                         <v-spacer></v-spacer>
                         <v-btn type="submit" color="primary" text>Login</v-btn>
                     </v-card-actions>

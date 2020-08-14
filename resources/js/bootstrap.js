@@ -1,7 +1,7 @@
 const { default: config } = require('./config');
 
 const sessTokenConfigName = config.session.AUTH_TOKEN_NAME
-const SESSION_TOKEN = window.sessionStorage.getItem(sessTokenConfigName)
+const SESSION_TOKEN = window.localStorage.getItem(sessTokenConfigName)
 
 
 window._ = require('lodash');
