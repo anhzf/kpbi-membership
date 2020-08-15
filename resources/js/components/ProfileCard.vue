@@ -5,6 +5,7 @@
     :loading="isLoading"
     elevation="4"
     class="profile-card"
+    style="background-color: #ffffffd9;"
 >
     <v-card-text>
         <v-container fluid>
@@ -456,13 +457,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-    .profile-card {
-        background:
-            url('/img/ICON_KPBI.png')
-            50% center / 70% no-repeat
-            #ffffffd9;
-        background-blend-mode: color;
-    }
-</style>
