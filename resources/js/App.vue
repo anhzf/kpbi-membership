@@ -1,13 +1,8 @@
 <template>
 <v-app :style="$store.state.isContentLoading ? { 'cursor': 'wait' }:{}">
 
-    <DrawerNavigation
-        v-model="drawer"
-        :isLoggedIn="isLoggedIn"
-        :userEmail="userEmail"
-        :userName="userName"
-    ></DrawerNavigation>
-    <NavigationBar @navigate="drawer = !drawer" :contentLoading="isContentLoading"></NavigationBar>
+    <drawer-navigation v-model="drawer" />
+    <navigation-bar @navigate="drawer = !drawer" :contentLoading="isContentLoading" />
     
     <div class="flash-alert__wrapper mx-sm-10 px-4 pt-4">
         <v-scale-transition group>
@@ -16,7 +11,7 @@
                 :type="type"
                 :color="color"
                 :message="message"
-            ></flash-message>
+            />
         </v-scale-transition>
     </div>
 
@@ -25,7 +20,7 @@
             <router-view
                 :isLoading="isContentLoading"
                 @notice="flash" @noticeError="axiosErrorMessageHandler"
-            ></router-view>
+            />
         </keep-alive>
     </v-main>
 

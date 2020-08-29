@@ -11,6 +11,16 @@ function updateToken(newTokenType, newToken) {
     return true
 }
 
+function errorHandler(err) {
+    return {
+        success: false,
+        message: err.message,
+        response: {...err.response},
+        request: {...err.request},
+        config: {...err.config},
+    }
+}
+
 async function Login(loginData, finallyCB = null) {
     try {
         const {
@@ -25,13 +35,7 @@ async function Login(loginData, finallyCB = null) {
             }
         }
     } catch (error) {
-        return {
-            success: false,
-            message: error.message,
-            response: {...error.response},
-            request: {...error.request},
-            config: {...error.config},
-        }
+        return errorHandler(error)
     }
 }
 
@@ -43,13 +47,7 @@ async function Logout(finallyCB = null) {
             ...data
         }
     } catch (error) {
-        return {
-            success: false,
-            message: error.message,
-            response: {...error.response},
-            request: {...error.request},
-            config: {...error.config},
-        }
+        return errorHandler(error)
     }
 }
 
@@ -62,13 +60,7 @@ async function Register(registerData, finallyCB = null) {
             return { success, message }
         }
     } catch (error) {
-        return {
-            success: false,
-            message: error.message,
-            response: {...error.response},
-            request: {...error.request},
-            config: {...error.config},
-        }
+        return errorHandler(error)
     }
 }
 

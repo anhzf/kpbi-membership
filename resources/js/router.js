@@ -10,6 +10,7 @@ const Register = () => import('./views/Register.vue')
 const Verify = () => import('./views/Verify.vue')
 const MyProfile = () => import('./views/MyProfile.vue')
 const AccountSettings = () => import('./views/AccountSettings.vue')
+const Admin = () => import('./views/Admin.vue')
 const NotFound404 = () => import('./views/404.vue')
 // Middleware
 import {auth, emailVerified , guestOnly} from './util/Middleware'
@@ -66,6 +67,12 @@ const router = new VueRouter({
             name: 'AccountSettings',
             path: '/settings',
             component: AccountSettings,
+            beforeEnter: auth,
+        },
+        {
+            name: 'Admin',
+            path: '/admin',
+            component: Admin,
             beforeEnter: auth,
         },
         {

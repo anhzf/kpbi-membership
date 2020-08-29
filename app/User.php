@@ -46,10 +46,14 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
      */
     public function toArray()
     {
+        // now()->toString()
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'role' => $this->role,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
     

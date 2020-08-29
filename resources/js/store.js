@@ -36,6 +36,7 @@ const store = new Vuex.Store({
         userEmail: state => state.Authentication.email,
         userName: state => state.Authentication.name,
         userVerified: state => state.Authentication.verified,
+        userRole: state => state.Authentication.role,
     }
 })
 
