@@ -18,17 +18,17 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
-    // $userNameGenerator = function () use ($faker) {
-    //     $jenjang = $faker->randomElement(['S1','S2','S3']);
-    //     $ptSingkat = strtoupper($faker->word);
-    //     return implode(' PBIO ', [$jenjang, $ptSingkat]);
-    // };
+  // $userNameGenerator = function () use ($faker) {
+  //   $jenjang = $faker->randomElement(['S1','S2','S3']);
+  //   $ptSingkat = strtoupper($faker->word);
+  //   return implode(' PBIO ', [$jenjang, $ptSingkat]);
+  // };
 
-    return [
-        'name' => $faker->unique()->userName,
-        'email' => $faker->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
-    ];
+  return [
+    'name' => $faker->unique()->userName,
+    'email' => $faker->safeEmail,
+    'email_verified_at' => now(),
+    'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+    'remember_token' => Str::random(10),
+  ];
 });

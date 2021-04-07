@@ -29,47 +29,47 @@ return [
   | mailers below. You are free to add additional mailers as required.
   |
   | Supported: "smtp", "sendmail", "mailgun", "ses",
-  |      "postmark", "log", "array"
+  |    "postmark", "log", "array"
   |
   */
 
   'mailers' => [
-    'smtp' => [
-      'transport' => 'smtp',
-      'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-      'port' => env('MAIL_PORT', 587),
-      'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-      'username' => env('MAIL_USERNAME'),
-      'password' => env('MAIL_PASSWORD'),
-      'timeout' => null,
-      'auth_mode' => null,
-    ],
+  'smtp' => [
+    'transport' => 'smtp',
+    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+    'port' => env('MAIL_PORT', 587),
+    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'username' => env('MAIL_USERNAME'),
+    'password' => env('MAIL_PASSWORD'),
+    'timeout' => null,
+    'auth_mode' => null,
+  ],
 
-    'ses' => [
-      'transport' => 'ses',
-    ],
+  'ses' => [
+    'transport' => 'ses',
+  ],
 
-    'mailgun' => [
-      'transport' => 'mailgun',
-    ],
+  'mailgun' => [
+    'transport' => 'mailgun',
+  ],
 
-    'postmark' => [
-      'transport' => 'postmark',
-    ],
+  'postmark' => [
+    'transport' => 'postmark',
+  ],
 
-    'sendmail' => [
-      'transport' => 'sendmail',
-      'path' => '/usr/sbin/sendmail -bs',
-    ],
+  'sendmail' => [
+    'transport' => 'sendmail',
+    'path' => '/usr/sbin/sendmail -bs',
+  ],
 
-    'log' => [
-      'transport' => 'log',
-      'channel' => env('MAIL_LOG_CHANNEL'),
-    ],
+  'log' => [
+    'transport' => 'log',
+    'channel' => env('MAIL_LOG_CHANNEL'),
+  ],
 
-    'array' => [
-      'transport' => 'array',
-    ],
+  'array' => [
+    'transport' => 'array',
+  ],
   ],
 
   /*
@@ -84,8 +84,8 @@ return [
   */
 
   'from' => [
-    'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-    'name' => env('MAIL_FROM_NAME', 'Example'),
+  'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+  'name' => env('MAIL_FROM_NAME', 'Example'),
   ],
 
   /*
@@ -100,11 +100,11 @@ return [
   */
 
   'markdown' => [
-    'theme' => 'default',
+  'theme' => 'default',
 
-    'paths' => [
-      resource_path('views/vendor/mail'),
-    ],
+  'paths' => [
+    resource_path('views/vendor/mail'),
+  ],
   ],
 
 ];

@@ -9,38 +9,38 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    public function ShowRegisterForm()
-    {
-        if (Auth::check()) return redirect()->route('profile');
-        
-        // $form = [
-        //     'Jenjang' => ['S1', 'S2', 'S3'],
-        //     'Nama Prodi' => '',
-        //     'Perguruan Tinggi' => [
-        //         'Lengkap' => '',
-        //         'Singkat' => '', 
-        //     ],
-        //     'Email Prodi' => [
-        //         'type' => 'email'
-        //     ],
-        //     'Email Kaprodi' => [
-        //         'type' => 'email'
-        //     ],
-        // ];
+  public function ShowRegisterForm()
+  {
+    if (Auth::check()) return redirect()->route('profile');
 
-        return view('home.register'/* , ['form' => $form] */);
-    }
+    // $form = [
+    //   'Jenjang' => ['S1', 'S2', 'S3'],
+    //   'Nama Prodi' => '',
+    //   'Perguruan Tinggi' => [
+    //     'Lengkap' => '',
+    //     'Singkat' => '',
+    //   ],
+    //   'Email Prodi' => [
+    //     'type' => 'email'
+    //   ],
+    //   'Email Kaprodi' => [
+    //     'type' => 'email'
+    //   ],
+    // ];
 
-    public function register(Request $request)
-    {   
-        $data = $request->all();
+    return view('home.register'/* , ['form' => $form] */);
+  }
 
-        KPBI::requiredDataValidator($data, KPBI::FIRST_ATTEMPT)->validate();
+  public function register(Request $request)
+  {
+    $data = $request->all();
 
-        $data = $data + KPBI::generateLoginCredentials($request->all());
-        $data['password_confirmation'] = $data['password'];
+    KPBI::requiredDataValidator($data, KPBI::FIRST_ATTEMPT)->validate();
 
-        // Use Auth\RegisterController to Handle next action
-        return app('App\Http\Controllers\Auth\RegisterController')->register((new Request($data)));
-    }
+    $data = $data + KPBI::generateLoginCredentials($request->all());
+    $data['password_confirmation'] = $data['password'];
+
+    // Use Auth\RegisterController to Handle next action
+    return app('App\Http\Controllers\Auth\RegisterController')->register((new Request($data)));
+  }
 }

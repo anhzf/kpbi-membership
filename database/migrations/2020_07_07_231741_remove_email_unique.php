@@ -24,10 +24,10 @@ class RemoveEmailUnique extends Migration
    */
   public function up()
   {
-    Schema::table('users', function (Blueprint $table) {
-      $table->unique('name');
-      $table->dropUnique(['email']);
-    });
+  Schema::table('users', function (Blueprint $table) {
+    $table->unique('name');
+    $table->dropUnique(['email']);
+  });
   }
 
   /**
@@ -37,9 +37,9 @@ class RemoveEmailUnique extends Migration
    */
   public function down()
   {
-    Schema::table('users', function (Blueprint $table) {
-      $table->dropUnique(['name']);
-      $table->unique('email');
-    });
+  Schema::table('users', function (Blueprint $table) {
+    $table->dropUnique(['name']);
+    $table->unique('email');
+  });
   }
 }

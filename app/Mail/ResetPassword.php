@@ -9,28 +9,28 @@ use Illuminate\Queue\SerializesModels;
 
 class ResetPassword extends Mailable
 {
-    use Queueable, SerializesModels;
+  use Queueable, SerializesModels;
 
-    public $link;
+  public $link;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct(string $link)
-    {
-        $this->link = $link;
-    }
+  /**
+   * Create a new message instance.
+   *
+   * @return void
+   */
+  public function __construct(string $link)
+  {
+    $this->link = $link;
+  }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->markdown('emails.ResetPassword')
-                    ->subject('KPBI - Link untuk reset password');
-    }
+  /**
+   * Build the message.
+   *
+   * @return $this
+   */
+  public function build()
+  {
+    return $this->markdown('emails.ResetPassword')
+          ->subject('KPBI - Link untuk reset password');
+  }
 }

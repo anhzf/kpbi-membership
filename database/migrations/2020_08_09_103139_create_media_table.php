@@ -13,17 +13,17 @@ class CreateMediaTable extends Migration
    */
   public function up()
   {
-    Schema::create('media', function (Blueprint $table) {
-      $table->id();
-      $table->foreignId('owner_id')
-        ->nullable()
-        ->constrained('users')
-        ->onDelete('Set NULL');
-      $table->string('path');
-      $table->string('alt', 50)->nullable();
-      $table->timestamps();
-      $table->softDeletes();
-    });
+  Schema::create('media', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('owner_id')
+    ->nullable()
+    ->constrained('users')
+    ->onDelete('Set NULL');
+    $table->string('path');
+    $table->string('alt', 50)->nullable();
+    $table->timestamps();
+    $table->softDeletes();
+  });
   }
 
   /**
@@ -33,6 +33,6 @@ class CreateMediaTable extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('media');
+  Schema::dropIfExists('media');
   }
 }

@@ -13,9 +13,9 @@ class AddUniqueToPasswordResetsToken extends Migration
    */
   public function up()
   {
-    Schema::table('password_resets', function (Blueprint $table) {
-      $table->unique('token');
-    });
+  Schema::table('password_resets', function (Blueprint $table) {
+    $table->unique('token');
+  });
   }
 
   /**
@@ -25,8 +25,8 @@ class AddUniqueToPasswordResetsToken extends Migration
    */
   public function down()
   {
-    Schema::table('password_resets', function (Blueprint $table) {
-      $table->dropUnique(['token']);
-    });
+  Schema::table('password_resets', function (Blueprint $table) {
+    $table->dropUnique(['token']);
+  });
   }
 }

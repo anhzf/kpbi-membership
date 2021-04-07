@@ -14,81 +14,81 @@ use Illuminate\Validation\Rule;
 
 class ForgotPassword extends Controller
 {
-    private $email;
-    private $username;
-    private $token;
-    // use SendsPasswordResetEmails;
+  private $email;
+  private $username;
+  private $token;
+  // use SendsPasswordResetEmails;
 
-    public function __invoke(Request $request)
-    {
-        $this->validateRequest($request);
+  public function __invoke(Request $request)
+  {
+    $this->validateRequest($request);
 
-        $this->email = $request->email;
-        $this->username = $request->username;
-        $this->token = $this->generateToken();
+    $this->email = $request->email;
+    $this->username = $request->username;
+    $this->token = $this->generateToken();
 
-        DB::table('password_resets')->insert([
-            'email' => $this->email,
-            'token' => $this->token,
-            'created_at' => now()
-        ]);
+    DB::table('password_resets')->insert([
+      'email' => $this->email,
+      'token' => $this->token,
+      'created_at' => now()
+    ]);
 
-        $this->sendResetPasswordLink();
+    $this->sendResetPasswordLink();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'email telah dikirim ke ' . $this->email,
-        ]);
+    return response()->json([
+      'success' => true,
+      'message' => 'email telah dikirim ke ' . $this->email,
+    ]);
+  }
+
+  private function validateRequest(Request $request)
+  {
+    $request->validate([
+      'email' => [
+        'required', 'string', 'email',
+        Rule::exists(User::class, 'email')
+      ],
+      'username' => [
+        'required', 'string',
+        Rule::exists(User::class, 'name')
+      ]
+    ]);
+  }
+
+  private function generateToken()
+  {
+    while (true) {
+      $token = Str::random(72);
+      $isTokenExist = DB::table('password_resets')
+        ->where('token', $token)
+        ->count();
+
+      if (!$isTokenExist) {
+        return $token;
+      }
     }
+  }
 
-    private function validateRequest(Request $request)
-    {
-        $request->validate([
-            'email' => [
-                'required', 'string', 'email',
-                Rule::exists(User::class, 'email')
-            ],
-            'username' => [
-                'required', 'string',
-                Rule::exists(User::class, 'name')
-            ]
-        ]);
-    }
+  private function sendResetPasswordLink()
+  {
+    $link = $this->generateResetPasswordLink();
 
-    private function generateToken()
-    {
-        while (true) {
-            $token = Str::random(72);
-            $isTokenExist = DB::table('password_resets')
-                ->where('token', $token)
-                ->count();
+    Mail::to($this->email)
+      ->send(new ResetPassword($link));
 
-            if (!$isTokenExist) {
-                return $token;
-            }
-        }
-    }
+    if (Mail::failures())
+      return response()->json([
+        'success' => false,
+        'message' => 'Terjadi kesalahan!',
+      ], 400);
+  }
 
-    private function sendResetPasswordLink()
-    {
-        $link = $this->generateResetPasswordLink();
-
-        Mail::to($this->email)
-            ->send(new ResetPassword($link));
-
-        if (Mail::failures())
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan!',
-            ], 400);
-    }
-
-    protected function generateResetPasswordLink()
-    {
-        return URL::temporarySignedRoute('password.reset', now()->addDay(), [
-            'hash' => sha1($this->email),
-            'token' => $this->token,
-            'username' => sha1($this->username)
-        ]);
-    }
+  protected function generateResetPasswordLink()
+  {
+    return URL::temporarySignedRoute('password.reset', now()->addDay(), [
+      'hash' => sha1($this->email),
+      'token' => $this->token,
+      'username' => sha1($this->username)
+    ]);
+  }
 }

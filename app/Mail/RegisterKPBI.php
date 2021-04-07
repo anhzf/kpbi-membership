@@ -14,35 +14,35 @@ use Illuminate\Support\Facades\Session;
 
 class RegisterKPBI extends Mailable
 {
-    use Queueable, SerializesModels;
+  use Queueable, SerializesModels;
 
-    public $verifyURL;
-    public $user;
-    public $password;
-    
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($verifyURL, User $user)
-    {
-        $user_profile = $user->kpbi_profile;
-        $profile_info = $user_profile->attributesToArray();
-        
-        $this->verifyURL = $verifyURL;
-        $this->user = $user;
-        $this->password = KPBI::generateLoginCredentials($profile_info)['password'];
-    }
+  public $verifyURL;
+  public $user;
+  public $password;
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->view('email.RegisterKPBI')
-                    ->subject(__('kpbi.mail.subject'));
-    }
+  /**
+   * Create a new message instance.
+   *
+   * @return void
+   */
+  public function __construct($verifyURL, User $user)
+  {
+    $user_profile = $user->kpbi_profile;
+    $profile_info = $user_profile->attributesToArray();
+
+    $this->verifyURL = $verifyURL;
+    $this->user = $user;
+    $this->password = KPBI::generateLoginCredentials($profile_info)['password'];
+  }
+
+  /**
+   * Build the message.
+   *
+   * @return $this
+   */
+  public function build()
+  {
+    return $this->view('email.RegisterKPBI')
+          ->subject(__('kpbi.mail.subject'));
+  }
 }

@@ -15,28 +15,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api'], function () {
   Route::group([
-    'prefix' => 'kpbi',
-    'namespace' => 'KPBI'
+  'prefix' => 'kpbi',
+  'namespace' => 'KPBI'
   ], function () {
-    Route::get('/profile', 'ProfileAPIController@get')->middleware('auth:api');
-    Route::put('/profile', 'ProfileAPIController@update')->middleware('auth:api');
-    Route::post('/profile/pt-image', 'ProfileAPIController@uploadPTimg')->middleware('auth:api');
-    Route::post('/profile/kaprodi-image', 'ProfileAPIController@uploadKaprodiimg')->middleware('auth:api');
-    Route::get('/profiles', 'ProfileAPIController@getAll');
+  Route::get('/profile', 'ProfileAPIController@get')->middleware('auth:api');
+  Route::put('/profile', 'ProfileAPIController@update')->middleware('auth:api');
+  Route::post('/profile/pt-image', 'ProfileAPIController@uploadPTimg')->middleware('auth:api');
+  Route::post('/profile/kaprodi-image', 'ProfileAPIController@uploadKaprodiimg')->middleware('auth:api');
+  Route::get('/profiles', 'ProfileAPIController@getAll');
   });
 
   Route::group([
-    'prefix' => 'auth',
-    'namespace' => 'Auth\API'
+  'prefix' => 'auth',
+  'namespace' => 'Auth\API'
   ], function () {
-    Route::post('/login', 'BasicController@login');
-    Route::post('/register', 'RegisterController@register');
+  Route::post('/login', 'BasicController@login');
+  Route::post('/register', 'RegisterController@register');
 
-    Route::middleware('auth:api')->group(function () {
-      Route::get('/user', 'BasicController@user');
-      Route::put('/user/change-password', 'BasicController@changePassword');
-      Route::post('/logout', 'BasicController@logout');
-    });
+  Route::middleware('auth:api')->group(function () {
+    Route::get('/user', 'BasicController@user');
+    Route::put('/user/change-password', 'BasicController@changePassword');
+    Route::post('/logout', 'BasicController@logout');
+  });
   });
 
   Route::post('/forgot-password', 'Auth\API\ForgotPassword');
