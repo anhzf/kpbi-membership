@@ -77,85 +77,85 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ChangePasswordDialog',
   props: {
-    value: {
-      required: true,
-      type: Boolean
-    }
+  value: {
+    required: true,
+    type: Boolean
+  }
   },
   data: function data() {
-    return {
-      changePasswordOnProgress: false,
-      oldPassword: null,
-      showOldPassword: null,
-      newPassword: null,
-      showNewPassword: null,
-      newPassword_confirmation: null,
-      required: _util_Validator__WEBPACK_IMPORTED_MODULE_1__["required"]
-    };
+  return {
+    changePasswordOnProgress: false,
+    oldPassword: null,
+    showOldPassword: null,
+    newPassword: null,
+    showNewPassword: null,
+    newPassword_confirmation: null,
+    required: _util_Validator__WEBPACK_IMPORTED_MODULE_1__["required"]
+  };
   },
   methods: {
-    changePassword: function changePassword() {
-      var _this = this;
+  changePassword: function changePassword() {
+    var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var changePassword, _yield$window$axios$p, message;
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    var changePassword, _yield$window$axios$p, message;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.changePasswordOnProgress = true;
-                changePassword = {
-                  oldPassword: _this.oldPassword,
-                  newPassword: _this.newPassword,
-                  newPassword_confirmation: _this.newPassword_confirmation
-                };
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+        _this.changePasswordOnProgress = true;
+        changePassword = {
+          oldPassword: _this.oldPassword,
+          newPassword: _this.newPassword,
+          newPassword_confirmation: _this.newPassword_confirmation
+        };
 
-                _this.$refs.changePasswordForm.reset();
+        _this.$refs.changePasswordForm.reset();
 
-                _this.$refs.changePasswordForm.resetValidation();
+        _this.$refs.changePasswordForm.resetValidation();
 
-                _context.prev = 4;
-                _context.next = 7;
-                return window.axios.put('/api/auth/user/change-password', changePassword);
+        _context.prev = 4;
+        _context.next = 7;
+        return window.axios.put('/api/auth/user/change-password', changePassword);
 
-              case 7:
-                _yield$window$axios$p = _context.sent;
-                message = _yield$window$axios$p.data.message;
+        case 7:
+        _yield$window$axios$p = _context.sent;
+        message = _yield$window$axios$p.data.message;
 
-                _this.$emit('notice', {
-                  message: message,
-                  type: 'success'
-                });
+        _this.$emit('notice', {
+          message: message,
+          type: 'success'
+        });
 
-                _context.next = 15;
-                break;
+        _context.next = 15;
+        break;
 
-              case 12:
-                _context.prev = 12;
-                _context.t0 = _context["catch"](4);
+        case 12:
+        _context.prev = 12;
+        _context.t0 = _context["catch"](4);
 
-                _this.$emit('noticeError', _context.t0);
+        _this.$emit('noticeError', _context.t0);
 
-              case 15:
-                _this.$emit('input', false);
+        case 15:
+        _this.$emit('input', false);
 
-                _this.changePasswordOnProgress = false;
+        _this.changePasswordOnProgress = false;
 
-              case 17:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[4, 12]]);
-      }))();
-    }
+        case 17:
+        case "end":
+        return _context.stop();
+      }
+      }
+    }, _callee, null, [[4, 12]]);
+    }))();
+  }
   } // watch: {
   // toggleChangePassword() {
-  //     if (!this.toggleChangePassword) {
-  //         this.$refs.changePasswordForm.reset()
-  //         this.$refs.changePasswordForm.resetValidation()
-  //     }
+  //   if (!this.toggleChangePassword) {
+  //     this.$refs.changePasswordForm.reset()
+  //     this.$refs.changePasswordForm.resetValidation()
+  //   }
   // }
   // }
 
@@ -251,64 +251,64 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AccountSettings',
   data: function data() {
-    return {
-      showChangePasswordDialog: false
-    };
+  return {
+    showChangePasswordDialog: false
+  };
   },
   computed: {
-    verified: function verified() {
-      return this.$store.getters.userVerified;
-    }
+  verified: function verified() {
+    return this.$store.getters.userVerified;
+  }
   },
   methods: {
-    sendEmailVerification: function sendEmailVerification() {
-      var _this = this;
+  sendEmailVerification: function sendEmailVerification() {
+    var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _yield$window$axios, message;
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    var _yield$window$axios, message;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.$store.commit('contentLoading', true);
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+        _this.$store.commit('contentLoading', true);
 
-                _context.prev = 1;
-                _context.next = 4;
-                return window.axios('/verify/resend');
+        _context.prev = 1;
+        _context.next = 4;
+        return window.axios('/verify/resend');
 
-              case 4:
-                _yield$window$axios = _context.sent;
-                message = _yield$window$axios.data.message;
+        case 4:
+        _yield$window$axios = _context.sent;
+        message = _yield$window$axios.data.message;
 
-                _this.$emit('notice', {
-                  message: message,
-                  type: 'success'
-                });
+        _this.$emit('notice', {
+          message: message,
+          type: 'success'
+        });
 
-                _context.next = 12;
-                break;
+        _context.next = 12;
+        break;
 
-              case 9:
-                _context.prev = 9;
-                _context.t0 = _context["catch"](1);
+        case 9:
+        _context.prev = 9;
+        _context.t0 = _context["catch"](1);
 
-                _this.$emit('noticeError', _context.t0);
+        _this.$emit('noticeError', _context.t0);
 
-              case 12:
-                _this.$store.commit('contentLoading', false);
+        case 12:
+        _this.$store.commit('contentLoading', false);
 
-              case 13:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[1, 9]]);
-      }))();
-    }
+        case 13:
+        case "end":
+        return _context.stop();
+      }
+      }
+    }, _callee, null, [[1, 9]]);
+    }))();
+  }
   },
   components: {
-    ChangePasswordDialog: _components_ChangePasswordDialog__WEBPACK_IMPORTED_MODULE_1__["default"]
+  ChangePasswordDialog: _components_ChangePasswordDialog__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 });
 
@@ -330,170 +330,170 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-dialog",
-    {
-      attrs: {
-        value: _vm.value,
-        width: "450",
-        "max-width": "100%",
-        persistent: _vm.changePasswordOnProgress
-      },
-      on: {
-        input: function($event) {
-          return _vm.$emit("input", $event)
-        }
-      }
+  "v-dialog",
+  {
+    attrs: {
+    value: _vm.value,
+    width: "450",
+    "max-width": "100%",
+    persistent: _vm.changePasswordOnProgress
     },
+    on: {
+    input: function($event) {
+      return _vm.$emit("input", $event)
+    }
+    }
+  },
+  [
+    _c(
+    "v-card",
     [
+      !_vm.changePasswordOnProgress
+      ? _c("v-card-title", [_vm._v("Ubah Password")])
+      : _vm._e(),
+      _vm._v(" "),
       _c(
-        "v-card",
+      "v-card-text",
+      [
+        _c(
+        "v-container",
+        { attrs: { fluid: "" } },
         [
-          !_vm.changePasswordOnProgress
-            ? _c("v-card-title", [_vm._v("Ubah Password")])
-            : _vm._e(),
-          _vm._v(" "),
           _c(
-            "v-card-text",
-            [
-              _c(
-                "v-container",
-                { attrs: { fluid: "" } },
+          "v-row",
+          { attrs: { justify: "center", align: "center" } },
+          [
+            _vm.changePasswordOnProgress
+            ? _c("v-progress-circular", {
+              attrs: {
+                indeterminate: _vm.changePasswordOnProgress
+              }
+              })
+            : _c(
+              "v-col",
+              [
+                _c(
+                "v-form",
+                { ref: "changePasswordForm" },
                 [
-                  _c(
-                    "v-row",
-                    { attrs: { justify: "center", align: "center" } },
-                    [
-                      _vm.changePasswordOnProgress
-                        ? _c("v-progress-circular", {
-                            attrs: {
-                              indeterminate: _vm.changePasswordOnProgress
-                            }
-                          })
-                        : _c(
-                            "v-col",
-                            [
-                              _c(
-                                "v-form",
-                                { ref: "changePasswordForm" },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Password Lama",
-                                      type: _vm.showOldPassword
-                                        ? "text"
-                                        : "password",
-                                      "append-icon": _vm.showOldPassword
-                                        ? "mdi-eye"
-                                        : "mdi-eye-off",
-                                      rules: [_vm.required]
-                                    },
-                                    on: {
-                                      "click:append": function($event) {
-                                        _vm.showOldPassword = !_vm.showOldPassword
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.oldPassword,
-                                      callback: function($$v) {
-                                        _vm.oldPassword = $$v
-                                      },
-                                      expression: "oldPassword"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Password baru",
-                                      type: _vm.showNewPassword
-                                        ? "text"
-                                        : "password",
-                                      "append-icon": _vm.showNewPassword
-                                        ? "mdi-eye"
-                                        : "mdi-eye-off",
-                                      rules: [_vm.required]
-                                    },
-                                    on: {
-                                      "click:append": function($event) {
-                                        _vm.showNewPassword = !_vm.showNewPassword
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.newPassword,
-                                      callback: function($$v) {
-                                        _vm.newPassword = $$v
-                                      },
-                                      expression: "newPassword"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Ulangi password baru",
-                                      type: _vm.showNewPassword
-                                        ? "text"
-                                        : "password",
-                                      rules: [_vm.required]
-                                    },
-                                    model: {
-                                      value: _vm.newPassword_confirmation,
-                                      callback: function($$v) {
-                                        _vm.newPassword_confirmation = $$v
-                                      },
-                                      expression: "newPassword_confirmation"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                    ],
-                    1
-                  )
+                  _c("v-text-field", {
+                  attrs: {
+                    label: "Password Lama",
+                    type: _vm.showOldPassword
+                    ? "text"
+                    : "password",
+                    "append-icon": _vm.showOldPassword
+                    ? "mdi-eye"
+                    : "mdi-eye-off",
+                    rules: [_vm.required]
+                  },
+                  on: {
+                    "click:append": function($event) {
+                    _vm.showOldPassword = !_vm.showOldPassword
+                    }
+                  },
+                  model: {
+                    value: _vm.oldPassword,
+                    callback: function($$v) {
+                    _vm.oldPassword = $$v
+                    },
+                    expression: "oldPassword"
+                  }
+                  }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                  attrs: {
+                    label: "Password baru",
+                    type: _vm.showNewPassword
+                    ? "text"
+                    : "password",
+                    "append-icon": _vm.showNewPassword
+                    ? "mdi-eye"
+                    : "mdi-eye-off",
+                    rules: [_vm.required]
+                  },
+                  on: {
+                    "click:append": function($event) {
+                    _vm.showNewPassword = !_vm.showNewPassword
+                    }
+                  },
+                  model: {
+                    value: _vm.newPassword,
+                    callback: function($$v) {
+                    _vm.newPassword = $$v
+                    },
+                    expression: "newPassword"
+                  }
+                  }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                  attrs: {
+                    label: "Ulangi password baru",
+                    type: _vm.showNewPassword
+                    ? "text"
+                    : "password",
+                    rules: [_vm.required]
+                  },
+                  model: {
+                    value: _vm.newPassword_confirmation,
+                    callback: function($$v) {
+                    _vm.newPassword_confirmation = $$v
+                    },
+                    expression: "newPassword_confirmation"
+                  }
+                  })
                 ],
                 1
+                )
+              ],
+              1
               )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          !_vm.changePasswordOnProgress
-            ? _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "grey darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$emit("input", false)
-                        }
-                      }
-                    },
-                    [_vm._v("Close")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "blue darken-1", text: "" },
-                      on: { click: _vm.changePassword }
-                    },
-                    [_vm._v("Save")]
-                  )
-                ],
-                1
-              )
-            : _vm._e()
+          ],
+          1
+          )
         ],
         1
-      )
+        )
+      ],
+      1
+      ),
+      _vm._v(" "),
+      !_vm.changePasswordOnProgress
+      ? _c(
+        "v-card-actions",
+        [
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+          "v-btn",
+          {
+            attrs: { color: "grey darken-1", text: "" },
+            on: {
+            click: function($event) {
+              return _vm.$emit("input", false)
+            }
+            }
+          },
+          [_vm._v("Close")]
+          ),
+          _vm._v(" "),
+          _c(
+          "v-btn",
+          {
+            attrs: { color: "blue darken-1", text: "" },
+            on: { click: _vm.changePassword }
+          },
+          [_vm._v("Save")]
+          )
+        ],
+        1
+        )
+      : _vm._e()
     ],
     1
+    )
+  ],
+  1
   )
 }
 var staticRenderFns = []
@@ -519,225 +519,225 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-row",
-    { staticClass: "pa-10", attrs: { align: "center", justify: "center" } },
+  "v-row",
+  { staticClass: "pa-10", attrs: { align: "center", justify: "center" } },
+  [
+    _c(
+    "v-card",
+    { attrs: { width: "100%", "max-width": "650" } },
     [
       _c(
-        "v-card",
-        { attrs: { width: "100%", "max-width": "650" } },
+      "v-list",
+      [
+        _c(
+        "v-list-item",
+        {
+          class: [
+          _vm.verified ? "success" : "error",
+          "lighten-5",
+          "pa-4"
+          ]
+        },
         [
           _c(
-            "v-list",
-            [
-              _c(
-                "v-list-item",
+          "v-list-item-avatar",
+          [
+            _vm.verified
+            ? _c("v-icon", { attrs: { color: "success" } }, [
+              _vm._v("mdi-check")
+              ])
+            : _c("v-icon", { attrs: { color: "error" } }, [
+              _vm._v("mdi-close")
+              ])
+          ],
+          1
+          ),
+          _vm._v(" "),
+          _c(
+          "v-list-item-content",
+          [
+            _vm.verified
+            ? _c("v-list-item-title", [_vm._v("Terverifikasi")])
+            : _c("v-list-item-title", [
+              _vm._v("Belum terverifikasi")
+              ]),
+            _vm._v(" "),
+            !_vm.verified
+            ? _c(
+              "v-list-item-subtitle",
+              [
+                _c(
+                "v-btn",
                 {
-                  class: [
-                    _vm.verified ? "success" : "error",
-                    "lighten-5",
-                    "pa-4"
-                  ]
+                  attrs: { text: "", "x-small": "" },
+                  on: { click: _vm.sendEmailVerification }
                 },
-                [
-                  _c(
-                    "v-list-item-avatar",
-                    [
-                      _vm.verified
-                        ? _c("v-icon", { attrs: { color: "success" } }, [
-                            _vm._v("mdi-check")
-                          ])
-                        : _c("v-icon", { attrs: { color: "error" } }, [
-                            _vm._v("mdi-close")
-                          ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [
-                      _vm.verified
-                        ? _c("v-list-item-title", [_vm._v("Terverifikasi")])
-                        : _c("v-list-item-title", [
-                            _vm._v("Belum terverifikasi")
-                          ]),
-                      _vm._v(" "),
-                      !_vm.verified
-                        ? _c(
-                            "v-list-item-subtitle",
-                            [
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: { text: "", "x-small": "" },
-                                  on: { click: _vm.sendEmailVerification }
-                                },
-                                [_vm._v("Kirim email verifikasi")]
-                              )
-                            ],
-                            1
-                          )
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { ripple: "" } },
-                [
-                  _c(
-                    "v-list-item-content",
-                    [
-                      _c(
-                        "v-row",
-                        { staticClass: "px-6" },
-                        [
-                          _c(
-                            "v-col",
-                            {
-                              staticClass: "grey--text text--darken-1",
-                              attrs: { sm: "3" }
-                            },
-                            [_vm._v("Email")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { staticClass: "text-right grey--text" },
-                            [_vm._v(_vm._s(_vm.$store.getters.userEmail))]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { ripple: "" } },
-                [
-                  _c(
-                    "v-list-item-content",
-                    [
-                      _c(
-                        "v-row",
-                        { staticClass: "px-6" },
-                        [
-                          _c(
-                            "v-col",
-                            {
-                              staticClass: "grey--text text--darken-1",
-                              attrs: { sm: "3" }
-                            },
-                            [_vm._v("Username")]
-                          ),
-                          _vm._v(" "),
-                          _c("v-col", { staticClass: "text-right" }, [
-                            _vm._v(_vm._s(_vm.$store.getters.userName))
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                [
-                  _c(
-                    "v-list-item-content",
-                    [
-                      _c(
-                        "v-row",
-                        { staticClass: "px-6", attrs: { align: "center" } },
-                        [
-                          _c(
-                            "v-col",
-                            {
-                              staticClass: "grey--text text--darken-1",
-                              attrs: { sm: "3" }
-                            },
-                            [_vm._v("Password")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { staticClass: "text-right" },
-                            [
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    text: "",
-                                    small: "",
-                                    color: "grey darken-2"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.showChangePasswordDialog = !_vm.showChangePasswordDialog
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { small: "" } }, [
-                                    _vm._v("mdi-pencil")
-                                  ]),
-                                  _vm._v(
-                                    "\r\n                                Ubah password\r\n                            "
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
+                [_vm._v("Kirim email verifikasi")]
+                )
+              ],
+              1
               )
-            ],
-            1
+            : _vm._e()
+          ],
+          1
           )
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("change-password-dialog", {
-        on: {
-          notice: function($event) {
-            return _vm.$emit("notice", $event)
-          },
-          noticeError: function($event) {
-            return _vm.$emit("noticeError", $event)
-          }
-        },
-        model: {
-          value: _vm.showChangePasswordDialog,
-          callback: function($$v) {
-            _vm.showChangePasswordDialog = $$v
-          },
-          expression: "showChangePasswordDialog"
-        }
-      })
+        ),
+        _vm._v(" "),
+        _c(
+        "v-list-item",
+        { attrs: { ripple: "" } },
+        [
+          _c(
+          "v-list-item-content",
+          [
+            _c(
+            "v-row",
+            { staticClass: "px-6" },
+            [
+              _c(
+              "v-col",
+              {
+                staticClass: "grey--text text--darken-1",
+                attrs: { sm: "3" }
+              },
+              [_vm._v("Email")]
+              ),
+              _vm._v(" "),
+              _c(
+              "v-col",
+              { staticClass: "text-right grey--text" },
+              [_vm._v(_vm._s(_vm.$store.getters.userEmail))]
+              )
+            ],
+            1
+            )
+          ],
+          1
+          )
+        ],
+        1
+        ),
+        _vm._v(" "),
+        _c(
+        "v-list-item",
+        { attrs: { ripple: "" } },
+        [
+          _c(
+          "v-list-item-content",
+          [
+            _c(
+            "v-row",
+            { staticClass: "px-6" },
+            [
+              _c(
+              "v-col",
+              {
+                staticClass: "grey--text text--darken-1",
+                attrs: { sm: "3" }
+              },
+              [_vm._v("Username")]
+              ),
+              _vm._v(" "),
+              _c("v-col", { staticClass: "text-right" }, [
+              _vm._v(_vm._s(_vm.$store.getters.userName))
+              ])
+            ],
+            1
+            )
+          ],
+          1
+          )
+        ],
+        1
+        ),
+        _vm._v(" "),
+        _c(
+        "v-list-item",
+        [
+          _c(
+          "v-list-item-content",
+          [
+            _c(
+            "v-row",
+            { staticClass: "px-6", attrs: { align: "center" } },
+            [
+              _c(
+              "v-col",
+              {
+                staticClass: "grey--text text--darken-1",
+                attrs: { sm: "3" }
+              },
+              [_vm._v("Password")]
+              ),
+              _vm._v(" "),
+              _c(
+              "v-col",
+              { staticClass: "text-right" },
+              [
+                _c(
+                "v-btn",
+                {
+                  attrs: {
+                  text: "",
+                  small: "",
+                  color: "grey darken-2"
+                  },
+                  on: {
+                  click: function($event) {
+                    _vm.showChangePasswordDialog = !_vm.showChangePasswordDialog
+                  }
+                  }
+                },
+                [
+                  _c("v-icon", { attrs: { small: "" } }, [
+                  _vm._v("mdi-pencil")
+                  ]),
+                  _vm._v(
+                  "\r\n                Ubah password\r\n              "
+                  )
+                ],
+                1
+                )
+              ],
+              1
+              )
+            ],
+            1
+            )
+          ],
+          1
+          )
+        ],
+        1
+        )
+      ],
+      1
+      )
     ],
     1
+    ),
+    _vm._v(" "),
+    _c("change-password-dialog", {
+    on: {
+      notice: function($event) {
+      return _vm.$emit("notice", $event)
+      },
+      noticeError: function($event) {
+      return _vm.$emit("noticeError", $event)
+      }
+    },
+    model: {
+      value: _vm.showChangePasswordDialog,
+      callback: function($$v) {
+      _vm.showChangePasswordDialog = $$v
+      },
+      expression: "showChangePasswordDialog"
+    }
+    })
+  ],
+  1
   )
 }
 var staticRenderFns = []
@@ -774,7 +774,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -794,7 +794,7 @@ component.options.__file = "resources/js/components/ChangePasswordDialog.vue"
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePasswordDialog.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChangePasswordDialog.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -830,7 +830,7 @@ __webpack_require__.r(__webpack_exports__);
 var required = function required(v) {
   return !!v || 'Wajib diisi';
 },
-    email = function email(v) {
+  email = function email(v) {
   return /.+@.+\..+/.test(v) || 'E-mail tidak valid';
 };
 
@@ -865,7 +865,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -885,7 +885,7 @@ component.options.__file = "resources/js/views/AccountSettings.vue"
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AccountSettings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AccountSettings.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/AccountSettings.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AccountSettings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AccountSettings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
