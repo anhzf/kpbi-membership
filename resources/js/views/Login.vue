@@ -12,7 +12,7 @@
 
             <v-card width="320" class="elevation-4 mb-16">
                 <v-form @submit.prevent="login">
-                    
+
                     <v-card-title primary-title>
                         <v-container fluid>
                             <v-row>
@@ -26,7 +26,7 @@
                             </v-row>
                         </v-container>
                     </v-card-title>
-                    
+
 
                     <v-card-text class="px-4">
 
@@ -88,7 +88,7 @@ export default {
                 password: this.password,
             }
             try {
-                const login = await Login(loginData)
+                await Login(loginData)
                 this.$emit('notice', {message: 'Login Berhasil!', type: 'success'})
                 this.$router.push(this.$route.query.redirect ??  {name: 'AccountSettings'})
             } catch (err) {
