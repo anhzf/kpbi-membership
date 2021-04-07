@@ -9,7 +9,7 @@
         <v-card-title class="px-8 py-3">
 
           <v-tooltip bottom>
-            <template v-slot:activator="{on, attrs}">
+            <template #activator="{on, attrs}">
               <v-btn
                 fab icon
                 v-bind="attrs" v-on="on"
@@ -44,22 +44,57 @@
           :loading="isLoading"
           fixed-header
           height="65vh"
-          show-expand single-expand :expanded.sync="expanded"
+          show-expand
+          single-expand
+          :expanded.sync="expanded"
         >
-          <template v-slot:item.web_prodi="{ item }">
+          <template #item.web_prodi="{ item }">
             <a :href="item.web_prodi" target="_blank">{{ item.web_prodi }}</a>
           </template>
 
-          <template v-slot:item.created_at="{ item }">
-            {{ new Date(item.created_at).toLocaleDateString() }}
+          <template #item.created_at="{ item }">
+            <span class="mr-2">
+              {{ new Date(item.created_at).toLocaleDateString() }}
+            </span>
+            <v-chip
+              small
+              color="green"
+              text-color="white"
+            >
+              aktif sampai {{ addDate(new Date(item.created_at), activeMemberInterval).toLocaleDateString() }}
+            </v-chip>
           </template>
 
-          <template v-slot:expanded-item="{ headers, item }">
+          <template #expanded-item="{ headers, item }">
             <td :colspan="headers.length" class="py-6">
               <v-row justify="center">
-                <v-btn small depressed color="info" class="mx-2">send email verification</v-btn>
-                <v-btn small depressed color="info" class="mx-2">send password reset link</v-btn>
-                <v-btn small depressed color="error" class="mx-2">delete user</v-btn>
+                <v-btn
+                  small
+                  depressed
+                  color="info"
+                  class="mx-2"
+                  @click="onSendEmailVerification(item.id)"
+                >
+                  send email verification
+                </v-btn>
+                <v-btn
+                  small
+                  depressed
+                  color="info"
+                  class="mx-2"
+                  @click="onSendPasswordResetLink(item.id)"
+                >
+                  send password reset link
+                </v-btn>
+                <v-btn
+                  small
+                  depressed
+                  color="error"
+                  class="mx-2"
+                  @click="onDeactiveUser(item.id)"
+                >
+                  deactivate user
+                </v-btn>
               </v-row>
             </td>
           </template>
@@ -76,9 +111,10 @@
 </template>
 
 <script>
+import { addDate } from '@/util/Helper';
+
 export default {
   name: 'Members',
-
   data() {
     return {
       expanded: [],
@@ -95,17 +131,16 @@ export default {
       search: null,
 
       detailDialog: false,
-      currentProfileShow: {}
+      currentProfileShow: {},
+      activeMemberInterval: 1000 * 3600 * 30 * 12, // about a year
     }
   },
-
   computed: {
     dialogTitle() {
       const profileData = this.currentProfileShow;
       return `${profileData.jenjang ?? ''} ${profileData.nama_prodi ?? ''} ${profileData.pt?.lengkap ?? ''}`
     }
   },
-
   methods: {
     async getUsers() {
       this.isLoading = true
@@ -119,13 +154,27 @@ export default {
 
       this.isLoading = false
     },
-
     seeDetails(profileData) {
       this.currentProfileShow = profileData
       this.detailDialog = true
-    }
+    },
+    onSendEmailVerification(id) {
+      const {jenjang, nama_prodi} = this.getMemberById(id);
+      console.log(`send email verification to ${jenjang} ${nama_prodi}`);
+    },
+    onSendPasswordResetLink(id) {
+      const {jenjang, nama_prodi} = this.getMemberById(id);
+      console.log(`password reset link sent to ${jenjang} ${nama_prodi}`);
+    },
+    onDeactiveUser(id) {
+      const {jenjang, nama_prodi} = this.getMemberById(id);
+      console.log(`deactivate ${jenjang} ${nama_prodi}`);
+    },
+    getMemberById(id) {
+      return this.members.find(member => member.id === id);
+    },
+    addDate,
   },
-
   created() {
     this.getUsers()
   },

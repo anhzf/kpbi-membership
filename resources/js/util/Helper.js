@@ -4,4 +4,13 @@ class Helper {
   }
 }
 
+/**
+ * @param  {Date} date
+ * @param  {number} milisecondAdd
+ * @return {Date}
+ */
+export const addDate = (date, milisecondAdd) => {
+  return new Date(date.getMilliseconds() + milisecondAdd);
+}
+
 export default Helper
