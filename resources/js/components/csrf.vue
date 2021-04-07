@@ -1,15 +1,15 @@
 <template>
-    <input type="hidden" name="_token" v-model="token">
+  <input type="hidden" name="_token" v-model="token">
 </template>
 
 <script>
 export default {
-    name: 'CSRF',
+  name: 'CSRF',
 
-    data() {
-        return {
-            token: document.querySelector('meta[name=csrf-token]').content
-        }
+  data() {
+    return {
+      token: document.querySelector('meta[name=csrf-token]').content
     }
+  }
 }
 </script>

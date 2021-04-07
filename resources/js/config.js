@@ -1,5 +1,5 @@
 export default {
-    session: {
-        AUTH_TOKEN_NAME: 'uToken'
-    }
+  session: {
+    AUTH_TOKEN_NAME: 'uToken'
+  }
 }

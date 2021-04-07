@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 | Remove email unique
 |--------------------------------------------------------------------------
 |
-| Modified column = 
+| Modified column =
 |   - email.users
 |   - name.users
 |
@@ -17,29 +17,29 @@ use Illuminate\Support\Facades\Schema;
 
 class RemoveEmailUnique extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unique('name');
-            $table->dropUnique(['email']);
-        });
-    }
-    
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropUnique(['name']);
-            $table->unique('email');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      $table->unique('name');
+      $table->dropUnique(['email']);
+    });
+  }
+
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      $table->dropUnique(['name']);
+      $table->unique('email');
+    });
+  }
 }

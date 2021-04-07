@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddUniqueToPasswordResetsToken extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('password_resets', function (Blueprint $table) {
-            $table->unique('token');
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('password_resets', function (Blueprint $table) {
+      $table->unique('token');
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('password_resets', function (Blueprint $table) {
-            $table->dropUnique(['token']);
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('password_resets', function (Blueprint $table) {
+      $table->dropUnique(['token']);
+    });
+  }
 }

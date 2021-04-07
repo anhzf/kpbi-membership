@@ -113,13 +113,13 @@ export default {
 	},
 
 	computed: {
-        ...mapGetters([
-            'isLoggedIn',
-            'userEmail',
-            'userName',
-            'userRole',
-        ])
-    },
+    ...mapGetters([
+      'isLoggedIn',
+      'userEmail',
+      'userName',
+      'userRole',
+    ])
+  },
 
 	methods: {
 		async logout() {

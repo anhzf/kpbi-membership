@@ -1,3 +1,3 @@
 export default {
-    403: 'Illuminate\\Routing\\Exceptions\\InvalidSignatureException'
+  403: 'Illuminate\\Routing\\Exceptions\\InvalidSignatureException'
 }
