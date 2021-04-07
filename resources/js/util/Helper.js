@@ -10,7 +10,7 @@ class Helper {
  * @return {Date}
  */
 export const addDate = (date, milisecondAdd) => {
-  return new Date(date.getMilliseconds() + milisecondAdd);
+  return new Date(date.getTime() + milisecondAdd);
 }
 
 export default Helper
