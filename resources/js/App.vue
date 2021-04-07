@@ -57,9 +57,11 @@ export default {
 
   methods: {
     flash() {
-      const flashes = [...arguments].map((
-          { message, color = undefined, type = undefined }
-        ) => {
+      const flashes = [...arguments].map(({
+        message,
+        color = undefined,
+        type = undefined
+      }) => {
         return { message, color, type }
       })
 

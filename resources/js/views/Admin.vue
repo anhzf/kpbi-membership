@@ -112,6 +112,7 @@
 
 <script>
 import { addDate } from '@/util/Helper';
+import { userApi, kpbiApi } from '@/apis'
 
 export default {
   name: 'Members',
@@ -162,9 +163,21 @@ export default {
       const {jenjang, nama_prodi} = this.getMemberById(id);
       console.log(`send email verification to ${jenjang} ${nama_prodi}`);
     },
-    onSendPasswordResetLink(id) {
-      const {jenjang, nama_prodi} = this.getMemberById(id);
-      console.log(`password reset link sent to ${jenjang} ${nama_prodi}`);
+    async onSendPasswordResetLink(id) {
+      this.$store.commit('contentLoading', true)
+
+      try {
+        const { data: user } = await kpbiApi.getAccountByProfileId(id);
+        const { data } = await userApi.sendPasswordResetEmail({
+          email: user.email,
+          username: user.name,
+        });
+
+        this.$emit('notice', {message: data.message, type: 'success'});
+      } catch (err) {
+        this.$emit('noticeError', err);
+      }
+      this.$store.commit('contentLoading', false)
     },
     onDeactiveUser(id) {
       const {jenjang, nama_prodi} = this.getMemberById(id);
@@ -176,7 +189,8 @@ export default {
     addDate,
   },
   created() {
-    this.getUsers()
+    this.getUsers();
+    console.log(userApi);
   },
 }
 </script>

@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { userApi } from '@/apis'
 export default {
   name: 'ForgotPassword',
   data: () => ({
@@ -60,8 +61,8 @@ export default {
         email: this.email,
       }
       try {
-        const reset = await window.axios.post('/api/forgot-password', userData)
-        this.$emit('notice', {message: reset.data.message, type: 'success'})
+        const {data} = await userApi.sendPasswordResetEmail(userData);
+        this.$emit('notice', {message: data.message, type: 'success'})
       } catch (err) {
         this.$emit('noticeError', err)
       }

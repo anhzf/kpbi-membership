@@ -22,31 +22,31 @@ class BasicController extends Controller
    */
   public function login(Request $request)
   {
-  $request->validate([
-    'name' => 'required|string',
-    'password' => 'required|string',
-    'remember_me' => 'boolean'
-  ]);
-  $credentials = request(['name', 'password']);
-  if (!Auth::attempt($credentials))
+    $request->validate([
+      'name' => 'required|string',
+      'password' => 'required|string',
+      'remember_me' => 'boolean'
+    ]);
+    $credentials = request(['name', 'password']);
+    if (!Auth::attempt($credentials))
+      return response()->json([
+      'success' => false,
+      'message' => 'Mohon maaf, username/password salah!'
+      ], 401);
+    $user = $request->user();
+    $tokenResult = $user->createToken('Personal Access Token');
+    $token = $tokenResult->token;
+    if ($request->remember_me)
+      $token->expires_at = Carbon::now()->addWeeks(1);
+    $token->save();
     return response()->json([
-    'success' => false,
-    'message' => 'Mohon maaf, username/password salah!'
-    ], 401);
-  $user = $request->user();
-  $tokenResult = $user->createToken('Personal Access Token');
-  $token = $tokenResult->token;
-  if ($request->remember_me)
-    $token->expires_at = Carbon::now()->addWeeks(1);
-  $token->save();
-  return response()->json([
-    'success' => true,
-    'access_token' => $tokenResult->accessToken,
-    'token_type' => 'Bearer',
-    'expires_at' => Carbon::parse(
-    $tokenResult->token->expires_at
-    )->toDateTimeString()
-  ]);
+      'success' => true,
+      'access_token' => $tokenResult->accessToken,
+      'token_type' => 'Bearer',
+      'expires_at' => Carbon::parse(
+      $tokenResult->token->expires_at
+      )->toDateTimeString()
+    ]);
   }
 
   /**
@@ -56,10 +56,10 @@ class BasicController extends Controller
    */
   public function logout(Request $request)
   {
-  $request->user()->token()->revoke();
-  return response()->json([
-    'message' => 'Successfully logged out'
-  ]);
+    $request->user()->token()->revoke();
+    return response()->json([
+      'message' => 'Successfully logged out'
+    ]);
   }
 
   /**
@@ -69,8 +69,8 @@ class BasicController extends Controller
    */
   public function user(Request $request)
   {
-  $user = $request->user();
-  return response()->json($user->toArray() + ['verified' => $user->hasVerifiedEmail()]);
+    $user = $request->user();
+    return response()->json($user->toArray() + ['verified' => $user->hasVerifiedEmail()]);
   }
 
   /**
@@ -80,30 +80,30 @@ class BasicController extends Controller
    */
   public function changePassword(Request $request)
   {
-  $user = $request->user();
-  $request->validate([
-    'oldPassword' => 'required',
-    'newPassword' => 'required|confirmed|min:6',
-  ]);
+    $user = $request->user();
+    $request->validate([
+      'oldPassword' => 'required',
+      'newPassword' => 'required|confirmed|min:6',
+    ]);
 
-  if (!Hash::check($request->get('oldPassword'), $user->password)) {
-    return response()->json(
-    [
-      'success' => false,
-      'message' => 'Password lama yang dimasukkan tidak cocok!'
-    ],
-    400
-    );
-  }
+    if (!Hash::check($request->get('oldPassword'), $user->password)) {
+      return response()->json(
+      [
+        'success' => false,
+        'message' => 'Password lama yang dimasukkan tidak cocok!'
+      ],
+      400
+      );
+    }
 
-  $user->update([
-    'password' => Hash::make($request->get('newPassword'))
-  ]);
+    $user->update([
+      'password' => Hash::make($request->get('newPassword'))
+    ]);
 
-  if ($user->save()) {
-    return response()->json(['success' => true, 'message' => __('Password berhasil diubah!')]);
-  }
+    if ($user->save()) {
+      return response()->json(['success' => true, 'message' => __('Password berhasil diubah!')]);
+    }
 
-  return response()->json(['success' => false, 'message' => __('Error! Terjadi kesalahan!')], 400);
+    return response()->json(['success' => false, 'message' => __('Error! Terjadi kesalahan!')], 400);
   }
 }
