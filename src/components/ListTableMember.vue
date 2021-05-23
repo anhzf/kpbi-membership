@@ -1,17 +1,50 @@
 <template>
   <q-table
     :columns="columnDefinitions"
-    :rows="data"
+    :rows="numberedData"
     row-key="action"
     :pagination="pagination"
-  />
+  >
+    <template #header-cell-numb="props">
+      <q-th
+        :props="props"
+        auto-width
+      >
+        {{ props.col.label }}
+      </q-th>
+    </template>
+
+    <template #header-cell-jenjang="props">
+      <q-th
+        :props="props"
+        auto-width
+      >
+        {{ props.col.label }}
+      </q-th>
+    </template>
+
+    <template #body-cell-webProdi="props">
+      <q-td :props="props">
+        <a
+          :href="props.value"
+          target="_blank"
+        >
+          {{ props.value }}
+        </a>
+        <q-icon
+          name="open_in_new"
+          color="blue-13"
+          class="q-ml-xs"
+        />
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { uid } from 'quasar';
-import firebase from 'firebase';
+import { defineComponent, computed } from 'vue';
 import type { q } from 'src/types';
+import type { PropType } from 'vue';
 import type { Member, Model, ModelInObject } from 'app/common/schema';
 
 const columnDefinitions = [
@@ -22,6 +55,7 @@ const columnDefinitions = [
     align: 'left',
     field: (row) => row.numb,
     sortable: false,
+    classes: 'text-blue-grey-13',
   },
   {
     label: 'JENJANG',
@@ -71,47 +105,19 @@ const pagination = {
 
 export default defineComponent({
   name: 'ListTableMember',
-  setup() {
+  props: {
+    data: {
+      type: Array as PropType<(ModelInObject<Model<Member>>)[]>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const numberedData = computed(() => props.data.map((el, numb) => Object.assign(el, { numb })));
+
     return {
-      data: Array.from(Array(10), (el, i) => ({
-        numb: i,
-        _uid: uid(),
-        jenjang: 'S1',
-        namaProdi: 'Pendidikan Biologi',
-        status: 'NEGERI',
-        jurusan: '-',
-        fakultas: 'Pertanian',
-        webProdi: 'https://google.com',
-        noHpProdi: '+62851XXXXX',
-        emailProdi: 'anh.dev7@gmail.com',
-        perguruanTinggi: {
-          singkatan: 'UNS',
-          lengkap: 'Universitas Sebelas Maret',
-          alamat: 'Jl. Kahuripan Utara',
-        },
-        kaprodi: {
-          nama: 'JokowiDodo',
-          noHp: '+62XXXXXXX',
-          email: 'gmail@yahoo.com',
-          periode: {
-            mulai: firebase.firestore.Timestamp.now(),
-            purna: firebase.firestore.Timestamp.now(),
-          },
-        },
-        akreditasi: {
-          prodi: {
-            value: 'A',
-            tanggal: firebase.firestore.Timestamp.now(),
-            internasional: '-',
-          },
-          perguruanTinggi: 'Belum Terakreditasi',
-        },
-        _created: firebase.firestore.Timestamp.now(),
-        _updated: firebase.firestore.Timestamp.now(),
-        _deleted: null,
-      } as ModelInObject<Model<Member>> & {numb: number})),
       columnDefinitions,
       pagination,
+      numberedData,
     };
   },
 });
