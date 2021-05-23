@@ -70,6 +70,12 @@ const router = new VueRouter({
       beforeEnter: auth,
     },
     {
+      name: 'UploadDocument',
+      path: '/upload-berkas',
+      component: () => import('./views/UploadDocument.vue'),
+      beforeEnter: auth,
+    },
+    {
       name: 'Admin',
       path: '/admin',
       component: Admin,

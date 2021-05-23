@@ -1,22 +1,20 @@
 <template>
 <v-container fluid>
-
   <v-row justify="center">
-    <h1 class="text-h5 my-6">{{ pageTitle }}</h1>
+    <h1 class="text-h5 my-6">
+      {{ pageTitle }}
+    </h1>
   </v-row>
-  <v-row justify="center">
 
-    <ProfileCard
-      :can-edit="true"
-      :profileData="profileData"
-      :isLoading="profileLoading"
+  <v-row justify="center">
+    <profile-card
+      :profile-data="profileData"
+      :is-loading="profileLoading"
+      can-edit
       @profile-update="save"
-    ></ProfileCard>
-
+    />
   </v-row>
-
 </v-container>
-
 </template>
 
 <script>

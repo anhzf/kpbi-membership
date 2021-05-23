@@ -1,18 +1,32 @@
 <template>
 
 <v-card
-  width="100%" max-width="650"
+  width="100%"
+  max-width="650"
   :loading="isLoading"
   elevation="4"
   class="profile-card"
   style="background-color: #ffffffd9;"
 >
+  <div :class="['d-flex px-3 white--text', 'red', 'success']">
+    <span class="caption"><b>Status keanggotaan:</b> aktif sampai {{ new Date().toLocaleString('ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}</span>
+
+    <v-spacer />
+
+    <v-btn
+      text
+      x-small
+      class="white--text"
+    >
+      <v-icon x-small left>mdi-upload</v-icon>
+      Unggah bukti pembayaran
+    </v-btn>
+  </div>
+
   <v-card-text>
     <v-container fluid>
       <v-row>
-
         <v-col cols="12" sm="8" order="1" order-sm="0">
-
           <profile-list-item v-if="editMode">
             <v-row>
               <v-col cols="3">
@@ -33,7 +47,10 @@
             </v-row>
           </profile-list-item>
 
-          <profile-list-item icon="mdi-warehouse" v-if="(jurusan && (jurusan !== '-')) || editMode">
+          <profile-list-item
+            v-if="(jurusan && (jurusan !== '-')) || editMode"
+            icon="mdi-warehouse"
+          >
             <profile-list-item-content
               label="Jurusan"
               v-model="jurusan"
@@ -249,13 +266,14 @@
         <v-col cols="12" sm="4">
           <v-row justify="center">
             <editable-image
-              :src="kaprodiImg" :editable="editMode"
-              width="125px" height="125px"
+              :src="kaprodiImg"
+              :editable="editMode"
+              width="125px"
+              height="125px"
               @image:changed="updateKaprodiImg"
             />
           </v-row>
         </v-col>
-
       </v-row>
     </v-container>
   </v-card-text>
@@ -265,24 +283,38 @@
       <v-fab-transition>
         <v-btn
           v-if="editMode"
-          fab fixed bottom right color="green" dark
-          v-bind="attrs" v-on="on"
+          color="green"
+          fixed
+          fab
+          bottom
+          right
+          dark
+          v-bind="attrs"
+          v-on="on"
           @click="updateProfile"
-        ><v-icon>mdi-check</v-icon>
+        >
+          <v-icon>mdi-check</v-icon>
         </v-btn>
         <v-btn
           v-else
-          fab fixed bottom right color="blue" dark
-          v-bind="attrs" v-on="on"
+          color="blue"
+          fixed
+          fab
+          bottom
+          right
+          dark
+          v-bind="attrs"
+          v-on="on"
           @click="editMode = true"
-        ><v-icon>mdi-pencil</v-icon>
+        >
+          <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-fab-transition>
     </template>
+
     <span v-if="editMode">Save</span>
     <span v-else>Edit</span>
   </v-tooltip>
-
 </v-card>
 
 </template>
@@ -294,7 +326,6 @@ import EditableImage from "./editableImage";
 
 export default {
   name: 'ProfileCard',
-
   props: {
     profileData: {
       required: true
@@ -308,7 +339,6 @@ export default {
       default: false,
     },
   },
-
   data() {
     return {
       editMode: false,
@@ -340,7 +370,6 @@ export default {
       newKaprodiImg: null,
     }
   },
-
   methods: {
     async fetchProfileData() {
       this.$store.commit('contentLoading', true);
@@ -384,7 +413,6 @@ export default {
 
       this.$store.commit('contentLoading', false)
     },
-
     updateProfile() {
       this.editMode = false
       this.$emit('profile-update', {
@@ -428,28 +456,23 @@ export default {
         }
       })
     },
-
-    updatePTImg({file, base64}) {
+    updatePTImg({ file, base64 }) {
       this.ptImg = base64
       this.newPTImg = file
     },
-
-    updateKaprodiImg({file, base64}) {
+    updateKaprodiImg({ file, base64 }) {
       this.kaprodiImg = base64
       this.newKaprodiImg = file
     }
   },
-
-  mounted() {
-    this.fetchProfileData()
-  },
-
   watch: {
     profileData() {
       this.fetchProfileData()
     }
   },
-
+  mounted() {
+    this.fetchProfileData()
+  },
   components: {
     ProfileListItem,
     ProfileListItemContent,
