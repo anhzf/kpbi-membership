@@ -72,6 +72,11 @@ const navItems: INavItem[] = [
     icon: 'login',
     to: { name: 'Login' },
   },
+  {
+    title: 'Daftar Anggota',
+    icon: 'group',
+    to: { name: 'Home' },
+  },
 ];
 
 export default defineComponent({
