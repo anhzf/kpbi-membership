@@ -12,10 +12,8 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          KPBI
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -25,18 +23,28 @@
       bordered
       class="bg-grey-1"
     >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
+      <q-bar
+        dense
+        class="bg-primary"
+      />
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
+      <q-list>
+        <q-item class="q-pt-lg q-pb-md">
+          <q-item-section avatar>
+            <q-img src="/images/Optimized-ICON_KPBI__no-text.png" />
+          </q-item-section>
+
+          <q-item-section class="text-weight-medium">
+            KPBI
+          </q-item-section>
+        </q-item>
+
+        <q-separator spaced />
+
+        <SideNavbarItem
+          v-for="navItem in navItems"
+          :key="navItem.title"
+          v-bind="navItem"
         />
       </q-list>
     </q-drawer>
@@ -48,67 +56,36 @@
 </template>
 
 <script lang="ts">
-import EssentialLink from 'components/EssentialLink.vue';
+import { defineComponent, ref } from 'vue';
+import SideNavbarItem from 'components/SideNavbarItem.vue';
+import type { RouteLocationRaw } from 'vue-router';
 
-const linksList = [
+interface INavItem {
+  title: string;
+  to?: RouteLocationRaw;
+  icon?: string;
+}
+
+const navItems: INavItem[] = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
+    title: 'Login',
+    icon: 'login',
+    to: { name: 'Login' },
   },
 ];
-
-import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink,
+    SideNavbarItem,
   },
 
   setup() {
     const leftDrawerOpen = ref(false);
 
     return {
-      essentialLinks: linksList,
+      navItems,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
