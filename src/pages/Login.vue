@@ -45,7 +45,8 @@
         <q-btn
           label="Daftar"
           flat
-          color="dark"
+          color="blue-grey"
+          :to="{name: 'Register'}"
         />
         <q-btn
           label="Masuk"
