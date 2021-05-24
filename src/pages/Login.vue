@@ -16,10 +16,15 @@
       </q-card-section>
 
       <q-card-section class="q-pb-xl">
-        <q-form class="column">
+        <q-form
+          :id="`${$.uid}__formLogin`"
+          class="column"
+          @submit.prevent="login"
+        >
           <q-input
-            v-model="username"
-            label="username"
+            v-model="email"
+            label="email"
+            type="email"
           />
           <q-input
             v-model="password"
@@ -35,7 +40,10 @@
             </template>
           </q-input>
 
-          <router-link to="#">
+          <router-link
+            to="#"
+            class="text-primary"
+          >
             <small>Lupa password? Klik disini</small>
           </router-link>
         </q-form>
@@ -44,13 +52,15 @@
       <q-card-actions align="between">
         <q-btn
           label="Daftar"
-          flat
           color="blue-grey"
+          flat
           :to="{name: 'Register'}"
         />
         <q-btn
           label="Masuk"
+          type="submit"
           color="primary"
+          :form="`${$.uid}__formLogin`"
         />
       </q-card-actions>
     </q-card>
@@ -59,17 +69,27 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
+import { Loading } from 'quasar';
+import { auth } from 'src/firebaseService';
 
 export default defineComponent({
   name: 'PageLogin',
   setup() {
     const state = reactive({
-      username: '',
+      email: '',
       password: '',
       hidePassword: true,
     });
+    const login = () => {
+      Loading.show();
+      return auth.signInWithEmailAndPassword(state.email, state.password)
+        .finally(() => Loading.hide());
+    };
 
-    return toRefs(state);
+    return {
+      ...toRefs(state),
+      login,
+    };
   },
 });
 </script>

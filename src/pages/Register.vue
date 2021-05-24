@@ -27,7 +27,7 @@
             outlined
           />
 
-          <div class="row">
+          <div class="row gap-x-sm">
             <small class="col-12 q-pl-sm text-weight-medium text-grey">NAMA PERGURUAN TINGGI</small>
             <q-input
               v-model="form.namaPerguruanTinggiSingkat"

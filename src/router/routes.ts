@@ -1,3 +1,4 @@
+import { GuardType } from 'src/types';
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
@@ -14,11 +15,13 @@ const routes: RouteRecordRaw[] = [
         path: 'login',
         name: 'Login',
         component: () => import('pages/Login.vue'),
+        meta: { guard: 'no-auth' as GuardType },
       },
       {
         path: 'register',
         name: 'Register',
         component: () => import('pages/Register.vue'),
+        meta: { guard: 'no-auth' as GuardType },
       },
     ],
   },

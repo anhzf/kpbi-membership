@@ -41,8 +41,25 @@
 
         <q-separator spaced />
 
+        <template v-if="$store.state.auth.user">
+          <SideNavbarItem
+            v-for="navItem in authNavItems"
+            :key="navItem.title"
+            v-bind="navItem"
+          />
+        </template>
+        <template v-else>
+          <SideNavbarItem
+            v-for="navItem in guestNavItems"
+            :key="navItem.title"
+            v-bind="navItem"
+          />
+        </template>
+
+        <q-separator spaced />
+
         <SideNavbarItem
-          v-for="navItem in navItems"
+          v-for="navItem in publicNavItems"
           :key="navItem.title"
           v-bind="navItem"
         />
@@ -56,26 +73,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import SideNavbarItem from 'components/SideNavbarItem.vue';
+import { auth } from 'src/firebaseService';
 import type { RouteLocationRaw } from 'vue-router';
 
 interface INavItem {
   title: string;
   to?: RouteLocationRaw;
   icon?: string;
+  [key: string]: unknown;
 }
 
-const navItems: INavItem[] = [
-  {
-    title: 'Login',
-    icon: 'login',
-    to: { name: 'Login' },
-  },
+const publicNavItems: INavItem[] = [
   {
     title: 'Daftar Anggota',
     icon: 'group',
     to: { name: 'Home' },
+    exact: true,
+  },
+];
+
+const guestNavItems: INavItem[] = [
+  {
+    title: 'Login',
+    icon: 'login',
+    to: { name: 'Login' },
+    exact: true,
+  },
+];
+
+const authNavItems: INavItem[] = [
+  {
+    title: 'Logout',
+    icon: 'logout',
+    onClick: () => auth.signOut(),
   },
 ];
 
@@ -87,13 +119,17 @@ export default defineComponent({
   },
 
   setup() {
-    const leftDrawerOpen = ref(false);
+    const state = reactive({
+      leftDrawerOpen: false,
+    });
 
     return {
-      navItems,
-      leftDrawerOpen,
+      publicNavItems,
+      guestNavItems,
+      authNavItems,
+      ...toRefs(state),
       toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
+        state.leftDrawerOpen = !state.leftDrawerOpen;
       },
     };
   },

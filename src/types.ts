@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import type { QTable } from 'quasar';
 
+export type GuardType = 'auth' | 'no-auth' | 'default';
+
 export namespace q {
   export type Table = QTable;
 
@@ -34,5 +36,15 @@ export namespace q {
       dark: boolean;
       dense: boolean;
     }
+  }
+}
+
+export namespace Vuex {
+  export type MutationFn<T> = T extends undefined
+    ? (() => void)
+    : ((payload: T) => void);
+
+  export type MutationFns<T extends Record<string, unknown>> = {
+    [k in keyof T]: MutationFn<T[k]>;
   }
 }

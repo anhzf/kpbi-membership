@@ -1,8 +1,8 @@
 <template>
   <q-item
+    v-ripple
     clickable
-    :to="to"
-    exact
+    v-bind="$props"
   >
     <q-item-section
       v-if="icon"
@@ -19,8 +19,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
-import type { RouteLocationRaw } from 'vue-router';
 
 export default defineComponent({
   name: 'SideNavbarItem',
@@ -32,10 +30,6 @@ export default defineComponent({
     icon: {
       type: String,
       default: '',
-    },
-    to: {
-      type: [String, Object] as PropType<RouteLocationRaw>,
-      default: '#',
     },
   },
 });
