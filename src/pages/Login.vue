@@ -69,8 +69,10 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import { Loading } from 'quasar';
+import { useRouter } from 'vue-router';
+import { Loading, Notify } from 'quasar';
 import { auth } from 'src/firebaseService';
+import type fb from 'firebase';
 
 export default defineComponent({
   name: 'PageLogin',
@@ -80,9 +82,15 @@ export default defineComponent({
       password: '',
       hidePassword: true,
     });
+    const router = useRouter();
     const login = () => {
       Loading.show();
-      return auth.signInWithEmailAndPassword(state.email, state.password)
+      auth.signInWithEmailAndPassword(state.email, state.password)
+        .then(() => router
+          .push({ name: 'AccountSettings' })
+          .finally(() => Loading.hide()))
+        .catch((err: fb.auth.Error) => Notify
+          .create({ message: err.message, type: 'negative' }))
         .finally(() => Loading.hide());
     };
 

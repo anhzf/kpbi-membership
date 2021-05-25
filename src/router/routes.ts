@@ -23,6 +23,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Register.vue'),
         meta: { guard: 'no-auth' as GuardType },
       },
+      {
+        path: 'settings',
+        name: 'AccountSettings',
+        component: () => import('pages/AccountSettings.vue'),
+        meta: { guard: 'auth' as GuardType },
+      },
     ],
   },
 

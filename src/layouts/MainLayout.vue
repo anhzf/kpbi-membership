@@ -74,9 +74,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
+import { Loading, Notify } from 'quasar';
 import SideNavbarItem from 'components/SideNavbarItem.vue';
 import { auth } from 'src/firebaseService';
 import type { RouteLocationRaw } from 'vue-router';
+import type fb from 'firebase';
 
 interface INavItem {
   title: string;
@@ -105,9 +107,21 @@ const guestNavItems: INavItem[] = [
 
 const authNavItems: INavItem[] = [
   {
+    title: 'Pengaturan Akun',
+    icon: 'settings',
+    to: { name: 'AccountSettings' },
+    exact: true,
+  },
+  {
     title: 'Logout',
     icon: 'logout',
-    onClick: () => auth.signOut(),
+    onClick: () => {
+      Loading.show();
+      auth.signOut()
+        .catch((err: fb.auth.Error) => Notify
+          .create({ message: err.message, type: 'positive' }))
+        .finally(() => Loading.hide());
+    },
   },
 ];
 
