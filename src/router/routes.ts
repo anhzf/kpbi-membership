@@ -1,4 +1,3 @@
-import { GuardType } from 'src/types';
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
@@ -15,19 +14,19 @@ const routes: RouteRecordRaw[] = [
         path: 'login',
         name: 'Login',
         component: () => import('pages/Login.vue'),
-        meta: { guard: 'no-auth' as GuardType },
+        meta: { guard: 'no-auth' },
       },
       {
         path: 'register',
         name: 'Register',
         component: () => import('pages/Register.vue'),
-        meta: { guard: 'no-auth' as GuardType },
+        meta: { guard: 'no-auth' },
       },
       {
         path: 'settings',
         name: 'AccountSettings',
         component: () => import('pages/AccountSettings.vue'),
-        meta: { guard: 'auth' as GuardType },
+        meta: { guard: 'auth' },
       },
     ],
   },

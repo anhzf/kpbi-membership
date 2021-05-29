@@ -71,6 +71,7 @@
 import { defineComponent, reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { Loading, Notify } from 'quasar';
+import { useStore } from 'src/store';
 import { auth } from 'src/firebaseService';
 import type fb from 'firebase';
 
@@ -82,13 +83,15 @@ export default defineComponent({
       password: '',
       hidePassword: true,
     });
+    const store = useStore();
     const router = useRouter();
     const login = () => {
       Loading.show();
+      store.commit('auth/setIsWaiting', true);
+      store.commit('auth/setAfterLoginFn', () => router
+        .push({ name: 'AccountSettings' }));
+
       auth.signInWithEmailAndPassword(state.email, state.password)
-        .then(() => router
-          .push({ name: 'AccountSettings' })
-          .finally(() => Loading.hide()))
         .catch((err: fb.auth.Error) => Notify
           .create({ message: err.message, type: 'negative' }))
         .finally(() => Loading.hide());

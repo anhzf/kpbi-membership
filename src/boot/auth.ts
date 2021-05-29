@@ -1,42 +1,63 @@
 import { Loading } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { auth } from 'src/firebaseService';
-import type { Store } from 'vuex';
+import type { RouteLocationRaw } from 'vue-router';
 import type { StateInterface } from 'src/store';
-import type { GuardType } from 'src/types';
 
-export default boot(({ store, router, redirect }) => {
+export default boot<StateInterface>(({ store, router, urlPath }) => {
+  const getCurrentRoute = (isFirstLoad = false) => (isFirstLoad
+    ? router.resolve(urlPath)
+    : router.currentRoute.value);
+  const getRouteGuardType = (isFirstLoad = false) => getCurrentRoute(isFirstLoad).meta.guard || 'default';
+
   auth
     .onAuthStateChanged(
       (user) => {
-        store.commit('auth/authResolved');
         store.commit('auth/setUser', user);
+
+        return user
+          ? store.dispatch('auth/afterAuthenticated')
+          : store.dispatch('auth/afterUnauthenticated');
       },
     );
 
-  (store as Store<StateInterface>)
-    .watch(
-      (state) => state.auth.user,
-      (user) => {
-        const routeGuardType = (router.currentRoute.value.meta.guard || 'default') as GuardType;
-
-        if (routeGuardType === 'auth' && !user) {
-          return redirect({ name: 'Login' });
+  store.watch(
+    (state) => [state.auth.user, state.auth.isWaiting] as const,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    ([user], old) => {
+      const isAuthenticated = Boolean(user);
+      const isFirstLoad = old === undefined;
+      const routeGuardType = getRouteGuardType(isFirstLoad);
+      const to = ((): RouteLocationRaw => {
+        if (routeGuardType === 'auth' && !isAuthenticated) {
+          return { name: 'Login' };
         }
-        if (routeGuardType === 'no-auth' && user) {
-          return redirect({ name: 'Home' });
+        if (routeGuardType === 'no-auth' && isAuthenticated) {
+          return { name: 'Home' };
         }
 
-        return undefined as void;
-      },
-    );
+        return urlPath;
+      })();
 
-  (store as Store<StateInterface>)
-    .watch(
-      (state) => state.auth.isWaiting,
-      (isWaiting) => (isWaiting
-        ? Loading.show({ message: 'Authenticating...' })
-        : Loading.hide()),
-      { immediate: true },
-    );
+      return !isFirstLoad && router.push(to);
+    },
+    { immediate: true },
+  );
+
+  store.watch(
+    (state) => state.auth.isWaiting,
+    (isWaiting, isWaitingOld) => {
+      const isFirstLoad = isWaitingOld === undefined;
+      const routeGuardType = getRouteGuardType(isFirstLoad);
+
+      if (routeGuardType === 'auth') {
+        return (isWaiting
+          ? Loading.show({ message: 'Authenticating...' })
+          : Loading.hide());
+      }
+
+      return undefined;
+    },
+    { immediate: true },
+  );
 });

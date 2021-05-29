@@ -19,7 +19,7 @@
             <q-item-label>Email</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-item-label>alwan.nuha7@gmail.com</q-item-label>
+            <q-item-label>{{ $store.state.auth.user?.email }}</q-item-label>
           </q-item-section>
         </q-item>
 

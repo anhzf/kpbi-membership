@@ -41,28 +41,49 @@
 
         <q-separator spaced />
 
-        <template v-if="$store.state.auth.user">
-          <SideNavbarItem
-            v-for="navItem in authNavItems"
-            :key="navItem.title"
-            v-bind="navItem"
-          />
+        <template v-if="$store.state.auth.isWaiting">
+          <q-item
+            v-for="i in 3"
+            :key="i"
+          >
+            <q-item-section>
+              <q-skeleton type="rect" />
+            </q-item-section>
+          </q-item>
+
+          <q-separator spaced />
+
+          <q-item>
+            <q-item-section>
+              <q-skeleton type="rect" />
+            </q-item-section>
+          </q-item>
         </template>
+
         <template v-else>
+          <template v-if="$store.state.auth.user">
+            <SideNavbarItem
+              v-for="navItem in authNavItems"
+              :key="navItem.title"
+              v-bind="navItem"
+            />
+          </template>
+          <template v-else>
+            <SideNavbarItem
+              v-for="navItem in guestNavItems"
+              :key="navItem.title"
+              v-bind="navItem"
+            />
+          </template>
+
+          <q-separator spaced />
+
           <SideNavbarItem
-            v-for="navItem in guestNavItems"
+            v-for="navItem in publicNavItems"
             :key="navItem.title"
             v-bind="navItem"
           />
         </template>
-
-        <q-separator spaced />
-
-        <SideNavbarItem
-          v-for="navItem in publicNavItems"
-          :key="navItem.title"
-          v-bind="navItem"
-        />
       </q-list>
     </q-drawer>
 
@@ -73,7 +94,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import {
+  defineComponent, reactive, toRefs,
+} from 'vue';
 import { Loading, Notify } from 'quasar';
 import SideNavbarItem from 'components/SideNavbarItem.vue';
 import { auth } from 'src/firebaseService';
