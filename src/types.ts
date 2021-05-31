@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-namespace */
 import type { QTable } from 'quasar';
+import type fb from 'firebase';
 
 export type GuardType = 'auth' | 'no-auth' | 'default';
 
@@ -46,5 +47,11 @@ export namespace Vuex {
 
   export type MutationFns<T extends Record<string, unknown>> = {
     [k in keyof T]: MutationFn<T[k]>;
+  }
+}
+
+export namespace Fb {
+  export interface User extends fb.UserInfo {
+    emailVerified: boolean;
   }
 }

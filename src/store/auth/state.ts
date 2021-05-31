@@ -1,7 +1,7 @@
-import type fb from 'firebase';
+import type { Fb } from 'src/types';
 
 export interface AuthStateInterface {
-  user: fb.User | null;
+  user: Fb.User | null;
   isWaiting: boolean;
   afterLoginFn: (() => void) | null;
   afterLogoutFn: (() => void) | null;

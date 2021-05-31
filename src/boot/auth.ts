@@ -13,7 +13,7 @@ export default boot<StateInterface>(({ store, router, urlPath }) => {
   auth
     .onAuthStateChanged(
       (user) => {
-        store.commit('auth/setUser', user);
+        store.commit('auth/setUser', user?.toJSON());
 
         return user
           ? store.dispatch('auth/afterAuthenticated')

@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import type fb from 'firebase';
 import 'firebase/auth';
 import 'firebase/firestore';
 
@@ -18,8 +19,15 @@ const fbs = (() => {
 const auth = fbs.auth();
 const db = fbs.firestore();
 
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
+const isFirebaseError = (data: any): data is fb.FirebaseError => typeof data.code === 'string'
+  && typeof data.message === 'string'
+  && typeof data.name === 'string';
+/* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
+
 export {
   fbs as default,
   auth,
   db,
+  isFirebaseError,
 };

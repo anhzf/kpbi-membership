@@ -5,12 +5,15 @@
   >
     <q-card class="account-settings-card">
       <q-list padding>
-        <q-item>
+        <q-item :class="isVerified ? 'bg-green-1' : 'bg-red-1'">
           <q-item-section avatar>
-            <q-icon name="check" />
+            <q-icon
+              :name="isVerified ? 'verified_user' : 'clear'"
+              :color="isVerified ? 'positive' : 'negative'"
+            />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Terverifikasi</q-item-label>
+            <q-item-label>{{ isVerified ? 'Terverifikasi' : 'Belum terverifikasi' }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -34,6 +37,7 @@
                 icon="edit"
                 flat
                 size="sm"
+                @click="onChangePasswordClick"
               />
             </q-item-label>
           </q-item-section>
@@ -44,10 +48,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { Dialog } from 'quasar';
+import DialogChangePassword from 'components/ui/AccountSettings/DialogChangePassword.vue';
+import { useStore } from 'src/store';
 
 export default defineComponent({
   name: 'PageAccountSettings',
+  setup() {
+    const store = useStore();
+    const openChangePasswordDialog = () => Dialog.create({
+      component: DialogChangePassword,
+    });
+
+    return {
+      isVerified: computed(() => store.state.auth.user?.emailVerified),
+      onChangePasswordClick: openChangePasswordDialog,
+    };
+  },
 });
 </script>
 
