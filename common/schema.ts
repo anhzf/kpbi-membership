@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type fb from 'firebase';
 
 export interface ModelTimestamp {
@@ -43,8 +45,10 @@ export interface Kaprodi {
   noHp: string;
 }
 
+export type jenjangPT = 'S1' | 'S2' | 'S3';
+
 export interface Member {
-  jenjang: 'S1' | 'S2' | 'S3';
+  jenjang: jenjangPT;
   namaProdi: string;
   jurusan: string;
   fakultas: string;
@@ -56,3 +60,25 @@ export interface Member {
   emailProdi: string;
   noHpProdi: string;
 }
+
+export interface MemberRegisterRequire {
+  jenjang: string;
+  namaProdi: string;
+  perguruanTinggi: {
+    lengkap: string;
+    singkatan: string;
+  };
+  emailProdi: string;
+  kaprodi: {
+    email: string;
+  };
+}
+
+export const isValidMemberRegisterRequire = (data: any): data is MemberRegisterRequire => (
+  typeof data.jenjang === 'string'
+  && typeof data.namaProdi === 'string'
+  && typeof data.emailProdi === 'string'
+  && typeof data.perguruanTinggi?.lengkap === 'string'
+  && typeof data.perguruanTinggi?.singkatan === 'string'
+  && typeof data.kaprodi?.email === 'string'
+);
