@@ -23,6 +23,12 @@ const routes: RouteRecordRaw[] = [
         meta: { guard: 'no-auth' },
       },
       {
+        path: 'profil-saya',
+        name: 'MyProfile',
+        component: () => import('pages/MyProfile.vue'),
+        meta: { guard: 'auth' },
+      },
+      {
         path: 'settings',
         name: 'AccountSettings',
         component: () => import('pages/AccountSettings.vue'),

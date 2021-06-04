@@ -52,7 +52,11 @@ export default defineComponent({
         perguruanTinggi: {
           singkatan: 'UNS',
           lengkap: 'Universitas Sebelas Maret',
-          alamat: 'Jl. Kahuripan Utara',
+          alamat: {
+            alamat: 'Jl. Kahuripan Utara',
+            kota: 'Bandung',
+            provinsi: 'Jakarta',
+          },
         },
         kaprodi: {
           nama: 'JokowiDodo',

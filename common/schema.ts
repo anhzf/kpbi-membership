@@ -15,7 +15,11 @@ export type ModelInObject<T> = T & {
 export interface PerguruanTinggi {
   singkatan: string;
   lengkap: string;
-  alamat: string;
+  alamat: {
+    kota: string;
+    provinsi: string;
+    alamat: string;
+  };
 }
 
 export type akreditasiValue = 'A' | 'B' | 'C' | 'Unggul' | 'Baik Sekali' | 'Baik' | 'Belum Terakreditasi';

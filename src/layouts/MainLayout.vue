@@ -100,8 +100,8 @@ import {
 import { Loading, Notify } from 'quasar';
 import SideNavbarItem from 'components/SideNavbarItem.vue';
 import { auth } from 'src/firebaseService';
+import { getErrMsg } from 'src/helpers';
 import type { RouteLocationRaw } from 'vue-router';
-import type fb from 'firebase';
 
 interface INavItem {
   title: string;
@@ -130,6 +130,12 @@ const guestNavItems: INavItem[] = [
 
 const authNavItems: INavItem[] = [
   {
+    title: 'Profil Saya',
+    icon: 'perm_identity',
+    to: { name: 'MyProfile' },
+    exact: true,
+  },
+  {
     title: 'Pengaturan Akun',
     icon: 'settings',
     to: { name: 'AccountSettings' },
@@ -141,8 +147,8 @@ const authNavItems: INavItem[] = [
     onClick: () => {
       Loading.show();
       auth.signOut()
-        .catch((err: fb.auth.Error) => Notify
-          .create({ message: err.message, type: 'positive' }))
+        .catch((err) => Notify
+          .create({ message: getErrMsg(err, true), type: 'positive' }))
         .finally(() => Loading.hide());
     },
   },
