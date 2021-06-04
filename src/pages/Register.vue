@@ -12,33 +12,45 @@
 
       <q-separator spaced />
 
-      <q-card-section class="q-pb-xl">
-        <q-form class="columns q-gutter-md">
-          <q-select
-            v-model="form.jenjang"
-            label="Jenjang"
-            outlined
-            :options="['S1', 'S2', 'S3']"
-          />
+      <q-card-section class="q-pb-lg">
+        <q-form
+          :id="`${$.uid}_formRegister`"
+          class="columns q-gutter-md"
+          @submit="onSubmit"
+        >
+          <div class="row gap-x-sm">
+            <q-select
+              v-model="form.jenjang"
+              label="Jenjang"
+              outlined
+              :options="['S1', 'S2', 'S3']"
+              :rules="[requiredRule]"
+              class="col-3"
+            />
 
-          <q-input
-            v-model="form.namaProdi"
-            label="Nama Prodi"
-            outlined
-          />
+            <q-input
+              v-model="form.namaProdi"
+              label="Nama Prodi"
+              outlined
+              :rules="[requiredRule]"
+              class="col-grow"
+            />
+          </div>
 
           <div class="row gap-x-sm">
             <small class="col-12 q-pl-sm text-weight-medium text-grey">NAMA PERGURUAN TINGGI</small>
             <q-input
-              v-model="form.namaPerguruanTinggiSingkat"
+              v-model="form.perguruanTinggi.singkatan"
               label="Singkat"
               outlined
+              :rules="[requiredRule]"
               class="col-shrink"
             />
             <q-input
-              v-model="form.namaPerguruanTinggiLengkap"
+              v-model="form.perguruanTinggi.lengkap"
               label="Lengkap"
               outlined
+              :rules="[requiredRule]"
               class="col-grow"
             />
           </div>
@@ -48,13 +60,15 @@
             label="Email prodi"
             type="email"
             outlined
+            :rules="[requiredRule]"
           />
 
           <q-input
-            v-model="form.emailKaprodi"
+            v-model="form.kaprodi.email"
             label="Email kaprodi"
             type="email"
             outlined
+            :rules="[requiredRule]"
           />
         </q-form>
       </q-card-section>
@@ -71,7 +85,9 @@
         />
         <q-btn
           label="Daftar"
+          type="submit"
           color="primary"
+          :form="`${$.uid}_formRegister`"
         />
       </q-card-actions>
     </q-card>
@@ -80,22 +96,55 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
+import { Loading, Notify } from 'quasar';
+import { requiredRule } from 'src/inputRules';
+import { auth } from 'src/firebaseService';
+import services from 'src/firestoreServices';
+import { getErrMsg } from 'src/helpers';
+import { isValidMemberRegisterRequire } from 'app/common/schema';
+import type { MemberRegisterRequire } from 'app/common/schema';
+
+const defaultPassword = 'imNewKPBIMember';
 
 export default defineComponent({
   name: 'PageRegister',
   setup() {
-    const formState = reactive({
+    const formData = reactive<MemberRegisterRequire>({
       jenjang: 'S1',
       namaProdi: '',
-      namaPerguruanTinggiLengkap: '',
-      namaPerguruanTinggiSingkat: '',
+      perguruanTinggi: {
+        lengkap: '',
+        singkatan: '',
+      },
       emailProdi: '',
-      emailKaprodi: '',
+      kaprodi: {
+        email: '',
+      },
     });
 
     return {
-      form: formState,
+      form: formData,
+      // utils
+      requiredRule,
     };
+  },
+  methods: {
+    async onSubmit() {
+      Loading.show();
+      if (isValidMemberRegisterRequire(this.form)) {
+        try {
+          const userCredential = await auth
+            .createUserWithEmailAndPassword(this.form.kaprodi.email, defaultPassword);
+
+          await services.registerMember(userCredential.user!, this.form);
+        } catch (err) {
+          Notify.create({ message: getErrMsg(err), type: 'negative' });
+        }
+      } else {
+        Notify.create({ message: 'Data registrasi tidak memenuhi', type: 'negative' });
+      }
+      Loading.hide();
+    },
   },
 });
 </script>

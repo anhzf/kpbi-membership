@@ -15,7 +15,7 @@
         </h6>
       </q-card-section>
 
-      <q-card-section class="q-pb-xl">
+      <q-card-section class="q-pt-none q-pb-xl">
         <q-form
           :id="`${$.uid}__formLogin`"
           class="column"
@@ -25,11 +25,13 @@
             v-model="email"
             label="email"
             type="email"
+            :rules="[requiredRule]"
           />
           <q-input
             v-model="password"
             label="password"
             :type="hidePassword ? 'password' : 'text'"
+            :rules="[requiredRule]"
           >
             <template #append>
               <q-icon
@@ -73,6 +75,7 @@ import { useRouter } from 'vue-router';
 import { Loading, Notify } from 'quasar';
 import { useStore } from 'src/store';
 import { auth } from 'src/firebaseService';
+import { requiredRule } from 'src/inputRules';
 import type fb from 'firebase';
 
 export default defineComponent({
@@ -100,6 +103,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       login,
+      // utils
+      requiredRule,
     };
   },
 });

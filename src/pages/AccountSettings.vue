@@ -15,6 +15,19 @@
           <q-item-section>
             <q-item-label>{{ isVerified ? 'Terverifikasi' : 'Belum terverifikasi' }}</q-item-label>
           </q-item-section>
+          <q-item-section
+            v-if="!isVerified"
+            side
+          >
+            <q-btn
+              label="kirim email verifikasi sekarang"
+              rounded
+              unelevated
+              size="sm"
+              color="primary"
+              @click="onSendEmailVerificationNow"
+            />
+          </q-item-section>
         </q-item>
 
         <q-item>
@@ -49,9 +62,11 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { Dialog } from 'quasar';
+import { Dialog, Loading, Notify } from 'quasar';
 import DialogChangePassword from 'components/ui/AccountSettings/DialogChangePassword.vue';
 import { useStore } from 'src/store';
+import { auth } from 'src/firebaseService';
+import { getErrMsg } from 'src/helpers';
 
 export default defineComponent({
   name: 'PageAccountSettings',
@@ -65,6 +80,24 @@ export default defineComponent({
       isVerified: computed(() => store.state.auth.user?.emailVerified),
       onChangePasswordClick: openChangePasswordDialog,
     };
+  },
+  methods: {
+    onSendEmailVerificationNow() {
+      if (auth.currentUser) {
+        Loading.show();
+        // eslint-disable-next-line no-restricted-globals
+        const url = new URL(location.href);
+        url.pathname = this.$router.resolve({ name: 'AccountSettings' }).href;
+        auth.currentUser.sendEmailVerification({
+          url: url.toString(),
+        })
+          .then(() => Notify.create(`Email untuk verifikasi telah dikirim ke ${auth.currentUser.email!}`))
+          .catch((err) => Notify.create({ message: getErrMsg(err), type: 'negative' }))
+          .finally(() => Loading.hide());
+      } else {
+        Notify.create({ message: 'Please login first', type: 'negative' });
+      }
+    },
   },
 });
 </script>
