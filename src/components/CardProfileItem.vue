@@ -22,9 +22,11 @@
             :dense="dense"
             :type="type"
           >
-            <template #append>
+            <template
+              v-if="!editMode && isLink"
+              #append
+            >
               <q-btn
-                v-if="isLink"
                 type="a"
                 :href="isEmail ? `mailto:${val}` : val"
                 :icon="isEmail ? 'send' : 'open_in_new'"
@@ -53,6 +55,7 @@ const formatDate = 'YYYY-MM-DD';
 const vEmailInput = (() => {
   const el = document.createElement('input');
   el.type = 'email';
+  el.required = true;
   return el;
 })();
 const validateEmail = (v: string) => {

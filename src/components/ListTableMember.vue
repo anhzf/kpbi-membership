@@ -38,6 +38,17 @@
         />
       </q-td>
     </template>
+
+    <template #body-cell-action="props">
+      <q-td :props="props">
+        <slot
+          name="action"
+          :data="props.row"
+        >
+          {{ props.value }}
+        </slot>
+      </q-td>
+    </template>
   </q-table>
 </template>
 

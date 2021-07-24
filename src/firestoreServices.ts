@@ -1,8 +1,10 @@
+import { merge } from 'lodash';
 import { collectionNames } from 'app/common/firestore';
 import fbs, { db } from 'src/firebaseService';
 import type fb from 'firebase';
 import type { CollectionRef } from 'app/common/firestore';
 import type {
+  Member,
   MemberRegisterRequire, ModelTimestamp,
 } from 'app/common/schema';
 
@@ -42,6 +44,48 @@ const registerMember = (user: fb.User, payload: MemberRegisterRequire) => db
   .collection(collectionNames.members)
   .doc(user.uid)
   .set({ ...payload, ...factories.attrs.create() });
+
+const memberTemplateFactory = () => ({
+  jenjang: 'S1',
+  namaProdi: '',
+  status: 'NEGERI',
+  jurusan: '-',
+  fakultas: '',
+  webProdi: '',
+  noHpProdi: '',
+  emailProdi: '',
+  perguruanTinggi: {
+    singkatan: '',
+    lengkap: '',
+    alamat: {
+      alamat: '',
+      kota: '',
+      provinsi: '',
+    },
+  },
+  kaprodi: {
+    nama: '',
+    noHp: '',
+    email: '',
+    periode: {
+      mulai: fbs.firestore.Timestamp.now(),
+      purna: fbs.firestore.Timestamp.now(),
+    },
+  },
+  akreditasi: {
+    prodi: {
+      value: 'Belum Terakreditasi',
+      tanggal: fbs.firestore.Timestamp.now(),
+      internasional: '-',
+    },
+    perguruanTinggi: 'Belum Terakreditasi',
+  },
+});
+
+export const memberMergeDefaults = (attrs: Partial<Member>) => merge(
+  memberTemplateFactory(),
+  attrs,
+) as Member;
 
 const services = {
   registerMember,
