@@ -10,14 +10,15 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.10.9",
     "core-js": "^3.6.5",
     "firebase": "^8.6.2",
-    "quasar": "^2.0.0-beta.1"
+    "quasar": "^2.0.3",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app": "^3.0.0-beta.1",
+    "@quasar/app": "^3.0.3",
     "@quasar/quasar-app-extension-dotenv": "^1.1.0",
     "@types/node": "^10.17.15",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
@@ -25,7 +26,8 @@
     "eslint": "^7.14.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.0.0",
+    "typescript": "^4.2.2"
   },
   "browserslist": [
     "last 10 Chrome versions",

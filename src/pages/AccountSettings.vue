@@ -83,15 +83,16 @@ export default defineComponent({
   },
   methods: {
     onSendEmailVerificationNow() {
-      if (auth.currentUser) {
+      const user = auth.currentUser;
+      if (user) {
         Loading.show();
         // eslint-disable-next-line no-restricted-globals
         const url = new URL(location.href);
         url.pathname = this.$router.resolve({ name: 'AccountSettings' }).href;
-        auth.currentUser.sendEmailVerification({
+        user.sendEmailVerification({
           url: url.toString(),
         })
-          .then(() => Notify.create(`Email untuk verifikasi telah dikirim ke ${auth.currentUser.email!}`))
+          .then(() => Notify.create(`Email untuk verifikasi telah dikirim ke ${user.email!}`))
           .catch((err) => Notify.create({ message: getErrMsg(err), type: 'negative' }))
           .finally(() => Loading.hide());
       } else {

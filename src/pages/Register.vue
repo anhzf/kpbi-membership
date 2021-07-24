@@ -133,10 +133,12 @@ export default defineComponent({
       Loading.show();
       if (isValidMemberRegisterRequire(this.form)) {
         try {
-          const userCredential = await auth
+          const { user } = await auth
             .createUserWithEmailAndPassword(this.form.kaprodi.email, defaultPassword);
 
-          await services.registerMember(userCredential.user!, this.form);
+          if (user) {
+            await services.registerMember(user, this.form);
+          } else throw new Error('Unauthenticated');
         } catch (err) {
           Notify.create({ message: getErrMsg(err), type: 'negative' });
         }

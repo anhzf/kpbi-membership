@@ -107,12 +107,13 @@ export default defineComponent({
       || 'Password konfirmasi harus sama dengan password baru';
     const isOldPasswordValidRule = async (v: string) => {
       try {
-        if (auth.currentUser) {
+        const user = auth.currentUser;
+        if (user) {
           const credential = fbs.auth.EmailAuthProvider.credential(
-            auth.currentUser.email!, v,
+            user.email!, v,
           );
 
-          await auth.currentUser.reauthenticateWithCredential(credential);
+          await user.reauthenticateWithCredential(credential);
 
           return true;
         }
