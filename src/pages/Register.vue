@@ -69,6 +69,7 @@
             type="email"
             outlined
             :rules="[requiredRule]"
+            hint="Harap diingat bahwa email kaprodi ini nanti yang akan digunakan untuk login"
           />
         </q-form>
       </q-card-section>
