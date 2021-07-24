@@ -43,7 +43,7 @@
           </q-input>
 
           <router-link
-            to="#"
+            :to="{name: 'ForgotPassword'}"
             class="text-primary"
           >
             <small>Lupa password? Klik disini</small>
