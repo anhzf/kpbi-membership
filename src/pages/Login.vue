@@ -95,8 +95,10 @@ export default defineComponent({
         .push({ name: 'AccountSettings' }));
 
       auth.signInWithEmailAndPassword(state.email, state.password)
-        .catch((err: fb.auth.Error) => Notify
-          .create({ message: err.message, type: 'negative' }))
+        .catch((err: fb.auth.Error) => {
+          Notify.create({ message: err.message, type: 'negative' });
+          return store.dispatch('auth/afterUnauthenticated');
+        })
         .finally(() => Loading.hide());
     };
 

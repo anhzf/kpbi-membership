@@ -72,12 +72,13 @@ export default defineComponent({
   name: 'PageAccountSettings',
   setup() {
     const store = useStore();
+    const isVerified = computed(() => store.state.auth.user?.emailVerified);
     const openChangePasswordDialog = () => Dialog.create({
       component: DialogChangePassword,
     });
 
     return {
-      isVerified: computed(() => store.state.auth.user?.emailVerified),
+      isVerified,
       onChangePasswordClick: openChangePasswordDialog,
     };
   },
