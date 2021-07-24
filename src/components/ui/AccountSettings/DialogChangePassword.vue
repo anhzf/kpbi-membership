@@ -21,7 +21,10 @@
             :rules="[requiredRule, isOldPasswordValidRule]"
             lazy-rules="ondemand"
           >
-            <template #append>
+            <template
+              v-if="token === ''"
+              #append
+            >
               <q-icon
                 :name="oldPasswordHide ? 'visibility_off' : 'visibility'"
                 class="cursor-pointer"
@@ -56,6 +59,7 @@
 
       <q-card-actions align="right">
         <q-btn
+          v-if="token === ''"
           color="primary"
           label="Cancel"
           @click="onCancelClick"
@@ -90,13 +94,19 @@ import { getErrMsg } from 'src/helpers';
 import { requiredRule } from 'src/inputRules';
 
 export default defineComponent({
+  props: {
+    token: {
+      type: String,
+      default: '',
+    },
+  },
   emits: useDialogPluginComponent.emits,
-  setup() {
+  setup(props) {
     const {
       dialogRef, onDialogHide, onDialogOK, onDialogCancel,
     } = useDialogPluginComponent();
     const state = reactive({
-      oldPassword: '',
+      oldPassword: props.token,
       newPassword: '',
       newPasswordConfirm: '',
       oldPasswordHide: true,

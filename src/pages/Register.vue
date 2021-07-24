@@ -97,10 +97,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
-import { Loading, Notify } from 'quasar';
-import { requiredRule } from 'src/inputRules';
+import { Dialog, Loading, Notify } from 'quasar';
+import { useStore } from 'src/store';
 import { auth } from 'src/firebaseService';
 import services from 'src/firestoreServices';
+import DialogChangePassword from 'components/ui/AccountSettings/DialogChangePassword.vue';
+import { requiredRule } from 'src/inputRules';
 import { getErrMsg } from 'src/helpers';
 import { isValidMemberRegisterRequire } from 'app/common/schema';
 import type { MemberRegisterRequire } from 'app/common/schema';
@@ -122,31 +124,38 @@ export default defineComponent({
         email: '',
       },
     });
+    const store = useStore();
+    const register = () => {
+      if (isValidMemberRegisterRequire(formData)) {
+        store.commit('auth/setAfterLoginFn', () => {
+          Dialog.create({
+            component: DialogChangePassword,
+            componentProps: { token: defaultPassword },
+          });
+          Notify.create({ message: 'Mohon untuk langsung mengganti password', timeout: 60 * 1000 });
+        });
+
+        auth.createUserWithEmailAndPassword(formData.kaprodi.email, defaultPassword)
+          .then(({ user }) => services.registerMember(user!, formData))
+          .catch((err) => Notify.create({ message: getErrMsg(err), type: 'negative' }));
+      } else {
+        Notify.create({ message: 'Data registrasi tidak memenuhi', type: 'negative' });
+      }
+    };
 
     return {
       form: formData,
+      register,
       // utils
       requiredRule,
     };
   },
   methods: {
-    async onSubmit() {
+    onSubmit() {
       Loading.show();
-      if (isValidMemberRegisterRequire(this.form)) {
-        try {
-          const { user } = await auth
-            .createUserWithEmailAndPassword(this.form.kaprodi.email, defaultPassword);
-
-          if (user) {
-            await services.registerMember(user, this.form);
-          } else throw new Error('Unauthenticated');
-        } catch (err) {
-          Notify.create({ message: getErrMsg(err), type: 'negative' });
-        }
-      } else {
-        Notify.create({ message: 'Data registrasi tidak memenuhi', type: 'negative' });
-      }
-      Loading.hide();
+      this.$store.commit('auth/setIsWaiting', true);
+      Promise.resolve(this.register())
+        .finally(() => Loading.hide());
     },
   },
 });
