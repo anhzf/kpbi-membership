@@ -136,6 +136,12 @@ const authNavItems: INavItem[] = [
     exact: true,
   },
   {
+    title: 'Administrasi',
+    icon: 'admin_panel_settings',
+    to: { name: 'Administration' },
+    exact: true,
+  },
+  {
     title: 'Pengaturan Akun',
     icon: 'settings',
     to: { name: 'AccountSettings' },

@@ -82,3 +82,13 @@ export const isValidMemberRegisterRequire = (data: any): data is MemberRegisterR
   && typeof data.perguruanTinggi?.singkatan === 'string'
   && typeof data.kaprodi?.email === 'string'
 );
+
+export type RequestVerificationStatus = 'accept' | 'decline' | 'pending';
+
+export interface RequestVerification<T = unknown> {
+  user: fb.firestore.DocumentReference<T>
+  documentPath: string;
+  masaBerlaku: fb.firestore.Timestamp;
+  status: RequestVerificationStatus;
+  message?: string;
+}

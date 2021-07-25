@@ -40,6 +40,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/AccountSettings.vue'),
         meta: { guard: 'auth' },
       },
+      {
+        path: 'admin',
+        name: 'Administration',
+        component: () => import('pages/Administration/Index.vue'),
+        meta: { guard: 'auth' },
+      },
     ],
   },
 
