@@ -8,7 +8,8 @@ import type { Model } from 'app/common/schema';
 
 type MaybeReactiveDocRef<T> = DocRef.base<T> | ComputedRef<DocRef.base<T>>;
 
-type MaybeReactiveCollectionRef<T> = CollectionRef.base<T> | ComputedRef<CollectionRef.base<T>>;
+type MaybeReactiveCollectionRef<T> = CollectionRef.base<T> | ComputedRef<CollectionRef.base<T>>
+  | ComputedRef<fb.firestore.Query<Model<T>>> | fb.firestore.Query<Model<T>>;
 
 const reactivyDocRef = <T>(docRef: MaybeReactiveDocRef<T>) => computed(
   () => (isRef(docRef) ? docRef.value : docRef),
@@ -27,7 +28,6 @@ export const useDoc = <T>(docRef: MaybeReactiveDocRef<T>) => {
   });
   const update = () => {
     state.isLoading = true;
-
     reactiveDocRef.value.get()
       .then((doc) => {
         state.data = (doc.data() ?? null) as typeof state.data;

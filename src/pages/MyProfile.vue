@@ -17,7 +17,7 @@
         icon="keyboard_arrow_up"
         color="primary"
         direction="up"
-        @before-hide="showFab = true"
+        @before-hide="showFab = editMode"
       >
         <template v-if="editMode">
           <q-fab-action
@@ -26,7 +26,7 @@
             color="negative"
             external-label
             label-position="left"
-            @click="editMode = false"
+            @click="onCancelChanges"
           />
           <q-fab-action
             label="Simpan perubahan"
@@ -34,7 +34,7 @@
             color="positive"
             external-label
             label-position="left"
-            @click="editMode = false"
+            @click="onSaveChanges"
           />
         </template>
 
@@ -53,11 +53,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
-import { uid } from 'quasar';
+import {
+  defineComponent, ref, computed, watch,
+} from 'vue';
+import { Loading, Notify } from 'quasar';
 import CardProfile from 'src/components/CardProfile.vue';
-import fbs from 'src/firebaseService';
-import type { Member, Model, ModelInObject } from 'app/common/schema';
+import { collections, factories, memberMergeDefaults } from 'src/firestoreServices';
+import { useStore } from 'src/store';
+import { useDoc } from 'src/use/firestore';
+import { getErrMsg } from 'src/helpers';
 
 export default defineComponent({
   name: 'PageMyProfile',
@@ -65,57 +69,26 @@ export default defineComponent({
     CardProfile,
   },
   setup() {
-    const data = reactive({
-      _uid: uid(),
-      jenjang: 'S1',
-      namaProdi: 'Pendidikan Biologi',
-      status: 'NEGERI',
-      jurusan: '-',
-      fakultas: 'Pertanian',
-      webProdi: 'https://google.com',
-      noHpProdi: '+62851XXXXX',
-      emailProdi: 'anh.dev7@gmail.com',
-      perguruanTinggi: {
-        singkatan: 'UNS',
-        lengkap: 'Universitas Sebelas Maret',
-        alamat: {
-          alamat: 'Jl. Kahuripan Utara',
-          kota: 'Bandung',
-          provinsi: 'Jakarta',
-        },
-      },
-      kaprodi: {
-        nama: 'JokowiDodo',
-        noHp: '+62XXXXXXX',
-        email: 'gmail@yahoo.com',
-        periode: {
-          mulai: fbs.firestore.Timestamp.now(),
-          purna: fbs.firestore.Timestamp.now(),
-        },
-      },
-      akreditasi: {
-        prodi: {
-          value: 'A',
-          tanggal: fbs.firestore.Timestamp.now(),
-          internasional: '-',
-        },
-        perguruanTinggi: 'Belum Terakreditasi',
-      },
-      _created: fbs.firestore.Timestamp.now(),
-      _updated: fbs.firestore.Timestamp.now(),
-      _deleted: null,
-    } as ModelInObject<Model<Member>>);
-    //     const akreditasiProdiTanggal = computed<string>({
-    //       get() {
-    //         return data.akreditasi.prodi.tanggal.toDate().toLocaleString('id');
-    //       },
-    //       set(v: string) {
-    // // fbs.firestore.Timestamp.
-    //       }
-    //     })
+    const store = useStore();
+    const memberDocRef = computed(() => collections.Members.doc(store.state.auth.user?.uid));
+    const { data, update } = useDoc(memberDocRef);
+    const editableData = ref(memberMergeDefaults(data.value ?? {}));
+    const assignDataOri = () => {
+      editableData.value = memberMergeDefaults(data.value ?? {});
+    };
+    const commitChanges = () => memberDocRef.value
+      .update({
+        ...editableData.value,
+        ...factories.attrs.update(),
+      })
+      .then(() => update());
+
+    watch(data, () => assignDataOri(), { immediate: true });
 
     return {
-      data,
+      data: editableData,
+      assignDataOri,
+      commitChanges,
     };
   },
   data() {
@@ -123,6 +96,20 @@ export default defineComponent({
       editMode: false,
       showFab: true,
     };
+  },
+  methods: {
+    onCancelChanges() {
+      this.editMode = false;
+      this.assignDataOri();
+    },
+    onSaveChanges() {
+      this.editMode = false;
+      Loading.show();
+      this.commitChanges()
+        .then(() => Notify.create('Profil berhasil diperbarui!'))
+        .catch((err) => Notify.create({ message: getErrMsg(err), type: 'negative' }))
+        .finally(() => Loading.hide());
+    },
   },
 });
 </script>

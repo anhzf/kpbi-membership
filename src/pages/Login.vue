@@ -77,6 +77,7 @@ import { useStore } from 'src/store';
 import { auth } from 'src/firebaseService';
 import { requiredRule } from 'src/inputRules';
 import type fb from 'firebase';
+import { getErrMsg } from 'src/helpers';
 
 export default defineComponent({
   name: 'PageLogin',
@@ -96,7 +97,7 @@ export default defineComponent({
 
       auth.signInWithEmailAndPassword(state.email, state.password)
         .catch((err: fb.auth.Error) => {
-          Notify.create({ message: err.message, type: 'negative' });
+          Notify.create({ message: getErrMsg(err), type: 'negative' });
           return store.dispatch('auth/afterUnauthenticated');
         })
         .finally(() => Loading.hide());

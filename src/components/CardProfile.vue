@@ -2,7 +2,7 @@
   <q-card class="relative-position bg-white">
     <div class="overlay absolute-full">
       <q-img
-        src="/images/ICON_KPBI.png"
+        src="/images/Optimized-ICON_KPBI.png"
         fit="scale-down"
         class="overlay-img fit"
       />
@@ -252,15 +252,31 @@ export default defineComponent({
     },
   },
   emits: ['update:data'],
+  data() {
+    return {
+      copyOfData: {} as Member,
+    };
+  },
   computed: {
     computedData: {
       get(): Member {
-        return this.data;
+        return this.copyOfData;
       },
       set(v: Member) {
+        // this.copyOfData = v;
         this.$emit('update:data', v);
       },
     },
+  },
+  watch: {
+    data: {
+      handler(v: Member) {
+        this.copyOfData = v;
+      },
+      immediate: true,
+    },
+    // copyOfData(v: Member) {
+    // },
   },
 });
 </script>
