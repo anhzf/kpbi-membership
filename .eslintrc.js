@@ -91,10 +91,19 @@ module.exports = {
     quotes: ['warn', 'single', { avoidEscape: true }],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'no-useless-constructor': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-underscore-dangle': 'off',
-    'func-names': 'off'
+    'func-names': 'off',
+    'max-len': ['warn', {
+      code: 150,
+      // will ignore everything inside html attrs
+      ignorePattern: '[\\w-]+="([^"]*)"',
+      ignoreStrings: true
+    }],
   }
 }

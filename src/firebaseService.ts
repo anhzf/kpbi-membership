@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import type fb from 'firebase';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 
 const fbs = (() => {
   if (firebase.apps.length) {
@@ -18,6 +19,7 @@ const fbs = (() => {
 
 const auth = fbs.auth();
 const db = fbs.firestore();
+const storage = fbs.storage().ref();
 
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
 const isFirebaseError = (data: any): data is fb.FirebaseError => typeof data.code === 'string'
@@ -29,5 +31,6 @@ export {
   fbs as default,
   auth,
   db,
+  storage,
   isFirebaseError,
 };

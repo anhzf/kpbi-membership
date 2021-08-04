@@ -21,6 +21,7 @@
             :readonly="!editMode"
             :dense="dense"
             :type="type"
+            v-bind="inputBind"
           >
             <template
               v-if="!editMode && isLink"
@@ -89,6 +90,10 @@ export default defineComponent({
     type: {
       type: String,
       default: 'text',
+    },
+    inputBind: {
+      type: Object,
+      default: () => ({}),
     },
   },
   emits: ['update:modelValue'],
