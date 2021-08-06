@@ -1,10 +1,13 @@
 import firebase from 'firebase/app';
+import fbConfig from 'app/firebase.json';
 import type fb from 'firebase';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 
-const fbs = (() => {
+const emulatorHost = 'localhost';
+
+const init = () => {
   if (firebase.apps.length) {
     firebase.app();
   } else {
@@ -14,12 +17,53 @@ const fbs = (() => {
     );
   }
 
-  return firebase;
-})();
+  const fbs = firebase;
+  /* eslint-disable no-console */
+  // all below services is trying to use emulator if in dev mode
+  const auth = (() => {
+    const fbAuth = fbs.auth();
+    try {
+      if (process.env.DEV) {
+        const emulatorUrl = `http://${emulatorHost}:${fbConfig.emulators.auth.port}`;
+        fbAuth.useEmulator(emulatorUrl);
+      }
+    } catch (err) { console.error(err); }
 
-const auth = fbs.auth();
-const db = fbs.firestore();
-const storage = fbs.storage().ref();
+    return fbAuth;
+  })();
+  const db = (() => {
+    const firestore = fbs.firestore();
+    try {
+      if (process.env.DEV) {
+        firestore.useEmulator(emulatorHost, fbConfig.emulators.firestore.port);
+      }
+    } catch (err) { console.error(err); }
+
+    return firestore;
+  })();
+  const storage = (() => {
+    const fbStorage = fbs.storage();
+    try {
+      if (process.env.DEV) {
+        fbStorage.useEmulator(emulatorHost, fbConfig.emulators.storage.port);
+      }
+    } catch (err) { console.error(err); }
+
+    return fbStorage;
+  })();
+  /* eslint-enable no-console */
+
+  return {
+    fbs, auth, db, storage,
+  };
+};
+
+const {
+  fbs,
+  auth,
+  db,
+  storage,
+} = init();
 
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
 const isFirebaseError = (data: any): data is fb.FirebaseError => typeof data.code === 'string'

@@ -1,6 +1,7 @@
 import { Loading } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { auth } from 'src/firebaseService';
+import { promiseProxy } from 'src/helpers';
 import type { RouteLocationRaw } from 'vue-router';
 import type { StateInterface } from 'src/store';
 
@@ -10,17 +11,26 @@ export default boot<StateInterface>(({ store, router, urlPath }) => {
     : router.currentRoute.value);
   const getRouteGuardType = (isFirstLoad = false) => getCurrentRoute(isFirstLoad).meta.guard || 'default';
 
+  // set user onChange, then fires after authenticated/unauthenticated effect
   auth
     .onAuthStateChanged(
       (user) => {
         store.commit('auth/setUser', user?.toJSON());
 
-        return user
-          ? store.dispatch('auth/afterAuthenticated')
-          : store.dispatch('auth/afterUnauthenticated');
+        if (user) {
+          void promiseProxy(() => user.getIdTokenResult()
+            .then(({ claims }) => store.commit('auth/setIsAdmin', claims.admin)))();
+
+          return store.dispatch('auth/afterAuthenticated');
+        }
+
+        store.commit('auth/setIsAdmin', false);
+
+        return store.dispatch('auth/afterUnauthenticated');
       },
     );
 
+  // page redirect depending on user state
   store.watch(
     (state) => [state.auth.user, state.auth.isWaiting] as const,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -44,6 +54,7 @@ export default boot<StateInterface>(({ store, router, urlPath }) => {
     { immediate: true },
   );
 
+  // show loading when authenticating
   store.watch(
     (state) => state.auth.isWaiting,
     (isWaiting, isWaitingOld) => {

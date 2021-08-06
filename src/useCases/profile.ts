@@ -4,7 +4,7 @@ import type fb from 'firebase';
 import type { Member, Model } from 'app/common/schema';
 import type { DocRef } from 'app/common/firestore';
 
-const storageRef = storage.child('profile');
+const storageRef = storage.ref('PROFILES');
 
 export default class ProfileUseCase {
   private static pTPhotoFilename = 'Pt'

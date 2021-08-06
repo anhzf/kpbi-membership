@@ -10,6 +10,7 @@ import type {
 
 export const collections = {
   Members: db.collection(collectionNames.members) as CollectionRef.MemberModel,
+  VerificationRequest: db.collection(collectionNames.verificationRequests) as CollectionRef.VerificationRequestModel,
 };
 
 export const factories = {

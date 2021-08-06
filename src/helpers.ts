@@ -21,19 +21,26 @@ export const getErrMsg = (err: any, withCode = false) => {
 type noArgsPromiseFn<R = unknown> = () => Promise<R>;
 
 export const promiseProxy = function <R> (promiseFn: noArgsPromiseFn<R>) {
+  const onError = (err: unknown) => {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    Notify.create({ type: 'negative', message: getErrMsg(err) });
+  };
+
   return (() => {
     Loading.show();
-    const invokeResult = promiseFn()
-      .then((res) => res)
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err);
-        Notify.create({ type: 'negative', message: getErrMsg(err) });
-      })
-      .finally(() => {
-        Loading.hide();
-      });
+    try {
+      const invokeResult = promiseFn()
+        .then((res) => res)
+        .catch(onError)
+        .finally(() => {
+          Loading.hide();
+        });
 
-    return invokeResult;
+      return invokeResult;
+    } catch (err) {
+      Loading.hide();
+      return onError(err);
+    }
   }) as noArgsPromiseFn<R>;
 };

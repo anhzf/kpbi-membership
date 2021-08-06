@@ -46,9 +46,10 @@ export const useDoc = <T>(docRef: MaybeReactiveDocRef<T>) => {
 };
 
 export const useCollection = <T>(collectionRef: MaybeReactiveCollectionRef<T>) => {
+  type model = Model<T> & {_uid: string}
   const reactiveCollectionRef = reactivyCollectionRef(collectionRef);
   const state = reactive<{
-    data: Model<T>[];
+    data: model[];
     error: fb.FirebaseError | null,
     isLoading: boolean;
   }>({
@@ -61,7 +62,7 @@ export const useCollection = <T>(collectionRef: MaybeReactiveCollectionRef<T>) =
 
     reactiveCollectionRef.value.get()
       .then((snapshot) => {
-        state.data = snapshot.docs.map((el) => el.data()) as typeof state.data;
+        state.data = snapshot.docs.map((el) => ({ ...el.data(), _uid: el.id })) as typeof state.data;
       })
       .catch((err: fb.FirebaseError) => {
         state.error = err;

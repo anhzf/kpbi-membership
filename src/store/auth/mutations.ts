@@ -6,6 +6,9 @@ const mutation: MutationTree<AuthStateInterface> = {
   setUser(state, payload: AuthStateInterface['user']) {
     state.user = payload;
   },
+  setIsAdmin(state, payload: AuthStateInterface['isAdmin']) {
+    state.isAdmin = payload;
+  },
   setIsWaiting(state, payload: AuthStateInterface['isWaiting']) {
     state.isWaiting = payload;
   },
@@ -20,6 +23,7 @@ const mutation: MutationTree<AuthStateInterface> = {
 export type AuthMutationInterface = Vuex.MutationFns<{
   setUser: AuthStateInterface['user'];
   setIsWaiting: AuthStateInterface['isWaiting'];
+  setIsAdmin: AuthStateInterface['isAdmin'];
   setAfterLoginFn: AuthStateInterface['afterLoginFn'];
   setAfterLogoutFn: AuthStateInterface['afterLogoutFn'];
 }>

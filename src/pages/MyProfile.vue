@@ -127,7 +127,7 @@ export default defineComponent({
       /* TODO: add form validation */
       this.editMode = false;
       void this.commitChanges()
-        .then(() => Notify.create('Profil berhasil diperbarui!'));
+        .then(() => Notify.create({ type: 'positive', message: 'Profil berhasil diperbarui!' }));
     },
     onSelectPTImg(file: File) {
       this.uploadedPhotoTemp.PT = file;

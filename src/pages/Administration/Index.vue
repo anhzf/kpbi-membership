@@ -18,6 +18,7 @@
           label="Verifikasi keanggotaan"
         />
         <q-tab
+          v-if="$store.state.auth.isAdmin"
           name="pendingVerificationList"
           label="Permintaan Verifikasi"
         />
@@ -33,7 +34,10 @@
           <request-verification />
         </q-tab-panel>
 
-        <q-tab-panel name="pendingVerificationList">
+        <q-tab-panel
+          v-if="$store.state.auth.isAdmin"
+          name="pendingVerificationList"
+        >
           <pending-verification-list />
         </q-tab-panel>
       </q-tab-panels>
@@ -56,5 +60,6 @@ export default defineComponent({
 
     return toRefs(state);
   },
+
 });
 </script>

@@ -12,7 +12,7 @@
 
         <q-card-section>
           <q-img
-            :src="imgUrl"
+            :src="documentPreviewSrc"
             height="40vh"
           />
 
@@ -20,7 +20,7 @@
             v-model="editable.requestedMasaBerlaku"
             label="Masa keanggotaan yang diajukan"
             type="number"
-            :hint="`Berlaku sampai ${requestedMasaBerlakuDate}`"
+            :hint="`Berlaku sampai ${requestedMasaBerlakuDate.toLocaleDateString()}`"
             required
           />
 
@@ -60,7 +60,7 @@ import {
   defineComponent, reactive, computed,
 } from 'vue';
 import { useDialogPluginComponent, date } from 'quasar';
-import type { RequestVerificationStatus } from 'app/common/schema';
+import type { VerificationRequestStatus } from 'app/common/schema';
 
 export default defineComponent({
   name: 'ReviewDialog',
@@ -69,9 +69,9 @@ export default defineComponent({
       type: String,
       default: 'Review verifikasi',
     },
-    imgUrl: {
+    documentPreviewSrc: {
       type: String,
-      default: 'https://picsum.photos/300/300',
+      default: 'https://via.placeholder/300',
     },
     requestedYear: {
       type: Number,
@@ -94,11 +94,10 @@ export default defineComponent({
       message: props.message,
     });
     const requestedMasaBerlakuDate = computed(() => date
-      .addToDate(new Date(), { years: editable.requestedMasaBerlaku })
-      .toLocaleDateString());
-    const onOKClick = (status: RequestVerificationStatus) => onDialogOK({
+      .addToDate(new Date(), { years: editable.requestedMasaBerlaku }));
+    const onOKClick = (status: VerificationRequestStatus) => onDialogOK({
       message: editable.message,
-      masaBerlaku: editable.requestedMasaBerlaku,
+      masaBerlaku: requestedMasaBerlakuDate.value,
       status,
     });
 
