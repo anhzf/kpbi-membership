@@ -4,6 +4,7 @@ import type fb from 'firebase';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
+import 'firebase/functions';
 
 const emulatorHost = 'localhost';
 
@@ -51,10 +52,20 @@ const init = () => {
 
     return fbStorage;
   })();
+  const fns = (() => {
+    const fbFunctions = fbs.functions();
+    try {
+      if (process.env.DEV) {
+        fbFunctions.useEmulator(emulatorHost, fbConfig.emulators.functions.port);
+      }
+    } catch (err) { console.error(err); }
+
+    return fbFunctions;
+  })();
   /* eslint-enable no-console */
 
   return {
-    fbs, auth, db, storage,
+    fbs, auth, db, storage, fns,
   };
 };
 
@@ -63,6 +74,7 @@ const {
   auth,
   db,
   storage,
+  fns,
 } = init();
 
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
@@ -76,5 +88,6 @@ export {
   auth,
   db,
   storage,
+  fns,
   isFirebaseError,
 };
