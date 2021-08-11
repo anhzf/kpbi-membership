@@ -9,7 +9,9 @@ export namespace q {
   export type Table = QTable;
 
   export namespace Table {
-    export type ColumnDefinition<T = Record<string, unknown>> = Omit<
+    export type ColumnDefinition<
+      T = Record<string, unknown>,
+    > = Omit<
       NonNullable<QTable['columns']>[number],
       'field' | 'format' | 'sort' | 'name' | 'align'
     > & {

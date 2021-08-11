@@ -29,6 +29,7 @@
       <q-tab-panels
         v-model="tab"
         animated
+        keep-alive
       >
         <q-tab-panel name="verifyPayment">
           <request-verification />

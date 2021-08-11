@@ -39,7 +39,11 @@ export default class VerificationRequestUseCase {
   }
 
   public getDocumentPreviewUrl() {
-    const fileRef = storageRef.child(this.model.id);
+    return VerificationRequestUseCase._getDocumentPreviewUrl(this.model.id);
+  }
+
+  public static _getDocumentPreviewUrl(reqId: string) {
+    const fileRef = storageRef.child(reqId);
 
     return fileRef.getDownloadURL()
       .then((res) => res as string)
