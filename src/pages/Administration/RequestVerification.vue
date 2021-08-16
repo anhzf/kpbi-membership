@@ -57,7 +57,7 @@
       <template #body-cell-action="props">
         <q-td :props="props">
           <q-btn
-            icon="assignment"
+            icon="visibility"
             color="primary"
             round
             flat
@@ -97,7 +97,7 @@ import type fb from 'firebase';
 import type { q } from 'src/types';
 import type { Model, ModelInObject, VerificationRequest } from 'app/common/schema';
 
-type reqHistoryModel = Pick<ModelInObject<Model<VerificationRequest>>, '_uid' | '_created'>
+type reqHistoryModel = Pick<ModelInObject<Model<VerificationRequest>>, 'masaBerlaku' | '_uid' | '_created'>
 
 const reqHistoryColumnsDefinition = [
   {
@@ -114,6 +114,15 @@ const reqHistoryColumnsDefinition = [
     name: 'timestamp',
     label: 'Tanggal Ajuan',
     field: '_created',
+    format: (v: fb.firestore.Timestamp) => v.toDate().toLocaleDateString(),
+    required: true,
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'requested',
+    label: 'Masa keanggotaan yang diajukan',
+    field: 'masaBerlaku',
     format: (v: fb.firestore.Timestamp) => v.toDate().toLocaleDateString(),
     required: true,
     sortable: true,
