@@ -29,9 +29,12 @@ import { collections } from 'src/firestoreServices';
 import VerificationRequestUseCase from 'src/useCases/verificationRequest';
 import { useCollection } from 'src/use/firestore';
 import { promiseProxy } from 'src/helpers';
+import type { PropType } from 'vue';
 import type fb from 'firebase';
 import type { q } from 'src/types';
-import type { Model, ModelInObject, VerificationRequest } from 'app/common/schema';
+import type {
+  Model, ModelInObject, VerificationRequest, VerificationRequestStatus,
+} from 'app/common/schema';
 
 type WantedModel = ModelInObject<Model<VerificationRequest>> & {numb: number};
 
@@ -82,11 +85,18 @@ const pagination = {
 
 export default defineComponent({
   name: 'PendingVerificationList',
-  setup() {
-    const { data, isLoading, update } = useCollection(collections
+  props: {
+    whereStatus: {
+      type: String as PropType<VerificationRequestStatus>,
+      default: 'pending',
+    },
+  },
+  setup(props) {
+    const query = computed(() => collections
       .VerificationRequest
       .where('_deleted', '==', null)
-      .where('status', '==', 'pending'));
+      .where('status', '==', props.whereStatus));
+    const { data, isLoading, update } = useCollection(query);
     const mappedData = computed(() => data.value.map((el, numb) => ({ ...el, numb }) as WantedModel));
     const state = reactive({
       reviewing: '',
