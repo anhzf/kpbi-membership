@@ -38,12 +38,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import {
+  defineComponent, reactive, computed, toRefs,
+} from 'vue';
+import { useAsyncState } from '@vueuse/core';
 import ListTableMember from 'src/components/ListTableMember.vue';
 import { useCollection } from 'src/use/firestore';
-import { collections, memberMergeDefaults } from 'src/firestoreServices';
+import { collections, jsonDateToTimestamp, memberMergeDefaults } from 'src/firestoreServices';
 import CardProfile from 'src/components/CardProfile.vue';
-import type { Member } from 'app/common/schema';
+import type { Member, Model, ModelInObject } from 'app/common/schema';
+import type { LegacyProfile } from 'app/common/legacy';
+import ProfileUseCase from 'src/useCases/profile';
 
 export default defineComponent({
   name: 'PageIndex',
@@ -57,11 +62,28 @@ export default defineComponent({
       isDialogOpen: false,
     });
     const { data, isLoading } = useCollection(collections.Members);
+    const { state: oldData, isReady } = useAsyncState(async () => {
+      const res = await fetch('https://anggota.kpbi.or.id/api/kpbi/profiles');
+      const profiles = await res.json() as LegacyProfile[];
+
+      return profiles.map((profile) => ({
+        _uid: profile.id.toString(),
+        _updated: jsonDateToTimestamp(profile.updated_at),
+        _created: jsonDateToTimestamp(profile.created_at),
+        _deleted: null,
+        ...ProfileUseCase.legacyProfileConverter(profile),
+      }) as ModelInObject<Model<Member>>);
+    }, []);
+    const mergedData = computed<ModelInObject<Model<Member>>[]>(() => [
+      ...data.value,
+      ...oldData.value.filter((el) => data.value
+        .findIndex((newEl) => newEl.emailProdi === el.emailProdi)),
+    ]);
 
     return {
       ...toRefs(state),
-      data,
-      isLoading,
+      data: mergedData,
+      isLoading: computed(() => isLoading.value && isReady.value),
     };
   },
   methods: {

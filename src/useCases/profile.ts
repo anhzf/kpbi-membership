@@ -1,8 +1,9 @@
 import { storage } from 'src/firebaseService';
-import { factories } from 'src/firestoreServices';
+import { factories, jsonDateToTimestamp } from 'src/firestoreServices';
 import type fb from 'firebase';
 import type { Member, Model } from 'app/common/schema';
 import type { DocRef } from 'app/common/firestore';
+import type { LegacyProfile } from 'app/common/legacy';
 
 const storageRef = storage.ref('PROFILES');
 
@@ -50,6 +51,45 @@ export default class ProfileUseCase {
 
   updateKaprodiPhoto(file: File) {
     return this.updatePhoto(ProfileUseCase.kaprodiPhotoFilename, file);
+  }
+
+  static legacyProfileConverter(data: LegacyProfile) {
+    return {
+      akreditasi: {
+        perguruanTinggi: data.akreditasi_pt ?? 'Belum Terakreditasi',
+        prodi: {
+          value: data.akreditasi_prodi.akreditasi ?? 'Belum Terakreditasi',
+          tanggal: jsonDateToTimestamp(data.akreditasi_prodi.tanggal),
+          internasional: data.akreditasi_prodi.internasional ?? '',
+        },
+      },
+      emailProdi: data.email_prodi,
+      fakultas: data.fakultas ?? '',
+      jenjang: data.jenjang,
+      jurusan: data.jurusan ?? '',
+      kaprodi: {
+        email: data.kaprodi.email,
+        nama: data.kaprodi.nama ?? '',
+        noHp: data.kaprodi.no ?? '',
+        periode: {
+          mulai: jsonDateToTimestamp(data.kaprodi.periode.mulai),
+          purna: jsonDateToTimestamp(data.kaprodi.periode.purna),
+        },
+      },
+      namaProdi: data.nama_prodi,
+      noHpProdi: data.no_telp_prodi ?? '',
+      perguruanTinggi: {
+        alamat: {
+          alamat: data.alamat_kampus.alamat ?? '',
+          kota: data.alamat_kampus.kota ?? '',
+          provinsi: data.alamat_kampus.provinsi ?? '',
+        },
+        lengkap: data.pt.lengkap,
+        singkatan: data.pt.singkat,
+      },
+      status: data.status,
+      webProdi: data.web_prodi ?? '',
+    };
   }
 
   private async updatePhoto(name: string, file: File) {

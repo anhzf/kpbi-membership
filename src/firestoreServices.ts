@@ -13,6 +13,8 @@ export const collections = {
   VerificationRequest: db.collection(collectionNames.verificationRequests) as CollectionRef.VerificationRequestModel,
 };
 
+export const jsonDateToTimestamp = (input: string) => fbs.firestore.Timestamp.fromDate(new Date(input));
+
 export const factories = {
   attrs: {
     create(): ModelTimestamp {
