@@ -89,6 +89,9 @@ export default class ProfileUseCase {
       },
       status: data.status,
       webProdi: data.web_prodi ?? '',
+      _isLegacy: true,
+      _pTImgSrc: data.ptImg_src,
+      _kaprodiImgSrc: data.kaprodiImg_src,
     };
   }
 
