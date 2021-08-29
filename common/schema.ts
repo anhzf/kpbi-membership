@@ -98,7 +98,7 @@ export interface VerificationRequest<isNodeCtx = false> {
   message?: string;
 }
 
-export interface AccountConversion {
+export interface LegacyAccountConversion {
   oldUserId: number;
   newUserId: string;
 }

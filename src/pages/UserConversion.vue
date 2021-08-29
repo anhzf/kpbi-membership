@@ -5,13 +5,8 @@
   >
     <q-card class="login-card">
       <q-card-section>
-        <q-img
-          src="/images/Optimized-ICON_KPBI.png"
-          fit="scale-down"
-          class="login-card__img"
-        />
         <h6 class="text-h6 text-center">
-          Login
+          Konversi akun
         </h6>
       </q-card-section>
 
@@ -22,9 +17,8 @@
           @submit.prevent="login"
         >
           <q-input
-            v-model="email"
-            label="email"
-            type="email"
+            v-model="username"
+            label="username"
             :rules="[requiredRule]"
           />
           <q-input
@@ -41,38 +35,35 @@
               />
             </template>
           </q-input>
-
-          <router-link
-            :to="{name: 'ForgotPassword'}"
-            class="text-primary"
-          >
-            <small>Lupa password? Klik disini</small>
-          </router-link>
-
-          <router-link
-            :to="{name: 'UserConversion'}"
-            class="text-grey-6"
-          >
-            <small>Pernah mendaftar? Klik disini untuk konversi akun</small>
-          </router-link>
         </q-form>
       </q-card-section>
 
       <q-card-actions align="between">
         <q-btn
-          label="Daftar"
+          label="Masuk"
           color="blue-grey"
-          flat
-          :to="{name: 'Register'}"
+          icon="chevron_left"
+          outline
+          :to="{name: 'Login'}"
         />
         <q-btn
-          label="Masuk"
+          label="Konversi"
           type="submit"
           color="primary"
           :form="`${$.uid}__formLogin`"
         />
       </q-card-actions>
     </q-card>
+
+    <ul class="max-w-xs">
+      <li class="text-red-5 text-italic">
+        halaman ini ditujukan bagi yang sudah pernah mendaftar akun pada aplikasi yang lama
+      </li>
+      <li class="text-red-5 text-italic">
+        Dengan masuk melalui halaman ini maka akun lama anda akan dikonversikan menjadi akun yang baru,
+        sehingga apabila telah melakukan konversi silahkan login menggunakan email dan password untuk kedepannya
+      </li>
+    </ul>
   </q-page>
 </template>
 
@@ -81,16 +72,18 @@ import { defineComponent, reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { Loading, Notify } from 'quasar';
 import { useStore } from 'src/store';
-import { auth } from 'src/firebaseService';
+import { auth, fns } from 'src/firebaseService';
 import { requiredRule } from 'src/inputRules';
-import type fb from 'firebase';
 import { getErrMsg } from 'src/helpers';
+import type fb from 'firebase';
+
+const legacyLoginAndMigrate = fns.httpsCallable('convertLegacyAccountThenLogin');
 
 export default defineComponent({
-  name: 'PageLogin',
+  name: 'PageUserConversion',
   setup() {
     const state = reactive({
-      email: '',
+      username: '',
       password: '',
       hidePassword: true,
     });
@@ -102,7 +95,11 @@ export default defineComponent({
       store.commit('auth/setAfterLoginFn', () => router
         .push({ name: 'AccountSettings' }));
 
-      auth.signInWithEmailAndPassword(state.email, state.password)
+      legacyLoginAndMigrate({ name: state.username, password: state.password })
+        .then(({ data }) => {
+          Notify.create({ type: 'positive', message: 'Berhasil mengkonversi akun!' });
+          return auth.signInWithCustomToken(data);
+        })
         .catch((err: fb.auth.Error) => {
           Notify.create({ message: getErrMsg(err), type: 'negative' });
           return store.dispatch('auth/afterUnauthenticated');

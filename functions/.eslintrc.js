@@ -30,6 +30,10 @@ module.exports = {
     'max-len': ['warn', {
       code: 150,
       ignoreStrings: true
-    }]
+    }],
+    // 'no-debugger': process.env. '',
+
+    // typescript
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   },
 };

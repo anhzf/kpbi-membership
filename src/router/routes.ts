@@ -17,6 +17,12 @@ const routes: RouteRecordRaw[] = [
         meta: { guard: 'no-auth' },
       },
       {
+        path: 'konversi-user',
+        name: 'UserConversion',
+        component: () => import('src/pages/UserConversion.vue'),
+        meta: { guard: 'no-auth' },
+      },
+      {
         path: 'register',
         name: 'Register',
         component: () => import('pages/Register.vue'),
