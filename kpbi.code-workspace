@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "name": "root",
+      "path": "."
+    },
+    {
       "name": "frontend",
       "path": "web"
     },
@@ -9,4 +13,7 @@
       "path": "server"
     },
   ],
+  "settings": {
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+  },
 }
