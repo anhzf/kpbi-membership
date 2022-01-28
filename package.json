@@ -1,0 +1,22 @@
+{
+  "name": "kpbi-membership",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:server": "cd server && php artisan serve",
+    "dev:app": "cd web && quasar dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhzf/kpbi-membership.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anhzf/kpbi-membership/issues"
+  },
+  "homepage": "https://github.com/anhzf/kpbi-membership#readme"
+}

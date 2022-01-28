@@ -5,15 +5,16 @@
       "path": "."
     },
     {
-      "name": "frontend",
       "path": "web"
     },
     {
-      "name": "backend",
       "path": "server"
     },
   ],
   "settings": {
     "typescript.preferences.importModuleSpecifier": "non-relative",
+    "conventionalCommits.scopes": [
+      "server"
+    ],
   },
 }

@@ -8,10 +8,4 @@
     "**/Thumbs.db": true,
     "{server,web}/**": true
   },
-  "conventionalCommits.scopes": [
-    "ui",
-    "page",
-    "auth",
-    "common"
-  ],
 }
