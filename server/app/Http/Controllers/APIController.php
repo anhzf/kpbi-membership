@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 class APIController extends Controller
 {
-  public function send($data, string $message = '-')
+  public function send($data, string $message = null)
   {
     return response()->json([
       'success' => true,

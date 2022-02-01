@@ -8,7 +8,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+/**
+ * @property string $username
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * relationship property
+ * @property \App\Models\KpbiProfile $kpbiProfile
+ */
+class User extends Authenticatable implements MustVerifyEmail
 {
   use HasApiTokens, HasFactory, Notifiable;
 
@@ -18,6 +29,7 @@ class User extends Authenticatable
    * @var string[]
    */
   protected $fillable = [
+    'username',
     'name',
     'email',
     'password',
@@ -41,4 +53,9 @@ class User extends Authenticatable
   protected $casts = [
     'email_verified_at' => 'datetime',
   ];
+
+  public function kpbiProfile()
+  {
+    return $this->hasOne(KpbiProfile::class);
+  }
 }

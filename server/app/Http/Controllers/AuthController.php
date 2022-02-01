@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends APIController
 {
+  public function whoami()
+  {
+    return $this->send(Auth::user());
+  }
+
   public function login(Request $request)
   {
     $credential = $request->validate([
@@ -27,8 +33,9 @@ class AuthController extends APIController
     return $this->sendError('INVALID_CREDENTIALS', 401);
   }
 
-  public function whoami()
+  public function verifyVerification(EmailVerificationRequest $request)
   {
-    return $this->send(Auth::user());
+    $request->fulfill();
+    return $this->send(null, __('Verifikasi berhasil!'));
   }
 }

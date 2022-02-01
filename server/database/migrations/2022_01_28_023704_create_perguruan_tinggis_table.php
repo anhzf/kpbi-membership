@@ -17,10 +17,10 @@ class CreatePerguruanTinggisTable extends Migration
       $table->id();
       $table->string('nama_singkat');
       $table->string('nama_lengkap');
-      $table->enum('status', ['NEGERI', 'SWASTA']);
-      $table->string('kota');
-      $table->string('provinsi');
-      $table->string('alamat');
+      $table->enum('status', ['NEGERI', 'SWASTA'])->nullable();
+      $table->string('kota')->nullable();
+      $table->string('provinsi')->nullable();
+      $table->string('alamat')->nullable();
       $table->foreignId('profile_id')
         ->constrained('kpbi_profiles')
         ->cascadeOnDelete();

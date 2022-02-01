@@ -21,11 +21,11 @@ class CreateKpbiProfilesTable extends Migration
       $table->enum('jenjang', ['S1', 'S2', 'S3']);
       $table->string('nama_prodi');
       $table->string('nama_jurusan')->nullable();
-      $table->string('nama_fakultas');
+      $table->string('nama_fakultas')->default('Fakultas Keguruan dan Ilmu Pendidikan');
       $table->string('nama_perguruan_tinggi'); // computed
-      $table->string('link');
+      $table->string('link')->nullable();
       $table->string('email_kantor_prodi');
-      $table->string('notelp_kantor_prodi');
+      $table->string('notelp_kantor_prodi')->nullable();
       $table->timestamps();
     });
   }

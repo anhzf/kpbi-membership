@@ -19,11 +19,12 @@ class KpbiProfileSeeder extends Seeder
    */
   public function run()
   {
-    KpbiProfile::factory()
-      ->has(PerguruanTinggi::factory()->has(AkreditasiPerguruanTinggi::factory()))
-      ->has(Kaprodi::factory())
-      ->has(AkreditasiProdi::factory())
-      ->for(User::factory())
+    User::factory(10)
+      ->has(KpbiProfile::factory()
+        ->has(PerguruanTinggi::factory()
+          ->has(AkreditasiPerguruanTinggi::factory(), 'akreditasi'))
+        ->has(Kaprodi::factory())
+        ->has(AkreditasiProdi::factory()))
       ->create();
   }
 }

@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Models\KpbiProfile;
-use Illuminate\Http\Request;
+use App\Http\Controllers\KpbiProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,20 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (Request $request) {
-  /** @var KpbiProfile */
-  $profile = KpbiProfile::with([
-    'user',
-    'perguruanTinggi',
-    'kaprodi',
-    'akreditasiProdi',
-  ])->find(5);
+Route::get('/', fn () => response()->json('Welcome to Kpbi API!'));
 
-  return response()->json($profile);
+Route::prefix('/auth')->group(function () {
+  Route::post('/login', [AuthController::class, 'login']);
+  Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyVerification'])
+    ->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
 });
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::apiResource('/kpbi-profile', KpbiProfileController::class);
 
-Route::middleware('auth:sanctum')->group(function () {
-  Route::get('/user', [AuthController::class, 'whoami']);
+Route::middleware(['auth:sanctum'])->group(function () {
+  Route::prefix('/iam')->group(function () {
+    Route::get('/', [AuthController::class, 'whoami']);
+    Route::get('/kpbi-profile', [KpbiProfileController::class, 'showIam']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+  });
 });

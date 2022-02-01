@@ -15,11 +15,11 @@ class CreateKaprodisTable extends Migration
   {
     Schema::create('kaprodis', function (Blueprint $table) {
       $table->id();
-      $table->string('nama');
-      $table->date('periode_mulai');
-      $table->date('periode_purna');
+      $table->string('nama')->nullable();
+      $table->date('periode_mulai')->nullable();
+      $table->date('periode_purna')->nullable();
       $table->string('email');
-      $table->string('notelp');
+      $table->string('notelp')->nullable();
       $table->foreignId('profile_id')
         ->constrained('kpbi_profiles')
         ->cascadeOnDelete();
