@@ -166,11 +166,12 @@
                 class="opacity-0 absolute-full cursor-pointer fit"
                 @change="onPTImgUploaderChange"
               >
+
               <q-btn
                 icon="upload"
                 round
                 color="secondary"
-                @click="() => pTImgUploader?.click()"
+                @click="pTImgUploader?.click"
               />
             </div>
           </q-img>
@@ -269,11 +270,12 @@
                 class="opacity-0 absolute-full cursor-pointer fit"
                 @change="onKaprodiImgUploaderChange"
               >
+
               <q-btn
                 icon="upload"
                 round
                 color="secondary"
-                @click="() => kaprodiImgUploader?.click()"
+                @click="kaprodiImgUploader?.click"
               />
             </div>
           </q-img>
@@ -291,7 +293,7 @@ import { urlRule } from 'src/utils/inputRules';
 import { JENJANG_PRODI } from 'src/constants';
 import * as mocks from 'src/mocks';
 import type { MemberDetailed } from 'src/types/models';
-import CardProfileItem from './CardProfileItem.vue';
+import CardProfileItem from 'components/CardProfileItem.vue';
 
 withDefaults(defineProps<{
   id: string,

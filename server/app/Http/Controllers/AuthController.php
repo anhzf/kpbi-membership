@@ -21,13 +21,8 @@ class AuthController extends APIController
     ]);
 
     if (Auth::attempt($credential)) {
-      /** @var \App\Models\User */
-      $user = Auth::user();
-      $token = $user->createToken('authToken')->plainTextToken;
-      return $this->send([
-        'user' => $user,
-        'token' => $token,
-      ]);
+      $request->session()->regenerate();
+      return $this->send(['cred' => $request->user()]);
     }
 
     return $this->sendError('INVALID_CREDENTIALS', 401);
@@ -37,5 +32,11 @@ class AuthController extends APIController
   {
     $request->fulfill();
     return $this->send(null, __('Verifikasi berhasil!'));
+  }
+
+  public function logout(Request $request)
+  {
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
   }
 }

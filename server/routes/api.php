@@ -28,7 +28,7 @@ Route::apiResource('/kpbi-profile', KpbiProfileController::class);
 Route::middleware(['auth:sanctum'])->group(function () {
   Route::prefix('/iam')->group(function () {
     Route::get('/', [AuthController::class, 'whoami']);
+    Route::delete('/', [AuthController::class, 'logout']);
     Route::get('/kpbi-profile', [KpbiProfileController::class, 'showIam']);
-    Route::post('/logout', [AuthController::class, 'logout']);
   });
 });

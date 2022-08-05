@@ -87,9 +87,8 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import SideNavbarItem from 'components/SideNavbarItem.vue';
-import { UserPubSub } from 'src/pubsub/User';
-import { usePubSub } from 'src/uses/usePubSub';
 import type { RouteLocationRaw } from 'vue-router';
+import { useAuthStore } from 'src/stores/auth';
 
 interface INavItem {
   title: string;
@@ -97,6 +96,8 @@ interface INavItem {
   icon?: string;
   [key: string]: unknown;
 }
+
+const auth = useAuthStore();
 
 const publicNavItems: INavItem[] = [
   {
@@ -138,19 +139,11 @@ const authNavItems: INavItem[] = [
   {
     title: 'Logout',
     icon: 'logout',
-    onClick: () => {
-      // Loading.show();
-      // auth.signOut()
-      //   .catch((err) => Notify
-      //     .create({ message: getErrMsg(err, true), type: 'positive' }))
-      //   .finally(() => Loading.hide());
-    },
+    onClick: () => auth.logout(),
   },
 ];
-
-const user = usePubSub(UserPubSub);
 const leftDrawerOpen = ref(false);
-const authorizedNavItems = computed(() => (user.value.state === 'Authenticated'
+const authorizedNavItems = computed(() => (auth.isAuthenticated
   ? authNavItems : guestNavItems));
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;

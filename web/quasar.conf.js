@@ -17,7 +17,7 @@ module.exports = configure((ctx) => ({
   supportTS: {
     tsCheckerConfig: {
       eslint: {
-        enabled: true,
+        enabled: ctx.prod,
         files: './src/**/*.{ts,tsx,js,jsx,vue}',
       },
     },
@@ -31,6 +31,7 @@ module.exports = configure((ctx) => ({
   // https://quasar.dev/quasar-cli/boot-files
   boot: [
     'axios',
+    'auth',
   ],
 
   // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -56,6 +57,7 @@ module.exports = configure((ctx) => ({
   build: {
     vueRouterMode: 'history', // available values: 'hash', 'history'
 
+    env: require('dotenv').config().parsed,
     // transpile: false,
     // publicPath: '/',
 
@@ -107,7 +109,7 @@ module.exports = configure((ctx) => ({
 
     // Quasar plugins
     plugins: [
-      'Loading', 'Notify', 'Dialog',
+      'Loading', 'LoadingBar', 'Notify', 'Dialog',
     ],
   },
 

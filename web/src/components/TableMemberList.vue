@@ -5,24 +5,6 @@
     row-key="action"
     :pagination="pagination"
   >
-    <template #header-cell-numb="props">
-      <q-th
-        :props="props"
-        auto-width
-      >
-        {{ props.col.label }}
-      </q-th>
-    </template>
-
-    <template #header-cell-jenjang="props">
-      <q-th
-        :props="props"
-        auto-width
-      >
-        {{ props.col.label }}
-      </q-th>
-    </template>
-
     <template #body-cell-numb="props">
       <q-th
         :props="props"
@@ -80,6 +62,7 @@ const columnDefinitions = [
     field: (row) => row.id,
     sortable: false,
     classes: 'text-blue-grey-13',
+    headerClasses: 'q-table--col-auto-width',
   },
   {
     label: 'JENJANG',
@@ -88,6 +71,7 @@ const columnDefinitions = [
     align: 'left',
     field: (row) => row.jenjang,
     sortable: true,
+    headerClasses: 'q-table--col-auto-width',
   },
   {
     label: 'PRODI',

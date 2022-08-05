@@ -9,6 +9,10 @@ export interface BaseModel {
 
 export type AkreditasiStatus = typeof AKREDITASI_STATUS[number];
 
+export type JenjangProdi = typeof JENJANG_PRODI[number];
+
+export type PTStatus = typeof PT_STATUS[number];
+
 export interface AkreditasiProdi {
   value: AkreditasiStatus;
   tanggal: Date;
@@ -29,6 +33,7 @@ export interface Kaprodi {
 export interface PerguruanTinggi {
   singkatan: string;
   lengkap: string;
+  status: PTStatus;
   img: string;
   alamat: {
     kota: string;
@@ -37,10 +42,6 @@ export interface PerguruanTinggi {
   };
   akreditasi: AkreditasiStatus;
 }
-
-export type JenjangProdi = typeof JENJANG_PRODI[number];
-
-export type PTStatus = typeof PT_STATUS[number];
 
 export interface Member extends BaseModel {
   jenjang: JenjangProdi;
@@ -54,7 +55,6 @@ export interface Member extends BaseModel {
 export interface MemberProfile extends Member {
   emailProdi: string;
   noHpProdi: string;
-  status: PTStatus;
   akreditasi: AkreditasiProdi;
   ptId: string;
   kaprodiId: string;

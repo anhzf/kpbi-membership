@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "name": "root",
+      "name": "$root",
       "path": "."
     },
     {
@@ -14,7 +14,9 @@
   "settings": {
     "typescript.preferences.importModuleSpecifier": "non-relative",
     "conventionalCommits.scopes": [
-      "server"
+      "server",
+      "web"
     ],
+    "typescript.tsdk": "web\\node_modules\\typescript\\lib",
   },
 }

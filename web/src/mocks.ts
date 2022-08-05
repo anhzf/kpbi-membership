@@ -12,7 +12,6 @@ export const members: MemberDetailed[] = [
     jurusan: '',
     emailProdi: 'halo@example.org',
     noHpProdi: '08123456789',
-    status: 'SWASTA',
     akreditasi: {
       value: 'A',
       tanggal: new Date('2019-01-01'),
@@ -23,6 +22,7 @@ export const members: MemberDetailed[] = [
     perguruanTinggi: {
       singkatan: 'Telkom',
       lengkap: 'PT. Telkom Indonesia',
+      status: 'SWASTA',
       alamat: {
         kota: 'Jakarta',
         provinsi: 'DKI Jakarta',

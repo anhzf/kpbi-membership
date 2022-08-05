@@ -1,7 +1,7 @@
 type Subscriber<T = unknown> = (data: T) => void;
 
 export class PubSub<T = unknown> {
-  private subscribers: Subscriber[] = [];
+  private subscribers: Subscriber<T>[] = [];
 
   constructor(
     private data: T,
@@ -14,18 +14,18 @@ export class PubSub<T = unknown> {
   }
 
   publish(data: T) {
-    this.subscribers.forEach((subscriber) => {
-      subscriber(data);
-    });
+    this.data = data;
+
+    this.subscribers.forEach((subscriber) => subscriber(data));
   }
 
-  subscribe(callback: Subscriber) {
+  subscribe(callback: Subscriber<T>) {
     this.subscribers.push(callback);
 
     return () => this.unsubscribe(callback);
   }
 
-  unsubscribe(callback: Subscriber) {
+  unsubscribe(callback: Subscriber<T>) {
     this.subscribers = this.subscribers.filter((subscriber) => subscriber !== callback);
   }
 
