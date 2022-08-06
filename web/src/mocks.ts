@@ -1,7 +1,7 @@
 import { uid } from 'quasar';
-import { MemberDetailed } from 'src/types/models';
+import { MemberDetails } from 'src/types/models';
 
-export const members: MemberDetailed[] = [
+export const members: MemberDetails[] = [
   {
     id: uid(),
     jenjang: 'S1',

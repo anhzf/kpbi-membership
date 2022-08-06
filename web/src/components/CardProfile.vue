@@ -198,7 +198,7 @@
               Status PT
             </dt>
             <dd class="text-caption">
-              {{ data.status }}
+              {{ data.perguruanTinggi.status }}
             </dd>
           </dl>
         </div>
@@ -292,7 +292,7 @@ import {
 import { urlRule } from 'src/utils/inputRules';
 import { JENJANG_PRODI } from 'src/constants';
 import * as mocks from 'src/mocks';
-import type { MemberDetailed } from 'src/types/models';
+import type { MemberDetails } from 'src/types/models';
 import CardProfileItem from 'components/CardProfileItem.vue';
 
 withDefaults(defineProps<{
@@ -302,7 +302,7 @@ withDefaults(defineProps<{
   editMode: false,
 });
 
-const data = ref<MemberDetailed>(mocks.members[0]);
+const data = ref<MemberDetails>(mocks.members[0]);
 const pTImgUploader = ref<HTMLInputElement | null>(null);
 const kaprodiImgUploader = ref<HTMLInputElement | null>(null);
 

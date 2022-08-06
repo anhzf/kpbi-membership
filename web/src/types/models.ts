@@ -60,7 +60,7 @@ export interface MemberProfile extends Member {
   kaprodiId: string;
 }
 
-export interface MemberDetailed extends MemberProfile {
+export interface MemberDetails extends MemberProfile {
   perguruanTinggi: PerguruanTinggi;
   kaprodi: Kaprodi;
 }

@@ -8,42 +8,42 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'Home',
-        component: () => import('pages/Index.vue'),
+        component: () => import('pages/IndexPage.vue'),
       },
       {
         path: 'login',
         name: 'Login',
-        component: () => import('pages/Login.vue'),
+        component: () => import('pages/LoginPage.vue'),
         meta: { guard: 'no-auth' },
       },
       {
         path: 'register',
         name: 'Register',
-        component: () => import('pages/Register.vue'),
+        component: () => import('pages/RegisterPage.vue'),
         meta: { guard: 'no-auth' },
       },
       {
         path: 'forgot',
         name: 'ForgotPassword',
-        component: () => import('pages/ForgotPassword.vue'),
+        component: () => import('pages/ForgotPasswordPage.vue'),
         meta: { guard: 'no-auth' },
       },
       {
         path: 'profil-saya',
         name: 'MyProfile',
-        component: () => import('pages/MyProfile.vue'),
+        component: () => import('pages/MyProfilePage.vue'),
         meta: { guard: 'auth' },
       },
       {
         path: 'settings',
         name: 'AccountSettings',
-        component: () => import('pages/AccountSettings.vue'),
+        component: () => import('pages/AccountSettingsPage.vue'),
         meta: { guard: 'auth' },
       },
       {
         path: 'admin',
         name: 'Administration',
-        component: () => import('pages/Administration/Index.vue'),
+        component: () => import('pages/Administration/AdministrationPage.vue'),
       },
     ],
   },
@@ -52,7 +52,7 @@ const routes: RouteRecordRaw[] = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue'),
+    component: () => import('pages/Error404Page.vue'),
   },
 ];
 

@@ -10,7 +10,7 @@
         :props="props"
         auto-width
       >
-        {{ props.rowIndex }}
+        {{ props.rowIndex + 1 }}
       </q-th>
     </template>
 
