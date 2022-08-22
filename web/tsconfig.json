@@ -1,15 +1,6 @@
 {
-  "extends": "@quasar/app-webpack/tsconfig-preset",
+  "extends": "@quasar/app-vite/tsconfig-preset",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "components/*": ["src/components/*"],
-      "layouts/*": ["src/layouts/*"],
-      "pages/*": ["src/pages/*"],
-      "assets/*": ["src/assets/*"],
-      "boot/*": ["src/boot/*"],
-      "src/*": ["src/*"],
-      "app/*": ["*"]
-    },
-  },
+    "baseUrl": "."
+  }
 }

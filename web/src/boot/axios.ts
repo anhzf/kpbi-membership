@@ -4,7 +4,6 @@ import axios, { AxiosInstance } from 'axios';
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
-    $api: AxiosInstance;
   }
 }
 
@@ -15,13 +14,16 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: '/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
   withCredentials: true,
 });
 
-export default boot(({ app }) => {
-  void api.get('/sanctum/csrf-cookie');
+void api.get('/sanctum/csrf-cookie');
 
+export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios;

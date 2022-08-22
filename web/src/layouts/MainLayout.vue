@@ -12,8 +12,10 @@
         />
 
         <q-toolbar-title>
-          KPBI
+          Quasar App
         </q-toolbar-title>
+
+        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -21,60 +23,19 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-grey-1"
     >
-      <q-bar
-        dense
-        class="bg-primary"
-      />
-
       <q-list>
-        <q-item class="q-pt-lg q-pb-md">
-          <q-item-section avatar>
-            <q-img src="/images/Optimized-ICON_KPBI__no-text.png" />
-          </q-item-section>
+        <q-item-label
+          header
+        >
+          Essential Links
+        </q-item-label>
 
-          <q-item-section class="text-weight-medium">
-            KPBI
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced />
-
-        <template v-if="false">
-          <q-item
-            v-for="i in 3"
-            :key="i"
-          >
-            <q-item-section>
-              <q-skeleton type="rect" />
-            </q-item-section>
-          </q-item>
-
-          <q-separator spaced />
-
-          <q-item>
-            <q-item-section>
-              <q-skeleton type="rect" />
-            </q-item-section>
-          </q-item>
-        </template>
-
-        <template v-else>
-          <SideNavbarItem
-            v-for="navItem in authorizedNavItems"
-            :key="navItem.title"
-            v-bind="navItem"
-          />
-
-          <q-separator spaced />
-
-          <SideNavbarItem
-            v-for="navItem in publicNavItems"
-            :key="navItem.title"
-            v-bind="navItem"
-          />
-        </template>
+        <EssentialLink
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-bind="link"
+        />
       </q-list>
     </q-drawer>
 
@@ -84,68 +45,58 @@
   </q-layout>
 </template>
 
-<script lang="ts" setup>
-import { ref, computed } from 'vue';
-import SideNavbarItem from 'components/SideNavbarItem.vue';
-import type { RouteLocationRaw } from 'vue-router';
-import { useAuthStore } from 'src/stores/auth';
+<script setup lang="ts">
+import { ref } from 'vue';
+import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 
-interface INavItem {
-  title: string;
-  to?: RouteLocationRaw;
-  icon?: string;
-  [key: string]: unknown;
+const essentialLinks: EssentialLinkProps[] = [
+  {
+    title: 'Docs',
+    caption: 'quasar.dev',
+    icon: 'school',
+    link: 'https://quasar.dev'
+  },
+  {
+    title: 'Github',
+    caption: 'github.com/quasarframework',
+    icon: 'code',
+    link: 'https://github.com/quasarframework'
+  },
+  {
+    title: 'Discord Chat Channel',
+    caption: 'chat.quasar.dev',
+    icon: 'chat',
+    link: 'https://chat.quasar.dev'
+  },
+  {
+    title: 'Forum',
+    caption: 'forum.quasar.dev',
+    icon: 'record_voice_over',
+    link: 'https://forum.quasar.dev'
+  },
+  {
+    title: 'Twitter',
+    caption: '@quasarframework',
+    icon: 'rss_feed',
+    link: 'https://twitter.quasar.dev'
+  },
+  {
+    title: 'Facebook',
+    caption: '@QuasarFramework',
+    icon: 'public',
+    link: 'https://facebook.quasar.dev'
+  },
+  {
+    title: 'Quasar Awesome',
+    caption: 'Community Quasar projects',
+    icon: 'favorite',
+    link: 'https://awesome.quasar.dev'
+  }
+];
+
+const leftDrawerOpen = ref(false)
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
-
-const auth = useAuthStore();
-
-const publicNavItems: INavItem[] = [
-  {
-    title: 'Daftar Anggota',
-    icon: 'group',
-    to: { name: 'Home' },
-    exact: true,
-  },
-];
-
-const guestNavItems: INavItem[] = [
-  {
-    title: 'Login',
-    icon: 'login',
-    to: { name: 'Login' },
-    exact: true,
-  },
-];
-
-const authNavItems: INavItem[] = [
-  {
-    title: 'Profil Saya',
-    icon: 'perm_identity',
-    to: { name: 'MyProfile' },
-    exact: true,
-  },
-  {
-    title: 'Administrasi',
-    icon: 'admin_panel_settings',
-    to: { name: 'Administration' },
-    exact: true,
-  },
-  {
-    title: 'Pengaturan Akun',
-    icon: 'settings',
-    to: { name: 'AccountSettings' },
-    exact: true,
-  },
-  {
-    title: 'Logout',
-    icon: 'logout',
-    onClick: () => auth.logout(),
-  },
-];
-const leftDrawerOpen = ref(false);
-const authorizedNavItems = computed(() => (auth.isAuthenticated
-  ? authNavItems : guestNavItems));
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-};
 </script>

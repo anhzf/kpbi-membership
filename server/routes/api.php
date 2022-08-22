@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\KpbiProfileController;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,20 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => response()->json('Welcome to Kpbi API!'));
+Route::get('/', fn () => response()->json(User::all()));
 
-Route::prefix('/auth')->group(function () {
-  Route::post('/login', [AuthController::class, 'login']);
-  Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyVerification'])
-    ->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
-});
+Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
-Route::apiResource('/kpbi-profile', KpbiProfileController::class);
-
-Route::middleware(['auth:sanctum'])->group(function () {
-  Route::prefix('/iam')->group(function () {
-    Route::get('/', [AuthController::class, 'whoami']);
-    Route::delete('/', [AuthController::class, 'logout']);
-    Route::get('/kpbi-profile', [KpbiProfileController::class, 'showIam']);
-  });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });

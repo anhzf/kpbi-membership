@@ -12,11 +12,10 @@
     },
   ],
   "settings": {
-    "typescript.preferences.importModuleSpecifier": "non-relative",
     "conventionalCommits.scopes": [
       "server",
       "web"
     ],
-    "typescript.tsdk": "web\\node_modules\\typescript\\lib",
+    "unocss.root": "web"
   },
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-  return view('welcome');
-});
+Route::view('/', 'welcome');
+
+// Route::get('/{any}', function () {
+//     return File::get(public_path('app/index.html'));
+// })
+//     ->where('any', '.*');
