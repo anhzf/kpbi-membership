@@ -5,10 +5,10 @@
       "path": "."
     },
     {
-      "path": "web"
+      "path": "./web"
     },
     {
-      "path": "server"
+      "path": "./server"
     },
   ],
   "settings": {

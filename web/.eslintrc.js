@@ -83,6 +83,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
+    'no-restricted-exports': 'off',
 
     'prefer-promise-reject-errors': 'off',
 
@@ -99,6 +100,8 @@ module.exports = {
     'no-unused-vars': 'off',
 
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+
+    'no-underscore-dangle': 'off',
   }
 }

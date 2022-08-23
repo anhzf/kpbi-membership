@@ -14,14 +14,14 @@
 const { configure } = require('quasar/wrappers');
 
 module.exports = configure((/* ctx */) => ({
-  eslint: {
+  eslint: ({
     fix: true,
     // include = [],
     // exclude = [],
     // rawOptions = {},
     warnings: true,
     errors: true,
-  },
+  }, undefined),
 
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
   // preFetch: true,
@@ -31,6 +31,7 @@ module.exports = configure((/* ctx */) => ({
   // https://v2.quasar.dev/quasar-cli-vite/boot-files
   boot: [
     'axios',
+    'auth',
   ],
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

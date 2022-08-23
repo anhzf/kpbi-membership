@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ Route::get('/', fn () => response()->json(User::all()));
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('/auth')->group(function () {
+    Route::get('/', [AuthController::class, 'index'])->middleware('auth:sanctum');
+    Route::post('/', [AuthController::class, 'store']);
+    Route::delete('/', [AuthController::class, 'destroy']);
 });
