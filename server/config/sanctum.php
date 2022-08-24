@@ -15,11 +15,20 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-        '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-        Sanctum::currentApplicationUrlWithPort()
-    ))),
+    'stateful' => [
+        // call_user_func(function () {
+        //     if (!env('FRONTEND_URL')) return '';
+
+        //     $parsed = (object) parse_url(env('FRONTEND_URL'));
+        //     $fullUrl = "{$parsed->scheme}://{$parsed->host}";
+        //     return $parsed->port ? "{$fullUrl}:{$parsed->port}" : $fullUrl;
+        // }),
+        ...explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
+            '%s%s',
+            'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
+            Sanctum::currentApplicationUrlWithPort()
+        )))
+    ],
 
     /*
     |--------------------------------------------------------------------------
