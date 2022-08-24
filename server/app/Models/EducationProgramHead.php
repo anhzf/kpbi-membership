@@ -6,11 +6,31 @@ use App\Models\Enums\EducationProgramHeadStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $program_id
+ * @property \App\Models\Enums\EducationProgramHeadStatus $status
+ * @property \Illuminate\Support\Carbon $period_start
+ * @property \Illuminate\Support\Carbon $period_end
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * Relationships
+ * @property User $user
+ * @property EducationProgram $program
+ */
 class EducationProgramHead extends Model
 {
     use HasFactory;
 
     const DEFAULT_STATUS = EducationProgramHeadStatus::INACTIVE;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     public function user()
     {
@@ -19,6 +39,6 @@ class EducationProgramHead extends Model
 
     public function program()
     {
-        return $this->belongsTo(EducationProgram::class);
+        return $this->belongsTo(EducationProgram::class, 'program_id');
     }
 }

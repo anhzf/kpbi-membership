@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('short_name');
             $table->enum('type', CollegeType::toArray());
-            $table->json('address');
+            $table->string('city')->nullable();
+            $table->string('province')->nullable();
+            $table->string('street_address')->nullable();
             $table->timestamps();
         });
     }

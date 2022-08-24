@@ -22,8 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('program_id');
             $table->foreign('program_id')->references('id')->on('education_programs')->onDelete('cascade');
             $table->enum('status', EducationProgramHeadStatus::toArray())->default(EducationProgramHead::DEFAULT_STATUS->value);
-            $table->date('period_start');
-            $table->date('period_end');
+            $table->date('period_start')->nullable();
+            $table->date('period_end')->nullable();
             $table->timestamps();
         });
     }

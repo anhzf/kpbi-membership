@@ -8,6 +8,6 @@ enum CollegeType: string
 {
     use ArrayableEnum;
 
-    case Private = 'private';
-    case State = 'state';
+    case PRIVATE = 'private';
+    case STATE = 'state';
 }

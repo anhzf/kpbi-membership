@@ -8,7 +8,7 @@ enum AcademicDegree: string
 {
     use ArrayableEnum;
 
-    case Bachelor = 'bachelor';
-    case Master = 'master';
-    case Doctor = 'doctor';
+    case BACHELOR = 'bachelor';
+    case MASTER = 'master';
+    case DOCTOR = 'doctor';
 }

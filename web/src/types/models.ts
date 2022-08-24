@@ -18,6 +18,8 @@ export interface User extends Timestamps {
   id: string;
   name: string;
   email: string;
+  phone_number?: string;
+  img?: string;
 }
 
 export interface UserInList extends Pick<User, 'id' | 'name'> { }
@@ -44,17 +46,13 @@ export interface Accreditation extends Timestamps {
   valid_until?: Date;
 }
 
-export interface Addresses {
-  city: string;
-  province: string;
-  street_address: string;
-}
-
 export interface College extends Accreditable, Timestamps {
   short_name: string;
   type: CollegeType;
   img?: string;
-  address: Addresses;
+  city: string;
+  province: string;
+  street_address: string;
   accreditations: Relation<Accreditation, 'label' | 'value'>[];
 }
 
@@ -66,18 +64,17 @@ export interface EducationProgram extends Accreditable, Timestamps {
   faculty?: string;
   email?: string;
   phone_number?: string;
-  /** Can be a website, linkt.ree maybe? */
+  /** Can be a website, linkt.ree, whatever. */
   external_link?: string;
   // head: Relation<EducationProgramHead, 'user' | 'img'>;
   accreditations: Relation<Accreditation, 'label' | 'value'>[];
 }
 
-export interface EducationProgramHead {
+export interface EducationProgramHead extends Timestamps {
   id: string;
   user: Relation<User, 'name'>;
   program: Relation<EducationProgram, 'name'>;
   status: EducationProgramHeadStatus;
-  img?: string;
   period_start: Date;
   period_end: Date;
 }
@@ -109,9 +106,7 @@ export type MemberProfile = Membership & {
 
 export interface MemberInList {
   id: string;
-  degree: AcademicDegree;
-  education_program: Relation<EducationProgram, 'name' | 'external_link'>;
-  college: Relation<College, 'name'>;
+  education_program: Relation<EducationProgram, 'name' | 'degree' | 'external_link' | 'college'>;
 }
 
 export interface MembershipRequest extends Timestamps {

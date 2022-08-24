@@ -5,6 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $label
+ * @property string $value
+ * @property string $accreditable_type
+ * @property int $accreditable_id
+ * @property \Illuminate\Support\Carbon|null $valid_from
+ * @property \Illuminate\Support\Carbon|null $valid_until
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * Relationships
+ * @property College|EducationProgram $accreditable
+ */
 class Accreditation extends Model
 {
     use HasFactory;

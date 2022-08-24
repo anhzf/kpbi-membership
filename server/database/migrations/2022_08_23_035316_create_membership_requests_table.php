@@ -23,6 +23,10 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->date('requested_date');
             $table->enum('status', MembershipRequestStatus::toArray())->default(MembershipRequest::STATUS_DEFAULT->value);
+            $table->unsignedBigInteger('authorized_by_id')->nullable();
+            $table->foreign('authorized_by_id')->references('id')->on('users');
+            $table->date('authorized_at')->nullable();
+            $table->date('valid_until')->nullable();
             $table->timestamps();
         });
     }

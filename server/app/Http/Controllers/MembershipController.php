@@ -14,7 +14,7 @@ class MembershipController extends Controller
      */
     public function index()
     {
-        //
+        return Membership::with(['educationProgram:id,name,degree,college_id,external_link', 'educationProgram.college:id,name,short_name'])->get(['id', 'education_program_id'])->makeHidden(['education_program.college_id', 'education_program_id']);
     }
 
     /**

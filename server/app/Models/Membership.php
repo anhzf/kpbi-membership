@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
+ * @property int $education_program_id
+ * @property \Illuminate\Support\Carbon $period_end
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  * Relationships
  * @property EducationProgram $educationProgram
  */
@@ -15,7 +20,7 @@ class Membership extends Model
 
     public function educationProgram()
     {
-        $this->belongsTo(EducationProgram::class);
+        return $this->belongsTo(EducationProgram::class);
     }
 
     public function profile()

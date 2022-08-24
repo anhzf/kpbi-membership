@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('department')->nullable();
             $table->string('faculty')->nullable();
             $table->string('email')->nullable();
-            $table->string('phoneNumber')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('external_link')->nullable();
             // $table->foreign('head_id')->references('id')->on('education_program_heads')->onDelete('cascade');
             $table->timestamps();
