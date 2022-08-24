@@ -1,4 +1,4 @@
-import api from 'src/services/api';
+import { api } from 'src/services/utils';
 import { User } from 'src/types/models';
 import {
   AuthService, GetCurrentUser, Login, Logout,

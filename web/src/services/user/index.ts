@@ -1,4 +1,4 @@
-import api from 'src/services/api';
+import { api } from 'src/services/utils';
 import { Register, RegisterPayload, UserService } from './UserService';
 
 const ENDPOINT = '/users';
