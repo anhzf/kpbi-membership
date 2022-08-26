@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'register',
         name: 'Register',
-        component: () => import('pages/RegisterPage.vue'),
+        component: () => import('pages/RegisterPage'),
         meta: { guard: 'guest' },
       },
       {

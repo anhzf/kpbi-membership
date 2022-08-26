@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Controllers\MembershipController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -26,3 +25,5 @@ Route::prefix('/auth')->group(function () {
     Route::post('/', [AuthController::class, 'store']);
     Route::delete('/', [AuthController::class, 'destroy']);
 });
+
+Route::apiResource('/members', MembershipController::class);
