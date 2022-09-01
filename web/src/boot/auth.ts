@@ -6,7 +6,7 @@ import { watch } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
 
 const AUTH_FAIL_REDIRECT: RouteLocationRaw = { name: 'Login' };
-const GUEST_FAIL_REDIRECT: RouteLocationRaw = { name: 'Home' };
+const GUEST_FAIL_REDIRECT: RouteLocationRaw = { name: 'MyProfile' };
 
 const inferRoute = (guard: GuardType, store: ReturnType<typeof useAuthStore>) => {
   switch (guard) {
