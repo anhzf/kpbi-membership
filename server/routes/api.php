@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MembershipController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -16,7 +17,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-Route::get('/', fn () => response()->json('ready!'));
+Route::any('/', fn () => response()->json('ready!'));
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
@@ -24,6 +25,13 @@ Route::prefix('/auth')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->middleware('auth:sanctum');
     Route::post('/', [AuthController::class, 'store']);
     Route::delete('/', [AuthController::class, 'destroy']);
+});
+
+Route::prefix('/users')->group(function () {
+    Route::post('/forgot', [ForgotPasswordController::class, 'sendResetLink'])
+        ->name('password.email');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'updatePassword'])
+        ->name('password.reset');
 });
 
 Route::apiResource('/members', MembershipController::class);

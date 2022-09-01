@@ -1,13 +1,23 @@
-export interface RegisterPayload {
-  name: string;
+export interface SendResetPasswordRequestPayload {
   email: string;
-  password: string;
 }
 
-export interface Register {
-  (payload: RegisterPayload): Promise<void>;
+export interface SendResetPasswordRequest {
+  (payload: SendResetPasswordRequestPayload): Promise<void>;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
+
+export interface ResetPassword {
+  (payload: ResetPasswordPayload): Promise<void>;
 }
 
 export interface UserService {
-  register: Register;
+  sendResetPasswordRequest: SendResetPasswordRequest;
+  resetPassword: ResetPassword;
 }

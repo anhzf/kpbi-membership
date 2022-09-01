@@ -47,7 +47,7 @@
             :to="{ name: 'ForgotPassword' }"
             class="text-primary"
           >
-            <small>Lupa password? Klik disini</small>
+            <small>Lupa kata sandi? Klik disini</small>
           </router-link>
         </q-form>
       </q-card-section>
@@ -72,9 +72,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
-import { requiredRule } from 'src/utils/input-rules';
+import { Notify } from 'quasar';
 import { useAuthStore } from 'src/stores/auth';
+import { requiredRule } from 'src/utils/input-rules';
+import { onMounted, reactive, ref } from 'vue';
 
 const auth = useAuthStore();
 const fields = reactive({
@@ -89,4 +90,13 @@ const onSubmit = async () => {
     password: fields.password,
   });
 };
+
+onMounted(() => {
+  Notify.create({
+    message: 'Bagi anggota yang dahulu telah terdaftar dimohon untuk melakukan reset password, silakan gunakan email kaprodi yang dulu telah terdaftar. Hal ini dikarenakan terdapat perubahan pada sistem. Terima kasih!',
+    timeout: 0,
+    type: 'warning',
+    closeBtn: true,
+  });
+});
 </script>

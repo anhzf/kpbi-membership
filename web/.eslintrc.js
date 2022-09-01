@@ -69,7 +69,7 @@ module.exports = {
     'no-void': 'off',
     'no-nested-ternary': 'off',
     'max-classes-per-file': 'off',
-    'max-len': ['error', { code: 150 }],
+    'max-len': ['error', { code: 150, ignoreStrings: true }],
 
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',

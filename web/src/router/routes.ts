@@ -29,6 +29,12 @@ const routes: RouteRecordRaw[] = [
         meta: { guard: 'guest' },
       },
       {
+        path: 'reset-password',
+        name: 'ResetPassword',
+        component: () => import('pages/ResetPasswordPage.vue'),
+        meta: { guard: 'guest' },
+      },
+      {
         path: 'profil-saya',
         name: 'MyProfile',
         component: () => import('pages/MyProfilePage.vue'),

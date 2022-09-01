@@ -103,7 +103,7 @@
               label="Ulangi password"
               :type="showPassword ? 'password' : 'text'"
               outlined
-              :rules="[requiredRule, shouldSameWithPassword]"
+              :rules="[requiredRule, shouldEq('password')]"
             >
               <template #append>
                 <q-icon
@@ -173,7 +173,7 @@ import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import memberService from 'src/services/member';
 import { AcademicDegree, ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
-import { requiredRule } from 'src/utils/input-rules';
+import { requiredRule, shouldEq } from 'src/utils/input-rules';
 import {
   computed, reactive, ref, watch,
 } from 'vue';
@@ -225,6 +225,4 @@ const degreeOptions = Object.entries(ACADEMIC_DEGREES_LABELS).map(([key, value])
   label: `${value} - ${key.toUpperCase()}`,
   value: key as AcademicDegree,
 }));
-
-const shouldSameWithPassword = (v: string) => (v === fields.password) || 'Password tidak sama';
 </script>
