@@ -64,12 +64,11 @@ class MembershipController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Membership  $membership
      * @return \Illuminate\Http\Response
      */
-    public function show(Membership $membership)
+    public function show(Membership $member)
     {
-        //
+        return $member->loadFullProfile();
     }
 
     /**

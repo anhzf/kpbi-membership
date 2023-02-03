@@ -99,9 +99,11 @@ export interface Membership extends Timestamps {
 // }
 
 export type MemberProfile = Membership & {
-  education_program: Omit<EducationProgram, 'college'>;
+  education_program: Omit<EducationProgram, 'college' | 'accreditations' | 'user'> & {
+    accreditations: RelationExpanded<Accreditation>[];
+  };
   college: College;
-  responsible: Omit<EducationProgramHead, 'program'>;
+  responsible: Omit<EducationProgramHead, 'program' | 'user'> & { user: RelationExpanded<User>; };
 }
 
 export interface MemberInList {

@@ -38,7 +38,7 @@
             label="Ulangi kata sandi yang baru"
             :type="showPassword ? 'text' : 'password'"
             outlined
-            :rules="[requiredRule, shouldEq('password')]"
+            :rules="[requiredRule, shouldEq('password', formData.password)]"
           >
             <template #append>
               <q-icon

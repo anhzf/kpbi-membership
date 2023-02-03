@@ -1,6 +1,6 @@
 <template>
   <q-table
-    :columns="columnDefinitions"
+    :columns="cols"
     :rows="data"
     row-key="action"
     :pagination="pagination"
@@ -55,7 +55,7 @@ import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
 import { MemberInList } from 'src/types/models';
 import { q } from 'src/types/q';
 
-const columnDefinitions = [
+const cols = [
   {
     label: '#',
     name: 'numb',

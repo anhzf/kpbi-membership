@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,7 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * Computed
  * @property \Spatie\MediaLibrary\MediaCollections\Models\Media|null $img
  */
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 

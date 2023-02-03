@@ -30,6 +30,7 @@
     <member-list-table
       ref="refTable"
       :filter="search"
+      class="max-h-full"
     >
       <template #action="{ data }">
         <q-btn

@@ -23,13 +23,20 @@ class Membership extends Model
         return $this->belongsTo(EducationProgram::class);
     }
 
-    public function profile()
+    public function loadFullProfile()
     {
-        $program = $this->educationProgram->load(['college']);
+        $this->educationProgram
+            ->append('img')
+            ->makeHidden('media');
+        $this->educationProgram->loadMissing([
+            'college.accreditations',
+            'heads.user',
+            'accreditations'
+        ]);
+        $this->educationProgram->college
+            ->append('img')
+            ->makeHidden('media');
 
-        return (object) [
-            ...$this->toArray(),
-            'education_program' => $program,
-        ];
+        return $this;
     }
 }

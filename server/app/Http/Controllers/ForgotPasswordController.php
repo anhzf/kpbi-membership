@@ -46,6 +46,9 @@ class ForgotPasswordController extends Controller
             }
         );
 
+        /**
+         * TODO: Restructure error response
+         */
         return $status === Password::PASSWORD_RESET
             ? response()->json(['message' => __($status)])
             : response()->json(['errors' => ['email' => [__($status)]]], 400);

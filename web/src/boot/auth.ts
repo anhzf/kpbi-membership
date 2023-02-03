@@ -8,6 +8,9 @@ import { RouteLocationRaw } from 'vue-router';
 const AUTH_FAIL_REDIRECT: RouteLocationRaw = { name: 'Login' };
 const GUEST_FAIL_REDIRECT: RouteLocationRaw = { name: 'MyProfile' };
 
+/**
+ * Returns the route should to be redirected to, or true if no redirect is needed.
+ */
 const inferRoute = (guard: GuardType, store: ReturnType<typeof useAuthStore>) => {
   switch (guard) {
     case 'auth':
@@ -26,6 +29,7 @@ export default boot(({ router }) => {
 
   auth.refresh();
 
+  // Prevent user from accessing routes that are not allowed.
   router.beforeEach((to) => {
     if (auth.isReady) {
       return inferRoute(to.meta.guard || 'default', auth);
@@ -34,6 +38,7 @@ export default boot(({ router }) => {
     return true;
   });
 
+  // Redirect to the correct route.
   watch(() => [auth, auth.isReady], async () => {
     if (auth.isReady) {
       const routeShouldBe = inferRoute(router.currentRoute.value.meta.guard || 'default', auth);
@@ -44,6 +49,7 @@ export default boot(({ router }) => {
     }
   });
 
+  // Show loading screen while auth is not ready, preventing user for any interaction.
   watch(() => auth.isReady, () => {
     if (auth.isReady) Loading.hide();
     else {

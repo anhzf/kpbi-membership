@@ -42,7 +42,7 @@ class College extends Model implements HasMedia
      */
     protected $guarded = [];
 
-    public function img()
+    public function img(): Attribute
     {
         return Attribute::get(fn () => $this->getFirstMedia());
     }
