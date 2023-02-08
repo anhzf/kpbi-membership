@@ -23,6 +23,8 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property \Illuminate\Support\Carbon $updated_at
  * Computed
  * @property \Spatie\MediaLibrary\MediaCollections\Models\Media|null $img
+ * Relationships
+ * @property \Illuminate\Database\Eloquent\Collection<EducationProgramHead> $headProgramOf
  */
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {

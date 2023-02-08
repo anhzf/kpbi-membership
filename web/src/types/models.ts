@@ -1,5 +1,5 @@
 import {
-  AcademicDegree, AccreditationStatus, CollegeType, EducationProgramHeadStatus, MembershipRequestStatus,
+  AcademicDegree, AccreditationStatus, CollegeType, CourseSemesterType, EducationProgramHeadStatus, MembershipRequestStatus,
 } from 'src/types/constants';
 
 type HasId = { id: unknown };
@@ -120,4 +120,16 @@ export interface MembershipRequest extends Timestamps {
   authorized_by?: Relation<User, 'name'>;
   authorized_at?: Date;
   valid_until?: Date;
+}
+
+export interface Course extends Timestamps {
+  id: string;
+  education_program: Relation<EducationProgram, 'name'>;
+  name: string;
+  code: string;
+  credits: number;
+  description?: string;
+  info: Record<string, any>;
+  lecturer: string;
+  semester: CourseSemesterType;
 }

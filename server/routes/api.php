@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MembershipController;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,4 @@ Route::prefix('/users')->group(function () {
 });
 
 Route::apiResource('/members', MembershipController::class);
+Route::apiResource('/courses', CourseController::class);

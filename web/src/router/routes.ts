@@ -54,8 +54,18 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'member/:memberId',
-        name: 'Member',
-        component: () => import('pages/MemberProfilePage.vue'),
+        children: [
+          {
+            path: '',
+            name: 'Member',
+            component: () => import('pages/MemberProfilePage.vue'),
+          },
+          {
+            path: 'courses',
+            name: 'Courses',
+            component: () => import('pages/CoursesPage.vue'),
+          },
+        ],
       },
     ],
   },

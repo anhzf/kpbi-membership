@@ -28,3 +28,12 @@ export type MembershipRequestStatus = typeof MEMBERSHIP_REQUEST_STATUSES[number]
 export const EDUCATION_PROGRAM_HEAD_STATUS = ['active', 'inactive'] as const;
 
 export type EducationProgramHeadStatus = typeof EDUCATION_PROGRAM_HEAD_STATUS[number];
+
+export const COURSE_SEMESTER_TYPES = ['odd', 'even'] as const;
+
+export type CourseSemesterType = typeof COURSE_SEMESTER_TYPES[number];
+
+export const COURSE_SEMESTER_TYPES_LABELS = <Record<CourseSemesterType, string>>{
+  odd: 'Ganjil',
+  even: 'Genap',
+};

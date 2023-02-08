@@ -23,7 +23,8 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property \Spatie\MediaLibrary\MediaCollections\Models\Media|null $img
  * Relationships
  * @property College $college
- * @property Accreditation[] $accreditations
+ * @property \Illuminate\Database\Eloquent\Collection<Accreditation> $accreditations
+ * @property \Illuminate\Database\Eloquent\Collection<EducationProgramHead> $heads
  */
 class EducationProgram extends Model implements HasMedia
 {
@@ -52,6 +53,11 @@ class EducationProgram extends Model implements HasMedia
     public function college()
     {
         return $this->belongsTo(College::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'education_program_id');
     }
 
     public function heads()
