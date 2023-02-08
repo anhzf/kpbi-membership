@@ -36,6 +36,17 @@ const { state: courses, execute: fetchCourses, isLoading: isCoursesLoading } = u
   { immediate: false },
 );
 
+const onCourseFormReset = () => {
+  courseFormField.id = undefined;
+  courseFormField.name = '';
+  courseFormField.code = '';
+  courseFormField.credits = undefined;
+  courseFormField.semester = undefined;
+  courseFormField.info!.cpmk = '';
+  courseFormField.lecturer = '';
+  courseFormField.description = '';
+};
+
 const onCourseFormDialogClose = () => {
   courseForm.value?.reset();
 };
@@ -71,6 +82,12 @@ const onCourseFormSubmit = async () => {
   } finally {
     _ui.isAddCourseDialogLoading = false;
   }
+};
+
+const onAddCourseClick = () => {
+  courseFormField.id = undefined;
+
+  _ui.showAddCourseDialog = true;
 };
 
 const onUpdateCourseClick = (course: Course) => {
@@ -127,7 +144,7 @@ whenever(() => profile.value?.id, () => {
       <q-btn
         label="Tambah Matkul"
         icon="add"
-        @click="_ui.showAddCourseDialog = true"
+        @click="onAddCourseClick"
       />
     </div>
 
@@ -245,10 +262,20 @@ whenever(() => profile.value?.id, () => {
       <q-form
         ref="courseForm"
         :method="courseFormField.id ? 'PUT' : 'POST'"
+        @reset="onCourseFormReset"
         @submit="onCourseFormSubmit"
       >
         <q-card-section>
-          <div class="text-h6">
+          <div
+            v-if="courseFormField.id"
+            class="text-h6"
+          >
+            Perbarui Mata Kuliah MBKM
+          </div>
+          <div
+            v-else
+            class="text-h6"
+          >
             Tambah Mata Kuliah MBKM
           </div>
         </q-card-section>
@@ -269,9 +296,7 @@ whenever(() => profile.value?.id, () => {
         <q-separator />
 
         <q-slide-transition>
-          <q-card-section
-            v-show="courseFormField.semester"
-          >
+          <q-card-section v-show="courseFormField.semester">
             <q-input
               v-model="courseFormField.name"
               label="Nama Mata Kuliah"
@@ -325,10 +350,20 @@ whenever(() => profile.value?.id, () => {
           </q-card-section>
         </q-slide-transition>
 
-        <q-card-actions align="right">
+        <q-separator />
+
+        <q-card-actions>
           <q-btn
+            label="Kosongkan"
+            type="reset"
             flat
+          />
+
+          <q-space />
+
+          <q-btn
             label="Batalkan"
+            flat
             color="negative"
             @click="onCloseCourseFormDialogClick"
           />

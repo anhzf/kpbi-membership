@@ -6,12 +6,21 @@ use App\Models\Course;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\EducationProgram;
-use Illuminate\Auth\Access\Response;
+use App\Policies\CoursePolicy;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class CourseController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Course::class, CoursePolicy::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,11 +40,6 @@ class CourseController extends Controller
     public function store(StoreCourseRequest $request)
     {
         $request->validated();
-
-        if ($request->user()->cannot('create', Course::class)) {
-            abort(403, 'You are not allowed to create courses for this program.');
-        }
-
         /** @var EducationProgram */
         $program = EducationProgram::find($request->get('education_program_id'));
 
@@ -64,7 +68,6 @@ class CourseController extends Controller
     public function update(UpdateCourseRequest $request, Course $course)
     {
         $request->validated();
-
         $course->update($request->all());
     }
 
