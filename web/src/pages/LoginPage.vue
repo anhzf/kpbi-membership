@@ -1,3 +1,33 @@
+<script lang="ts" setup>
+import { Notify } from 'quasar';
+import { useAuthStore } from 'src/stores/auth';
+import { requiredRule } from 'src/utils/input-rules';
+import { onMounted, reactive, ref } from 'vue';
+
+const auth = useAuthStore();
+const fields = reactive({
+  email: '',
+  password: '',
+});
+const hidePassword = ref(true);
+
+const onSubmit = async () => {
+  await auth.login({
+    username: fields.email,
+    password: fields.password,
+  });
+};
+
+onMounted(() => {
+  Notify.create({
+    message: 'Dikarenakan terdapat pembaruan pada sistem maka, bagi anggota yang dahulu telah terdaftar dimohon untuk melakukan reset password menggunakan email kaprodi yang dahulu telah terdaftar. Terima kasih.',
+    timeout: 0,
+    type: 'warning',
+    closeBtn: true,
+  });
+});
+</script>
+
 <template>
   <q-page
     padding
@@ -70,33 +100,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script lang="ts" setup>
-import { Notify } from 'quasar';
-import { useAuthStore } from 'src/stores/auth';
-import { requiredRule } from 'src/utils/input-rules';
-import { onMounted, reactive, ref } from 'vue';
-
-const auth = useAuthStore();
-const fields = reactive({
-  email: '',
-  password: '',
-});
-const hidePassword = ref(true);
-
-const onSubmit = async () => {
-  await auth.login({
-    username: fields.email,
-    password: fields.password,
-  });
-};
-
-onMounted(() => {
-  Notify.create({
-    message: 'Bagi anggota yang dahulu telah terdaftar dimohon untuk melakukan reset password, silakan gunakan email kaprodi yang dulu telah terdaftar. Hal ini dikarenakan terdapat perubahan pada sistem. Terima kasih!',
-    timeout: 0,
-    type: 'warning',
-    closeBtn: true,
-  });
-});
-</script>

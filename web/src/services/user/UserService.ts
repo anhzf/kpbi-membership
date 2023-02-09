@@ -17,7 +17,12 @@ export interface ResetPassword {
   (payload: ResetPasswordPayload): Promise<void>;
 }
 
+export interface SendEmailVerificationRequest {
+  (): Promise<void>;
+}
+
 export interface UserService {
   sendResetPasswordRequest: SendResetPasswordRequest;
   resetPassword: ResetPassword;
+  sendEmailVerificationRequest: SendEmailVerificationRequest;
 }

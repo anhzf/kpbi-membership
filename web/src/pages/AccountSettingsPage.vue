@@ -1,3 +1,29 @@
+<script lang="ts" setup>
+import { Loading } from 'quasar';
+import userService from 'src/services/user';
+import { useAuthStore } from 'src/stores/auth';
+import { computed, onMounted } from 'vue';
+
+const auth = useAuthStore();
+const isVerified = computed(() => !!auth.user?.email_verified_at);
+
+const onSendEmailVerificationClick = async () => {
+  try {
+    Loading.show();
+    await userService.sendEmailVerificationRequest();
+  } finally {
+    Loading.hide();
+  }
+};
+const onChangePasswordClick = () => {
+  //
+};
+
+onMounted(() => {
+  auth.refresh();
+});
+</script>
+
 <template>
   <q-page
     padding
@@ -58,18 +84,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue';
-import { useAuthStore } from 'src/stores/auth';
-
-const auth = useAuthStore();
-const isVerified = ref(false);
-
-const onSendEmailVerificationClick = () => {
-  //
-};
-const onChangePasswordClick = () => {
-  //
-};
-</script>

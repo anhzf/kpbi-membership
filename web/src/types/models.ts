@@ -20,6 +20,7 @@ export interface User extends Timestamps {
   email: string;
   phone_number?: string;
   img?: string;
+  email_verified_at?: Date;
 }
 
 export interface UserInList extends Pick<User, 'id' | 'name'> { }

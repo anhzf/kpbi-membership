@@ -1,3 +1,95 @@
+<script lang="ts" setup>
+import { Loading, Notify } from 'quasar';
+import { api } from 'src/services/utils';
+import { useAuthStore } from 'src/stores/auth';
+import { getErrMsg } from 'src/utils/simpler';
+import { ref, computed, watch } from 'vue';
+import { RouterLinkProps, useRouter, useRoute } from 'vue-router';
+import SideNavItem from './SideNavItem.vue';
+
+interface INavItem extends Partial<RouterLinkProps> {
+  title: string;
+  icon?: string;
+  [key: string]: unknown;
+}
+
+const route = useRoute();
+const router = useRouter();
+const auth = useAuthStore();
+const publicNavItems: INavItem[] = [
+  {
+    title: 'Daftar Anggota',
+    icon: 'group',
+    to: { name: 'Home' },
+    exact: true,
+  },
+];
+
+const guestNavItems: INavItem[] = [
+  {
+    title: 'Login',
+    icon: 'login',
+    to: { name: 'Login' },
+    exact: true,
+  },
+];
+
+const authNavItems: INavItem[] = [
+  {
+    title: 'Profil Saya',
+    icon: 'perm_identity',
+    to: { name: 'MyProfile' },
+    exact: true,
+  },
+  {
+    title: 'Keanggotaan Saya',
+    icon: 'card_membership',
+    to: { name: 'Membership' },
+    exact: true,
+  },
+  {
+    title: 'Pengaturan Akun',
+    icon: 'settings',
+    to: { name: 'AccountSettings' },
+    exact: true,
+  },
+  {
+    title: 'Logout',
+    icon: 'logout',
+    onClick: () => auth.logout(),
+  },
+];
+const leftDrawerOpen = ref(false);
+const authorizedNavItems = computed(() => (auth.user ? authNavItems : guestNavItems));
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+};
+
+// Call callback_url if it exists
+watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, callbackUrl]) => {
+  if (isReady && typeof callbackUrl === 'string') {
+    try {
+      Loading.show();
+      const { data, statusText } = await api.post(callbackUrl);
+
+      router.replace({ query: { callback_url: undefined } });
+
+      Notify.create({
+        type: 'positive',
+        message: data.message ?? statusText,
+      });
+    } catch (err) {
+      Notify.create({
+        type: 'negative',
+        message: getErrMsg(err),
+      });
+    } finally {
+      Loading.hide();
+    }
+  }
+});
+</script>
+
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
@@ -83,66 +175,3 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script lang="ts" setup>
-import { useAuthStore } from 'src/stores/auth';
-import { ref, computed } from 'vue';
-import type { RouterLinkProps } from 'vue-router';
-import SideNavItem from './SideNavItem.vue';
-
-interface INavItem extends Partial<RouterLinkProps> {
-  title: string;
-  icon?: string;
-  [key: string]: unknown;
-}
-
-const auth = useAuthStore();
-const publicNavItems: INavItem[] = [
-  {
-    title: 'Daftar Anggota',
-    icon: 'group',
-    to: { name: 'Home' },
-    exact: true,
-  },
-];
-
-const guestNavItems: INavItem[] = [
-  {
-    title: 'Login',
-    icon: 'login',
-    to: { name: 'Login' },
-    exact: true,
-  },
-];
-
-const authNavItems: INavItem[] = [
-  {
-    title: 'Profil Saya',
-    icon: 'perm_identity',
-    to: { name: 'MyProfile' },
-    exact: true,
-  },
-  {
-    title: 'Keanggotaan Saya',
-    icon: 'card_membership',
-    to: { name: 'Membership' },
-    exact: true,
-  },
-  {
-    title: 'Pengaturan Akun',
-    icon: 'settings',
-    to: { name: 'AccountSettings' },
-    exact: true,
-  },
-  {
-    title: 'Logout',
-    icon: 'logout',
-    onClick: () => auth.logout(),
-  },
-];
-const leftDrawerOpen = ref(false);
-const authorizedNavItems = computed(() => (auth.user ? authNavItems : guestNavItems));
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-};
-</script>

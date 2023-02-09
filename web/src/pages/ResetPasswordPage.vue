@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
+import { requiredRule, shouldEq } from 'src/utils/input-rules';
+import userService from 'src/services/user';
+import { useAsyncState } from '@vueuse/core';
+import { useRouter } from 'vue-router';
+import { Notify } from 'quasar';
+
+const router = useRouter();
+const showPassword = ref(false);
+const formData = reactive({
+  password: '',
+  password_confirmation: '',
+});
+
+const { execute, isLoading } = useAsyncState<void>(async () => {
+  await userService.resetPassword({
+    email: String(router.currentRoute.value.query.email),
+    password: formData.password,
+    password_confirmation: formData.password_confirmation,
+    token: String(router.currentRoute.value.query.token),
+  });
+}, undefined, { immediate: false });
+
+const onSubmit = async () => {
+  await execute();
+  Notify.create('Silakan login dengan password yang baru :)');
+  await router.push({ name: 'Login' });
+};
+</script>
+
 <template>
   <q-page
     padding
@@ -73,34 +104,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script lang="ts" setup>
-import { reactive, ref } from 'vue';
-import { requiredRule, shouldEq } from 'src/utils/input-rules';
-import userService from 'src/services/user';
-import { useAsyncState } from '@vueuse/core';
-import { useRouter } from 'vue-router';
-import { Notify } from 'quasar';
-
-const router = useRouter();
-const showPassword = ref(false);
-const formData = reactive({
-  password: '',
-  password_confirmation: '',
-});
-
-const { execute, isLoading } = useAsyncState<void>(async () => {
-  await userService.resetPassword({
-    email: String(router.currentRoute.value.query.email),
-    password: formData.password,
-    password_confirmation: formData.password_confirmation,
-    token: String(router.currentRoute.value.query.token),
-  });
-}, undefined, { immediate: false });
-
-const onSubmit = async () => {
-  await execute();
-  Notify.create('Silakan login dengan password yang baru :)');
-  await router.push({ name: 'Login' });
-};
-</script>

@@ -5,7 +5,7 @@ import { ACADEMIC_DEGREES_LABELS, COLLEGE_TYPES_LABELS } from 'src/types/constan
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const { state: data } = useAsyncState(() => memberService.get(String(route.params.memberId)), undefined);
+const { state: data, isLoading } = useAsyncState(() => memberService.get(String(route.params.memberId)), undefined);
 </script>
 
 <!-- TODO: Refactor card section to components -->
@@ -79,25 +79,25 @@ const { state: data } = useAsyncState(() => memberService.get(String(route.param
                     :key="accreditation.id"
                   >
                     <q-item-section>
+                      <q-item-label overline>
+                        {{ accreditation.label }}
+                      </q-item-label>
                       <q-item-label>
                         <span class="text-h6 m-0">
                           {{ accreditation.value }}
                         </span>
-                      </q-item-label>
-                      <q-item-label caption>
-                        {{ [accreditation.valid_from, accreditation.valid_until]
-                          .filter(Boolean)
-                          .map(el=>el?.toLocaleDateString())
-                          .join(' – ') }}
                       </q-item-label>
                     </q-item-section>
                     <q-item-section
                       side
                       top
                     >
-                      <q-item-section caption>
-                        {{ accreditation.label }}
-                      </q-item-section>
+                      <q-item-label caption>
+                        {{ accreditation.valid_from?.toLocaleDateString() }}—
+                      </q-item-label>
+                      <q-item-label caption>
+                        {{ accreditation.valid_until?.toLocaleDateString() }}
+                      </q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -231,22 +231,25 @@ const { state: data } = useAsyncState(() => memberService.get(String(route.param
                     :key="accreditation.id"
                   >
                     <q-item-section>
+                      <q-item-label overline>
+                        {{ accreditation.label }}
+                      </q-item-label>
                       <q-item-label>
                         <span class="text-h6 m-0">
                           {{ accreditation.value }}
                         </span>
-                      </q-item-label>
-                      <q-item-label caption>
-                        {{ [accreditation.valid_from, accreditation.valid_until].filter(Boolean).join(' – ') }}
                       </q-item-label>
                     </q-item-section>
                     <q-item-section
                       side
                       top
                     >
-                      <q-item-section caption>
-                        {{ accreditation.label }}
-                      </q-item-section>
+                      <q-item-label caption>
+                        {{ accreditation.valid_from?.toLocaleDateString() }}—
+                      </q-item-label>
+                      <q-item-label caption>
+                        {{ accreditation.valid_until?.toLocaleDateString() }}
+                      </q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -282,5 +285,7 @@ const { state: data } = useAsyncState(() => memberService.get(String(route.param
         </div>
       </q-card-section>
     </q-card>
+
+    <q-inner-loading :showing="isLoading" />
   </q-page>
 </template>

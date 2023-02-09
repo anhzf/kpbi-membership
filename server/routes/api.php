@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -28,11 +29,21 @@ Route::prefix('/auth')->group(function () {
     Route::delete('/', [AuthController::class, 'destroy']);
 });
 
-Route::prefix('/users')->group(function () {
+Route::prefix('/user')->group(function () {
     Route::post('/forgot', [ForgotPasswordController::class, 'sendResetLink'])
         ->name('password.email');
     Route::post('/reset-password', [ForgotPasswordController::class, 'updatePassword'])
         ->name('password.reset');
+
+    Route::group([
+        'prefix' => 'verify',
+        'as' => 'verification.',
+    ], function () {
+        Route::post('/{id}', [VerificationController::class, 'verify'])
+            ->name('verify');
+        Route::get('/resend', [VerificationController::class, 'resend'])
+            ->name('resend');
+    });
 });
 
 Route::apiResource('/members', MembershipController::class);
