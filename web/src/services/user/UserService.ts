@@ -21,8 +21,19 @@ export interface SendEmailVerificationRequest {
   (): Promise<void>;
 }
 
+export interface ChangePasswordPayload {
+  current_password: string;
+  password: string;
+  password_confirmation: string;
+}
+
+export interface ChangePassword {
+  (payload: ChangePasswordPayload): Promise<void>;
+}
+
 export interface UserService {
   sendResetPasswordRequest: SendResetPasswordRequest;
   resetPassword: ResetPassword;
   sendEmailVerificationRequest: SendEmailVerificationRequest;
+  changePassword: ChangePassword;
 }

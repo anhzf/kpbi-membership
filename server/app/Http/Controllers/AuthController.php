@@ -73,4 +73,29 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
     }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        if (!Auth::attempt([
+            'email' => Auth::user()->email,
+            'password' => $request->current_password
+        ])) {
+            return response()->json([
+                'message' => 'Invalid Credentials'
+            ], 401);
+        }
+
+        Auth::user()->update([
+            'password' => bcrypt($request->password)
+        ]);
+
+        return response()->json([
+            'message' => 'Password Changed'
+        ]);
+    }
 }

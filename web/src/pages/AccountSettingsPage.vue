@@ -2,10 +2,19 @@
 import { Loading } from 'quasar';
 import userService from 'src/services/user';
 import { useAuthStore } from 'src/stores/auth';
-import { computed, onMounted } from 'vue';
+import { requiredRule, shouldEq } from 'src/utils/input-rules';
+import { computed, onMounted, reactive } from 'vue';
 
+const _ui = reactive({
+  showChangePasswordDialog: false,
+});
 const auth = useAuthStore();
 const isVerified = computed(() => !!auth.user?.email_verified_at);
+const changePasswordField = reactive({
+  currentPassword: '',
+  newPassword: '',
+  newPasswordConfirmation: '',
+});
 
 const onSendEmailVerificationClick = async () => {
   try {
@@ -16,7 +25,29 @@ const onSendEmailVerificationClick = async () => {
   }
 };
 const onChangePasswordClick = () => {
-  //
+  _ui.showChangePasswordDialog = true;
+};
+
+const onChangePasswordFormReset = () => {
+  changePasswordField.currentPassword = '';
+  changePasswordField.newPassword = '';
+  changePasswordField.newPasswordConfirmation = '';
+};
+
+const onChangePasswordFormSubmit = async () => {
+  try {
+    Loading.show();
+    await userService.changePassword({
+      current_password: changePasswordField.currentPassword,
+      password: changePasswordField.newPassword,
+      password_confirmation: changePasswordField.newPasswordConfirmation,
+    });
+
+    _ui.showChangePasswordDialog = false;
+  } finally {
+    Loading.hide();
+    onChangePasswordFormReset();
+  }
 };
 
 onMounted(() => {
@@ -72,9 +103,7 @@ onMounted(() => {
               <q-btn
                 label="Ubah password"
                 icon="edit"
-                dense
                 flat
-                size="sm"
                 @click="onChangePasswordClick"
               />
             </q-item-label>
@@ -83,4 +112,56 @@ onMounted(() => {
       </q-list>
     </q-card>
   </q-page>
+
+  <q-dialog v-model="_ui.showChangePasswordDialog">
+    <q-card class="w-full max-w-screen-sm">
+      <q-form
+        @submit="onChangePasswordFormSubmit"
+        @reset="onChangePasswordFormReset"
+      >
+        <q-card-section class="row items-center">
+          <q-avatar icon="lock" />
+          <div class="text-h6">
+            Ubah password
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input
+            v-model="changePasswordField.currentPassword"
+            label="Password saat ini"
+            type="password"
+            :rules="[requiredRule]"
+            autofocus
+          />
+          <q-input
+            v-model="changePasswordField.newPassword"
+            label="Password baru"
+            type="password"
+            :rules="[requiredRule]"
+          />
+          <q-input
+            v-model="changePasswordField.newPasswordConfirmation"
+            label="Konfirmasi password baru"
+            type="password"
+            :rules="[shouldEq('Password baru', changePasswordField.newPassword)]"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            label="Batal"
+            flat
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            label="Simpan"
+            type="submit"
+            color="primary"
+          />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>

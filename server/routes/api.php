@@ -34,6 +34,8 @@ Route::prefix('/user')->group(function () {
         ->name('password.email');
     Route::post('/reset-password', [ForgotPasswordController::class, 'updatePassword'])
         ->name('password.reset');
+    Route::put('/change-password', [AuthController::class, 'changePassword'])
+        ->name('password.change');
 
     Route::group([
         'prefix' => 'verify',

@@ -5,6 +5,7 @@ import { APIResponse, isAPIValidationError } from 'src/types/common';
 import { getErrMsg } from 'src/utils/simpler';
 import { handleValidationError } from '../utils';
 import {
+  ChangePassword,
   ResetPassword, SendEmailVerificationRequest, SendResetPasswordRequest, UserService,
 } from './UserService';
 
@@ -96,10 +97,37 @@ const sendEmailVerificationRequest: SendEmailVerificationRequest = async () => {
   }
 };
 
+const changePassword: ChangePassword = async (payload) => {
+  try {
+    const { data } = await api.put<APIResponse>(`${ENDPOINT}/change-password`, payload);
+
+    if (data.message) {
+      Notify.create({
+        type: 'positive',
+        message: data.message,
+      });
+    }
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const resp = err.response?.data as APIResponse;
+
+      if (isAPIValidationError(resp)) {
+        handleValidationError(resp);
+      }
+    }
+
+    Notify.create({
+      type: 'negative',
+      message: getErrMsg(err),
+    });
+  }
+};
+
 const userService: UserService = {
   sendResetPasswordRequest,
   resetPassword,
   sendEmailVerificationRequest,
+  changePassword,
 };
 
 export default userService;
