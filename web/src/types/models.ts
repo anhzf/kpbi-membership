@@ -54,7 +54,7 @@ export interface College extends Accreditable, Timestamps {
   city: string;
   province: string;
   street_address: string;
-  accreditations: Relation<Accreditation, 'label' | 'value'>[];
+  accreditations: Relation<Accreditation, 'label' | 'value' | 'valid_from' | 'valid_until'>[];
 }
 
 export interface EducationProgram extends Accreditable, Timestamps {

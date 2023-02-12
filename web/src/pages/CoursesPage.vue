@@ -2,18 +2,18 @@
 <script lang="ts" setup>
 import { useAsyncState, whenever } from '@vueuse/core';
 import { Dialog, Notify, QForm } from 'quasar';
+import CardCourse from 'src/components/CardCourse.vue';
+import FormCourse from 'src/components/FormCourse.vue';
 import useMemberProfile from 'src/composables/use-member-profile';
 import courseServices from 'src/services/course';
-import { COURSE_SEMESTER_TYPES_LABELS } from 'src/types/constants';
 import { Course } from 'src/types/models';
-import { requiredRule } from 'src/utils/input-rules';
 import { getErrMsg } from 'src/utils/simpler';
 import { reactive, ref } from 'vue';
 
 const courseForm = ref<QForm>();
 const _ui = reactive({
   showAddCourseDialog: false,
-  isAddCourseDialogLoading: false,
+  isCourseFormDialogLoading: false,
 });
 const { state: profile, isLoading: isProfileLoading } = useMemberProfile();
 
@@ -36,17 +36,6 @@ const { state: courses, execute: fetchCourses, isLoading: isCoursesLoading } = u
   { immediate: false },
 );
 
-const onCourseFormReset = () => {
-  courseFormField.id = undefined;
-  courseFormField.name = '';
-  courseFormField.code = '';
-  courseFormField.credits = undefined;
-  courseFormField.semester = undefined;
-  courseFormField.info!.cpmk = '';
-  courseFormField.lecturer = '';
-  courseFormField.description = '';
-};
-
 const onCourseFormDialogClose = () => {
   courseForm.value?.reset();
 };
@@ -57,7 +46,7 @@ const onCloseCourseFormDialogClick = () => {
 };
 
 const onCourseFormSubmit = async () => {
-  _ui.isAddCourseDialogLoading = true;
+  _ui.isCourseFormDialogLoading = true;
 
   try {
     const data = {
@@ -80,7 +69,7 @@ const onCourseFormSubmit = async () => {
       color: 'negative',
     });
   } finally {
-    _ui.isAddCourseDialogLoading = false;
+    _ui.isCourseFormDialogLoading = false;
   }
 };
 
@@ -155,90 +144,17 @@ whenever(() => profile.value?.id, () => {
           :key="course.id"
           class="col-3"
         >
-          <q-card class="h-full column">
-            <q-card-section class="q-pb-xs">
-              <div class="text-h6">
-                {{ course.name }}
-              </div>
-              <div>
-                <span class="text-caption">Kode MK: </span>
-                <span class="text-subtitle2">
-                  {{ course.code }}
-                </span>
-              </div>
-            </q-card-section>
-
-            <q-card-section>
-              <q-list>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>Jumlah SKS</q-item-label>
-                    <q-item-label caption>
-                      {{ course.credits }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>Semester</q-item-label>
-                    <q-item-label caption>
-                      {{ COURSE_SEMESTER_TYPES_LABELS[course.semester] }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>CPMK</q-item-label>
-                    <q-item-label caption>
-                      {{ course.info.cpmk }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>Dosen Pengampu</q-item-label>
-                    <q-item-label caption>
-                      {{ course.lecturer }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>Deskripsi</q-item-label>
-                    <q-item-label caption>
-                      {{ course.description }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card-section>
-
-            <q-space />
-            <q-separator />
-
-            <q-card-actions class="no-wrap">
-              <q-btn
-                label="Hapus"
-                icon="delete"
-                color="negative"
-                outline
-                class="w-full"
-                @click="onDeleteCourseClick(course)"
-              />
-              <q-btn
-                label="Perbarui"
-                icon="edit"
-                color="secondary"
-                outline
-                class="w-full"
-                @click="onUpdateCourseClick(course)"
-              />
-            </q-card-actions>
-          </q-card>
+          <card-course
+            :title="course.name"
+            :description="course.description"
+            :credits="course.credits"
+            :semester="course.semester"
+            :lecturer="course.lecturer"
+            :cpmk="course.info.cpmk"
+            :code="course.code"
+            @update-click="onUpdateCourseClick(course)"
+            @delete-click="onDeleteCourseClick(course)"
+          />
         </div>
       </template>
 
@@ -258,124 +174,34 @@ whenever(() => profile.value?.id, () => {
     v-model="_ui.showAddCourseDialog"
     persistent
   >
-    <q-card class="w-full max-w-screen-sm">
-      <q-form
-        ref="courseForm"
-        :method="courseFormField.id ? 'PUT' : 'POST'"
-        @reset="onCourseFormReset"
-        @submit="onCourseFormSubmit"
-      >
-        <q-card-section>
-          <div
-            v-if="courseFormField.id"
-            class="text-h6"
-          >
-            Perbarui Mata Kuliah MBKM
-          </div>
-          <div
-            v-else
-            class="text-h6"
-          >
-            Tambah Mata Kuliah MBKM
-          </div>
-        </q-card-section>
+    <form-course
+      :model-value="courseFormField"
+      :is-loading="_ui.isCourseFormDialogLoading"
+      @submit="onCourseFormSubmit"
+    >
+      <q-separator />
 
-        <q-card-section>
-          <q-select
-            v-model="courseFormField.semester"
-            label="Semester"
-            filled
-            :options="Object.entries(COURSE_SEMESTER_TYPES_LABELS).map(([key, value]) => ({ label: value, value: key }))"
-            emit-value
-            map-options
-            autofocus
-            :rules="[requiredRule]"
-          />
-        </q-card-section>
+      <q-card-actions>
+        <q-btn
+          label="Kosongkan"
+          type="reset"
+          flat
+        />
 
-        <q-separator />
+        <q-space />
 
-        <q-slide-transition>
-          <q-card-section v-show="courseFormField.semester">
-            <q-input
-              v-model="courseFormField.name"
-              label="Nama Mata Kuliah"
-              outlined
-              :disable="!courseFormField.semester"
-              :rules="[requiredRule]"
-            />
-
-            <q-input
-              v-model="courseFormField.code"
-              label="Kode Mata Kuliah"
-              outlined
-              :disable="!courseFormField.semester"
-              :rules="[requiredRule]"
-            />
-
-            <q-input
-              v-model="courseFormField.credits"
-              label="Beban SKS"
-              type="number"
-              outlined
-              :disable="!courseFormField.semester"
-              :rules="[requiredRule]"
-            />
-
-            <q-input
-              v-model="courseFormField.description"
-              label="Deskripsi Mata Kuliah"
-              type="textarea"
-              outlined
-              :disable="!courseFormField.semester"
-              :rules="[requiredRule]"
-            />
-
-            <q-input
-              v-model="courseFormField.info!.cpmk"
-              type="textarea"
-              label="CPMK"
-              outlined
-              :disable="!courseFormField.semester"
-              :rules="[requiredRule]"
-            />
-
-            <q-input
-              v-model="courseFormField.lecturer"
-              label="Dosen Pengampu"
-              outlined
-              :disable="!courseFormField.semester"
-              :rules="[requiredRule]"
-            />
-          </q-card-section>
-        </q-slide-transition>
-
-        <q-separator />
-
-        <q-card-actions>
-          <q-btn
-            label="Kosongkan"
-            type="reset"
-            flat
-          />
-
-          <q-space />
-
-          <q-btn
-            label="Batalkan"
-            flat
-            color="negative"
-            @click="onCloseCourseFormDialogClick"
-          />
-          <q-btn
-            label="Simpan"
-            type="submit"
-            color="primary"
-          />
-        </q-card-actions>
-
-        <q-inner-loading :showing="_ui.isAddCourseDialogLoading" />
-      </q-form>
-    </q-card>
+        <q-btn
+          label="Batalkan"
+          flat
+          color="negative"
+          @click="onCloseCourseFormDialogClick"
+        />
+        <q-btn
+          label="Simpan"
+          type="submit"
+          color="primary"
+        />
+      </q-card-actions>
+    </form-course>
   </q-dialog>
 </template>

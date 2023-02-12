@@ -72,6 +72,19 @@ class MembershipController extends Controller
     }
 
     /**
+     * Display the current authenticated resource.
+     *
+     * @todo handle many programs
+     * @return \Illuminate\Http\Response
+     */
+    public function showMy(Request $request)
+    {
+        $program = $request->user()->headProgramOf->last()->program;
+        $member = Membership::where('education_program_id', $program->id)->first();
+        return $this->show($member);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
