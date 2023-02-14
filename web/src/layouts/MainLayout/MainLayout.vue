@@ -5,6 +5,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { getErrMsg } from 'src/utils/simpler';
 import { ref, computed, watch } from 'vue';
 import { RouterLinkProps, useRouter, useRoute } from 'vue-router';
+import { AxiosError } from 'axios';
 import SideNavItem from './SideNavItem.vue';
 
 interface INavItem extends Partial<RouterLinkProps> {
@@ -65,7 +66,7 @@ const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 
-// Call callback_url if it exists
+// Call callback_url if it exists then remove it from query. If the callback needs auth, redirect to login.
 watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, callbackUrl]) => {
   if (isReady && typeof callbackUrl === 'string') {
     try {
@@ -79,10 +80,21 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
         message: data.message ?? statusText,
       });
     } catch (err) {
-      Notify.create({
-        type: 'negative',
-        message: getErrMsg(err),
-      });
+      if ((err instanceof AxiosError)
+      && (err.response?.status === 401)) {
+        router.push({ name: 'Login', query: { callback_url: callbackUrl } });
+        Notify.create({
+          type: 'negative',
+          message: 'Silahkan login terlebih dahulu',
+        });
+      } else {
+        router.replace({ query: { callback_url: undefined } });
+
+        Notify.create({
+          type: 'negative',
+          message: getErrMsg(err),
+        });
+      }
     } finally {
       Loading.hide();
     }
@@ -126,8 +138,13 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
             <q-img src="/images/Optimized-ICON_KPBI__no-text.png" />
           </q-item-section>
 
-          <q-item-section class="text-weight-medium">
-            KPBI
+          <q-item-section>
+            <q-item-label class="text-weight-medium">
+              KPBI
+            </q-item-label>
+            <q-item-label caption>
+              {{ auth.user?.email }}
+            </q-item-label>
           </q-item-section>
         </q-item>
 

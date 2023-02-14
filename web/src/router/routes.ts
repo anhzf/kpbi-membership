@@ -37,7 +37,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'profil-saya',
         name: 'MyProfile',
-        component: () => import('pages/MyProfilePage.vue'),
+        redirect: { name: 'Member', params: { memberId: 'me' } },
         meta: { guard: 'auth' },
       },
       {

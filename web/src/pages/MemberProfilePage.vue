@@ -5,9 +5,11 @@ import CollegeCard from 'components/MemberProfile/CollegeCard.vue';
 import HeadOfProgramCard from 'components/MemberProfile/HeadOfProgramCard.vue';
 import ProgramCard from 'components/MemberProfile/ProgramCard.vue';
 import memberService from 'src/services/member';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const isOwner = computed(() => route.params.memberId === 'me');
 const { state: data, isLoading } = useAsyncState(() => memberService.get(String(route.params.memberId)), undefined);
 </script>
 
@@ -17,6 +19,7 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get(String(
     class="column"
   >
     <q-btn
+      v-if="!isOwner"
       icon="arrow_back"
       flat
       round

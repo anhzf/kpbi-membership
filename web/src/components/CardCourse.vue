@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { CourseSemesterType, COURSE_SEMESTER_TYPES_LABELS } from 'src/types/constants';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 interface Props {
   title: string;
@@ -18,6 +20,9 @@ interface Emits {
 
 defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+const route = useRoute();
+const isOwner = computed(() => route.params.memberId === 'me');
 
 const onUpdateClick = () => {
   emit('update-click');
@@ -92,25 +97,28 @@ const onDeleteClick = () => {
     </q-card-section>
 
     <q-space />
-    <q-separator />
 
-    <q-card-actions class="no-wrap">
-      <q-btn
-        label="Hapus"
-        icon="delete"
-        color="negative"
-        outline
-        class="w-full"
-        @click="onDeleteClick"
-      />
-      <q-btn
-        label="Perbarui"
-        icon="edit"
-        color="secondary"
-        outline
-        class="w-full"
-        @click="onUpdateClick"
-      />
-    </q-card-actions>
+    <template v-if="isOwner">
+      <q-separator />
+
+      <q-card-actions class="no-wrap">
+        <q-btn
+          label="Hapus"
+          icon="delete"
+          color="negative"
+          outline
+          class="w-full"
+          @click="onDeleteClick"
+        />
+        <q-btn
+          label="Perbarui"
+          icon="edit"
+          color="secondary"
+          outline
+          class="w-full"
+          @click="onUpdateClick"
+        />
+      </q-card-actions>
+    </template>
   </q-card>
 </template>

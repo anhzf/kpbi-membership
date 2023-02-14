@@ -1,4 +1,3 @@
-<!-- TODO: Refactor component, Show actions only if authorized -->
 <script lang="ts" setup>
 import { useAsyncState, whenever } from '@vueuse/core';
 import { Dialog, Notify, QForm } from 'quasar';
@@ -8,8 +7,11 @@ import useMemberProfile from 'src/composables/use-member-profile';
 import courseServices from 'src/services/course';
 import { Course } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const isOwner = computed(() => route.params.memberId === 'me');
 const courseForm = ref<QForm>();
 const _ui = reactive({
   showAddCourseDialog: false,
@@ -30,8 +32,17 @@ const courseFormField = reactive<Partial<Course>>({
   description: '',
 });
 
-const { state: courses, execute: fetchCourses, isLoading: isCoursesLoading } = useAsyncState<Course[]>(
-  () => courseServices.list(profile.value!.id),
+const {
+  state: courses, execute: fetchCourses, isLoading: isCoursesLoading, error: isCoursesError,
+} = useAsyncState<Course[]>(
+  () => {
+    try {
+      return courseServices.list(profile.value!.id);
+    } catch (err) {
+      Notify.create({ message: getErrMsg(err), color: 'negative' });
+    }
+    return Promise.resolve([]);
+  },
   [],
   { immediate: false },
 );
@@ -131,6 +142,7 @@ whenever(() => profile.value?.id, () => {
       />
 
       <q-btn
+        v-if="isOwner"
         label="Tambah Matkul"
         icon="add"
         @click="onAddCourseClick"
@@ -158,10 +170,18 @@ whenever(() => profile.value?.id, () => {
         </div>
       </template>
 
+      <template v-else-if="isCoursesError">
+        <div class="col-12">
+          <p class="text-center">
+            Terjadi kesalahan dalam mengambil data.
+          </p>
+        </div>
+      </template>
+
       <template v-else>
         <div class="col-12">
           <p class="text-center">
-            Belum ada mata kuliah
+            Belum ada mata kuliah.
           </p>
         </div>
       </template>
@@ -177,7 +197,7 @@ whenever(() => profile.value?.id, () => {
     <form-course
       :model-value="courseFormField"
       :is-loading="_ui.isCourseFormDialogLoading"
-      @submit="onCourseFormSubmit"
+      @update:model-value="onCourseFormSubmit"
     >
       <q-separator />
 
