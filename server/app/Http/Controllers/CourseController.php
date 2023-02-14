@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Http\Requests\StoreCourseRequest;
-use App\Http\Requests\UpdateCourseRequest;
 use App\Models\EducationProgram;
 use Illuminate\Http\Request;
 
@@ -34,9 +32,19 @@ class CourseController extends Controller
      * Store a newly created resource in storage.
      *
      */
-    public function store(StoreCourseRequest $request)
+    public function store(Request $request)
     {
-        $request->validated();
+        $request->validate([
+            'name' => 'required|string',
+            'code' => 'required|string',
+            'credits' => 'required|integer',
+            'description' => 'nullable|string',
+            'info.cpmk' => 'required|string',
+            'lecturer' => 'required|string',
+            'semester' => 'required|string',
+            'education_program_id' => 'required|exists:App\Models\EducationProgram,id',
+        ]);
+
         /** @var EducationProgram */
         $program = EducationProgram::find($request->get('education_program_id'));
 
@@ -58,9 +66,19 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCourseRequest $request, Course $course)
+    public function update(Request $request, Course $course)
     {
-        $course->update($request->validated());
+        $validated = $request->validate([
+            'name' => 'string',
+            'code' => 'string',
+            'credits' => 'integer',
+            'description' => 'nullable|string',
+            'info.cpmk' => 'string',
+            'lecturer' => 'string',
+            'semester' => 'string',
+        ]);
+
+        $course->update($validated);
     }
 
     /**
