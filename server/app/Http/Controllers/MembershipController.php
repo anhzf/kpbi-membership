@@ -8,6 +8,7 @@ use App\Models\EducationProgram;
 use App\Models\Membership;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -38,27 +39,40 @@ class MembershipController extends Controller
      */
     public function store(StoreMembershipRequest $request)
     {
-        abort(404);
-
         $data = $request->safe();
 
-        /** @var User */
-        $user = User::where('email', $data->email)->first() ?? User::create([
-            'name' => 'No name',
-            'email' => $data->email,
-            'password' => Hash::make($data->password),
-        ]);
+        DB::transaction(function () use ($data) {
+            /** @var User */
+            $user = User::where('email', $data->email)->first() ?? User::create([
+                'name' => 'No name',
+                'email' => $data->email,
+                'password' => Hash::make($data->password),
+            ]);
 
-        // Find match college, if not found, create new college
-        /** @var College */
-        $college = College::where('name', $data->college_name)->first() ?? College::create([
-            'name' => $data->college_name,
-            'short_name' => $data->college_short_name,
-        ]);
+            // Find match college, if not found, create new college
+            /** @var College */
+            $college = College::where('name', $data->college_name)->first() ?? College::create([
+                'name' => $data->college_name,
+                'short_name' => $data->college_short_name,
+            ]);
 
-        Validator::make($data->only('program_name'), [
-            'program_name' => Rule::unique(EducationProgram::class)->where('college_id', $college->id),
-        ])->validate();
+            $programPayload = Validator::make(['name' => $data->program_name], [
+                'name' => Rule::unique(EducationProgram::class, 'name')->where('college_id', $college->id),
+            ], [
+                'name.unique' => 'Program already exists in the college',
+            ])->validate();
+
+            /** @var EducationProgram */
+            $program = EducationProgram::create([
+                ...$programPayload,
+                'degree' => $data->degree,
+                'college_id' => $college->id,
+            ]);
+
+            $program->heads()->create([
+                'user_id' => $user->id,
+            ]);
+        });
     }
 
     /**

@@ -18,6 +18,7 @@ export const useAuthStore = defineStore('auth', {
         this.isReady = true;
       }
     },
+
     async login(payload: LoginPayload) {
       this.isReady = false;
       try {
@@ -27,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
         this.isReady = true;
       }
     },
+
     async logout() {
       this.isReady = false;
       try {

@@ -12,4 +12,6 @@ export const urlRule = (v: unknown) => {
   }
 };
 
-export const shouldEq = (fieldName: string, match: string) => (v: unknown) => (v === match) || `Harus sama dengan ${fieldName}`;
+export const shouldEq = (fieldName: string, match: string | (() => string)) => (
+  (v: unknown) => (v === (typeof match === 'function' ? match() : match)) || `Harus sama dengan ${fieldName}`
+);

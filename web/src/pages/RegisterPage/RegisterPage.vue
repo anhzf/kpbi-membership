@@ -103,7 +103,7 @@
               label="Ulangi password"
               :type="showPassword ? 'password' : 'text'"
               outlined
-              :rules="[requiredRule, shouldEq('password')]"
+              :rules="[requiredRule, shouldEq('password', () => fields.password)]"
             >
               <template #append>
                 <q-icon
@@ -116,14 +116,21 @@
           </template>
         </q-form>
 
-        <div class="absolute inset-0 bg-slate/50 column justify-center">
+        <p
+          v-if="errMsg"
+          class="text-red"
+        >
+          {{ errMsg }}
+        </p>
+
+        <!-- <div class="absolute inset-0 bg-slate/50 column justify-center">
           <p class="text-center">
             Mohon maaf, fitur ini untuk sementara tidak tersedia <span class="text-lg">🙏</span>
           </p>
           <small class="text-center">
             Silakan hubungi admin jika diperlukan.
           </small>
-        </div>
+        </div> -->
       </q-card-section>
 
       <q-separator spaced />
@@ -159,6 +166,7 @@
             type="submit"
             color="primary"
             form="form_register"
+            :disabled="onSubmitLoading"
           />
         </template>
       </q-card-actions>
@@ -171,16 +179,26 @@
 <script lang="ts" setup>
 import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
+import { Notify } from 'quasar';
+import authService from 'src/services/auth';
 import memberService from 'src/services/member';
-import { AcademicDegree, ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
+import { useAuthStore } from 'src/stores/auth';
+import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
 import { requiredRule, shouldEq } from 'src/utils/input-rules';
+import { getErrMsg } from 'src/utils/simpler';
 import {
   computed, reactive, ref, watch,
 } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const auth = useAuthStore();
+
 const step = ref(1);
+
+const errMsg = ref('');
+
 const showPassword = ref(false);
 const fields = reactive({
   degree: '' as AcademicDegree,
@@ -210,10 +228,29 @@ const { execute: onSubmit, isLoading: onSubmitLoading } = useAsyncState<void>(as
       password: fields.password,
       password_confirmation: fields.passwordConfirmation,
     });
+
+    await auth.login({
+      username: fields.email,
+      password: fields.password,
+    });
+
+    return void router.push({ name: 'MyProfile' });
   } catch (err) {
     if (axios.isAxiosError(err)) {
-      //
+      if (err.response?.status && (err.response?.status >= 400 || err.response?.status < 500)) {
+        errMsg.value = getErrMsg(err);
+        return Promise.resolve();
+      }
+
+      Notify.create({
+        type: 'negative',
+        message: `Terjadi kesalahan pada server. ${getErrMsg(err)}`,
+      });
+
+      return console.error({ err });
     }
+
+    throw err;
   }
 }, undefined, { immediate: false });
 
