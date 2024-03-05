@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/anhzf/kpbi-membership/issues"
   },
-  "homepage": "https://github.com/anhzf/kpbi-membership#readme"
+  "homepage": "https://github.com/anhzf/kpbi-membership#readme",
+  "workspaces": [
+    "server",
+    "web"
+  ]
 }
