@@ -8,6 +8,7 @@ use App\Models\EducationProgram;
 use App\Models\Membership;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -71,6 +72,11 @@ class MembershipController extends Controller
 
             $program->heads()->create([
                 'user_id' => $user->id,
+            ]);
+
+            Membership::create([
+                'period_end' => Carbon::now(),
+                'education_program_id' => $program->id,
             ]);
         });
     }
