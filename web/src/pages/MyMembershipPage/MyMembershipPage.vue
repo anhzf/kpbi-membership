@@ -1,3 +1,15 @@
+<script lang="ts" setup>
+import { useAuthStore } from 'src/stores/auth';
+import { computed, ref } from 'vue';
+import MembershipRequest from './MembershipRequest.vue';
+
+const auth = useAuthStore();
+
+const isAdmin = computed(() => auth.user?.role === 'admin');
+const tab = ref('verifyPayment');
+// const statusSelected = ref('PENDING');
+</script>
+
 <template>
   <q-page
     padding
@@ -32,7 +44,7 @@
         keep-alive
       >
         <q-tab-panel name="verifyPayment">
-          <!-- <request-verification /> -->
+          <membership-request />
         </q-tab-panel>
 
         <q-tab-panel
@@ -58,11 +70,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue';
-
-const isAdmin = ref(true);
-const tab = ref('verifyPayment');
-// const statusSelected = ref('PENDING');
-</script>

@@ -1,11 +1,12 @@
-import {
-  GetMember, GetMemberList, MemberService, RegisterMember,
+import type {
+  GetMember, GetMemberList, MemberService, RegisterMember, ListRequestMembership, RequestMembership,
 } from 'src/services/member/MemberService';
 import { api } from 'src/services/utils';
-import {
+import type {
   Accreditation,
-  College, EducationProgram, EducationProgramHead, MemberProfile, RelationExpanded, User,
+  College, EducationProgram, EducationProgramHead, MemberProfile, MembershipRequest, RelationExpanded, User,
 } from 'src/types/models';
+import { sleep } from 'src/utils/promise';
 
 const ENDPOINT = '/member';
 const MEMBERSHIP_ENDPOINT = '/membership';
@@ -43,10 +44,31 @@ const register: RegisterMember = async (payload) => {
   await api.post(ENDPOINT, payload);
 };
 
+const request: RequestMembership = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  await api.post(MEMBERSHIP_ENDPOINT, formData);
+};
+
+// const { data } = await api.get(MEMBERSHIP_ENDPOINT);
+// return data;
+const listRequest: ListRequestMembership = async () => sleep<MembershipRequest[]>(1000, [
+  {
+    id: '1',
+    user: { id: '3', name: 'John Doe' },
+    membership: { id: '1', education_program: { id: '1', name: 'Computer Science' } },
+    requested_date: new Date(Date.now() - 3600_000 * 24 * 7),
+    status: 'pending',
+    created_at: new Date(Date.now() - 3600_000 * 24 * 7),
+    updated_at: new Date(Date.now() - 3600_000 * 24 * 7),
+  },
+]);
 const memberService: MemberService = {
   get,
   list,
   register,
+  request,
+  listRequest,
 };
 
 export default memberService;

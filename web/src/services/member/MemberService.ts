@@ -1,5 +1,5 @@
-import { AcademicDegree } from 'src/types/constants';
-import { MemberInList, MemberProfile } from 'src/types/models';
+import type { AcademicDegree } from 'src/types/constants';
+import type { MemberInList, MemberProfile, MembershipRequest } from 'src/types/models';
 
 export interface GetMember {
   (id: string): Promise<MemberProfile | undefined>;
@@ -23,8 +23,18 @@ export interface RegisterMember {
   (payload: RegisterMemberPayload): Promise<void>;
 }
 
+export interface RequestMembership {
+  (file: File): Promise<void>;
+}
+
+export interface ListRequestMembership {
+  (): Promise<MembershipRequest[]>;
+}
+
 export interface MemberService {
   get: GetMember;
   list: GetMemberList;
   register: RegisterMember;
+  request: RequestMembership;
+  listRequest: ListRequestMembership;
 }

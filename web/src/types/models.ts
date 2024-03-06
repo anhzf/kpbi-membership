@@ -1,8 +1,11 @@
-import {
+import type {
   AcademicDegree, AccreditationStatus, CollegeType, CourseSemesterType, EducationProgramHeadStatus, MembershipRequestStatus,
+  UserRole,
 } from 'src/types/constants';
 
-type HasId = { id: unknown };
+export interface HasId {
+  id: unknown;
+}
 
 export type Relation<T extends HasId, Fields extends Exclude<keyof T, 'id'> = never> = Pick<T, Fields | 'id'>;
 
@@ -21,6 +24,7 @@ export interface User extends Timestamps {
   phone_number?: string;
   img?: string;
   email_verified_at?: Date;
+  role: UserRole | null;
 }
 
 export interface UserInList extends Pick<User, 'id' | 'name'> { }

@@ -17,15 +17,6 @@ const onSubmit = async () => {
     password: fields.password,
   });
 };
-
-onMounted(() => {
-  Notify.create({
-    message: 'Dikarenakan terdapat pembaruan pada sistem maka, bagi anggota yang dahulu telah terdaftar dimohon untuk melakukan reset password menggunakan email kaprodi yang dahulu telah terdaftar. Terima kasih.',
-    timeout: 0,
-    type: 'warning',
-    closeBtn: true,
-  });
-});
 </script>
 
 <template>

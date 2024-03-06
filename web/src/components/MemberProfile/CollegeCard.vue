@@ -66,7 +66,7 @@ defineProps<Props>();
               Alamat
             </q-item-label>
             <q-item-label>
-              {{ [streetAddress, city, province].join(', ') }}
+              {{ [streetAddress, city, province].filter(Boolean).join(', ') }}
             </q-item-label>
           </q-item-section>
         </q-item>

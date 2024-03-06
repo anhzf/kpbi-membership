@@ -1,3 +1,7 @@
+export const USER_ROLES = ['admin'] as const;
+
+export type UserRole = typeof USER_ROLES[number];
+
 export const ACCREDITATION_STATUSES = ['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi'] as const;
 
 export type AccreditationStatus = typeof ACCREDITATION_STATUSES[number];

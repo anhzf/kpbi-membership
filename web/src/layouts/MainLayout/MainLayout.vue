@@ -39,7 +39,7 @@ const authNavItems: INavItem[] = [
   {
     title: 'Profil Saya',
     icon: 'perm_identity',
-    to: { name: 'MyProfile' },
+    to: { name: 'Member', params: { memberId: 'me' } },
     exact: true,
   },
   {
