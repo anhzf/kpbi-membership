@@ -125,6 +125,7 @@ export interface MembershipRequest extends Timestamps {
   authorized_by?: Relation<User, 'name'>;
   authorized_at?: Date;
   valid_until?: Date;
+  attachment_url: string;
 }
 
 export interface Course extends Timestamps {

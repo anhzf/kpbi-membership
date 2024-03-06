@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon $updated_at
  * Relationships
  * @property EducationProgram $educationProgram
+ * @property \Illuminate\Database\Eloquent\Collection<MembershipRequest> $requests
  */
 class Membership extends Model
 {
@@ -21,6 +22,11 @@ class Membership extends Model
     public function educationProgram()
     {
         return $this->belongsTo(EducationProgram::class);
+    }
+
+    public function requests()
+    {
+        return $this->hasMany(MembershipRequest::class);
     }
 
     public function loadFullProfile()

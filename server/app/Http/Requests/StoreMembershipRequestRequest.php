@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreMembershipRequestRequest extends FormRequest
 {
@@ -13,7 +15,9 @@ class StoreMembershipRequestRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        /** @var User */
+        $user = $this->user();
+        return $user->headProgramOf->first()->exists;
     }
 
     /**
@@ -24,7 +28,7 @@ class StoreMembershipRequestRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'file' => [Rule::file()->types(['application/pdf', 'image/*'])->max(2048)],
         ];
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MembershipRequest;
 use App\Http\Requests\StoreMembershipRequestRequest;
 use App\Http\Requests\UpdateMembershipRequestRequest;
+use App\Models\EducationProgramHead;
+use App\Models\User;
+use Illuminate\Http\UploadedFile;
 
 class MembershipRequestController extends Controller
 {
@@ -15,7 +18,10 @@ class MembershipRequestController extends Controller
      */
     public function index()
     {
-        //
+        /** @var EducationProgramHead */
+        $headProgram = request()->user()->headProgramOf->first();
+
+        return $headProgram->program->membership->load('requests')->requests->append('attachment_url');
     }
 
     /**
@@ -26,7 +32,20 @@ class MembershipRequestController extends Controller
      */
     public function store(StoreMembershipRequestRequest $request)
     {
-        //
+        /** @var UploadedFile */
+        $file = $request->safe()->file;
+        /** @var User */
+        $user = $request->user();
+        /** @var EducationProgramHead */
+        $headProgram = $user->headProgramOf->first();
+
+        $membershipRequest = $headProgram->program->membership->requests()->create([
+            'requested_date' => now(),
+            'user_id' => $user->id,
+            'status' => MembershipRequest::STATUS_DEFAULT,
+        ]);
+
+        $membershipRequest->addMedia($file)->toMediaCollection('membership_requests');
     }
 
     /**

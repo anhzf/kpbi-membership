@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\MembershipRequestController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -51,5 +52,5 @@ Route::prefix('/user')->group(function () {
 Route::get('/member/me', [MembershipController::class, 'showMy'])
     ->middleware('auth:sanctum');
 Route::apiResource('/member', MembershipController::class);
-Route::apiResource(('/membership'), MembershipController::class);
+Route::apiResource(('/membership'), MembershipRequestController::class);
 Route::apiResource('/course', CourseController::class);

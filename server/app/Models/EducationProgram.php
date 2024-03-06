@@ -25,6 +25,8 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property College $college
  * @property \Illuminate\Database\Eloquent\Collection<Accreditation> $accreditations
  * @property \Illuminate\Database\Eloquent\Collection<EducationProgramHead> $heads
+ * @property \Illuminate\Database\Eloquent\Collection<Course> $courses
+ * @property Membership|null $membership
  */
 class EducationProgram extends Model implements HasMedia
 {
@@ -63,6 +65,11 @@ class EducationProgram extends Model implements HasMedia
     public function heads()
     {
         return $this->hasMany(EducationProgramHead::class, 'program_id');
+    }
+
+    public function membership()
+    {
+        return $this->hasOne(Membership::class);
     }
 
     public function registerMediaCollections(): void

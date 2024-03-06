@@ -87,7 +87,7 @@ const onFileChange = (ev: Event) => {
             </td>
             <td>
               <a
-                href="#"
+                :href="item.attachment_url"
                 target="_blank"
               >
                 {{ item.created_at.getTime() }}.pdf

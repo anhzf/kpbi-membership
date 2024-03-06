@@ -21,6 +21,12 @@ interface MemberRaw extends Omit<MemberProfile, 'education_program' | 'college' 
   updated_at: string;
 }
 
+interface MembershipRequestRaw extends Omit<MembershipRequest, 'created_at' | 'updated_at' | 'requested_date'> {
+  created_at: string;
+  updated_at: string;
+  requested_date: string;
+}
+
 const fromRaw = (raw: MemberRaw): MemberProfile => ({
   ...raw,
   college: raw.education_program.college,
@@ -28,6 +34,13 @@ const fromRaw = (raw: MemberRaw): MemberProfile => ({
   period_end: new Date(raw.period_end),
   created_at: new Date(raw.created_at),
   updated_at: new Date(raw.updated_at),
+});
+
+const fromMembershipRequestRaw = (raw: MembershipRequestRaw): MembershipRequest => ({
+  ...raw,
+  created_at: new Date(raw.created_at),
+  updated_at: new Date(raw.updated_at),
+  requested_date: new Date(raw.requested_date),
 });
 
 const get: GetMember = async (id) => {
@@ -50,19 +63,11 @@ const request: RequestMembership = async (file) => {
   await api.post(MEMBERSHIP_ENDPOINT, formData);
 };
 
-// const { data } = await api.get(MEMBERSHIP_ENDPOINT);
-// return data;
-const listRequest: ListRequestMembership = async () => sleep<MembershipRequest[]>(1000, [
-  {
-    id: '1',
-    user: { id: '3', name: 'John Doe' },
-    membership: { id: '1', education_program: { id: '1', name: 'Computer Science' } },
-    requested_date: new Date(Date.now() - 3600_000 * 24 * 7),
-    status: 'pending',
-    created_at: new Date(Date.now() - 3600_000 * 24 * 7),
-    updated_at: new Date(Date.now() - 3600_000 * 24 * 7),
-  },
-]);
+const listRequest: ListRequestMembership = async () => {
+  const { data } = await api.get<MembershipRequestRaw[]>(MEMBERSHIP_ENDPOINT);
+  return data.map(fromMembershipRequestRaw);
+};
+
 const memberService: MemberService = {
   get,
   list,
