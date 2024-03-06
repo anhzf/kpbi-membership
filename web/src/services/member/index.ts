@@ -7,7 +7,8 @@ import {
   College, EducationProgram, EducationProgramHead, MemberProfile, RelationExpanded, User,
 } from 'src/types/models';
 
-const ENDPOINT = '/members';
+const ENDPOINT = '/member';
+const MEMBERSHIP_ENDPOINT = '/membership';
 
 interface MemberRaw extends Omit<MemberProfile, 'education_program' | 'college' | 'responsible' | 'created_at' | 'updated_at'> {
   education_program: Omit<EducationProgram, 'accreditations'> & {
@@ -23,6 +24,7 @@ const fromRaw = (raw: MemberRaw): MemberProfile => ({
   ...raw,
   college: raw.education_program.college,
   responsible: raw.education_program.heads.at(-1)!,
+  period_end: new Date(raw.period_end),
   created_at: new Date(raw.created_at),
   updated_at: new Date(raw.updated_at),
 });

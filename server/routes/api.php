@@ -48,7 +48,8 @@ Route::prefix('/user')->group(function () {
     });
 });
 
-Route::get('/members/me', [MembershipController::class, 'showMy'])
+Route::get('/member/me', [MembershipController::class, 'showMy'])
     ->middleware('auth:sanctum');
-Route::apiResource('/members', MembershipController::class);
-Route::apiResource('/courses', CourseController::class);
+Route::apiResource('/member', MembershipController::class);
+Route::apiResource(('/membership'), MembershipController::class);
+Route::apiResource('/course', CourseController::class);
