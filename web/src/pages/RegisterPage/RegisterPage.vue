@@ -86,7 +86,7 @@
             <q-input
               v-model="fields.password"
               label="Password"
-              :type="showPassword ? 'password' : 'text'"
+              :type="showPassword ? 'text' : 'password'"
               outlined
               :rules="[requiredRule]"
             >
@@ -101,7 +101,7 @@
             <q-input
               v-model="fields.passwordConfirmation"
               label="Ulangi password"
-              :type="showPassword ? 'password' : 'text'"
+              :type="showPassword ? 'text' : 'password'"
               outlined
               :rules="[requiredRule, shouldEq('password', () => fields.password)]"
             >
@@ -122,15 +122,6 @@
         >
           {{ errMsg }}
         </p>
-
-        <!-- <div class="absolute inset-0 bg-slate/50 column justify-center">
-          <p class="text-center">
-            Mohon maaf, fitur ini untuk sementara tidak tersedia <span class="text-lg">🙏</span>
-          </p>
-          <small class="text-center">
-            Silakan hubungi admin jika diperlukan.
-          </small>
-        </div> -->
       </q-card-section>
 
       <q-separator spaced />
@@ -180,7 +171,6 @@
 import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import { Notify } from 'quasar';
-import authService from 'src/services/auth';
 import memberService from 'src/services/member';
 import { useAuthStore } from 'src/stores/auth';
 import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
