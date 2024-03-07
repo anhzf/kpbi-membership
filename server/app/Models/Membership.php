@@ -20,6 +20,15 @@ class Membership extends Model
     use HasFactory;
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'period_end' => 'datetime',
+    ];
+
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array

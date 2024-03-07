@@ -20,7 +20,10 @@ class MembershipRequestController extends Controller
     {
         /** @var EducationProgramHead */
         $headProgram = request()->user()->headProgramOf->first();
-        return $headProgram->program->membership->load('requests')->requests->append('attachment_url');
+        return $headProgram->program->membership->load('requests')
+            ->requests
+            ->orderBy('requested_date', 'desc')
+            ->append('attachment_url');
     }
 
     /**
