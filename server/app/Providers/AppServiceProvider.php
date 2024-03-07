@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
             parse_str($handlerUrl->query ?? '', $originQuery);
             $q = http_build_query([
                 ...$originQuery,
-                'callback_url' => $callbackUrl,
+                'callback_url' => Utils::stripOrigin($callbackUrl),
             ]);
             return "{$origin}{$handlerUrlPath}?{$q}";
         });

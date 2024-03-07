@@ -71,7 +71,11 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
   if (isReady && typeof callbackUrl === 'string') {
     try {
       Loading.show();
-      const { data, statusText } = await api.post(callbackUrl);
+      const url = callbackUrl.startsWith('/') && api.defaults.baseURL
+        ? callbackUrl.replace(new URL(api.defaults.baseURL!).pathname, '')
+        : callbackUrl;
+      debugger;
+      const { data, statusText } = await api.post(url);
 
       router.replace({ query: { callback_url: undefined } });
 
