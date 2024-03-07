@@ -21,15 +21,29 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property \Illuminate\Support\Carbon|null $valid_until
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
+ * Accessors
+ * @property string $attachment_url
  * Relationships
  * @property User $user
- * @property User|null $authorized_by
+ * @property User|null $authorizedBy
+ * @property Membership $membership
  */
 class MembershipRequest extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
     const STATUS_DEFAULT = MembershipRequestStatus::PENDING;
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'requested_date' => 'datetime',
+        'authorized_at' => 'datetime',
+        'valid_until' => 'datetime',
+    ];
 
     /**
      * The attributes that aren't mass assignable.
@@ -49,13 +63,28 @@ class MembershipRequest extends Model implements HasMedia
     {
         return Attribute::make(
             get: fn () => $this->getFirstMedia('membership_requests'),
-            set: fn (FileAdder $v) => $v->toMediaCollection('membership_requests')
+            // set: fn (FileAdder $v) => $v->toMediaCollection('membership_requests')
         );
     }
 
     public function attachmentUrl(): Attribute
     {
         return Attribute::get(fn () => $this->attachment->getUrl());
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function authorizedBy()
+    {
+        return $this->belongsTo(User::class, 'authorized_by_id');
+    }
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class);
     }
 
     public function registerMediaCollections(): void

@@ -19,6 +19,11 @@ const REQUEST_STATUS_COLORS: Record<MembershipRequestStatus, string> = {
   rejected: 'negative',
 };
 
+const REQUEST_STATUS_TEXT_COLORS: {[k in MembershipRequestStatus]?: string} = {
+  approved: 'white',
+  rejected: 'white',
+};
+
 const [isLoading, loading] = useLoading();
 
 const { state: listRequest, execute: refresh, isLoading: listRequestLoading } = useAsyncState(memberService.listRequest, []);
@@ -67,7 +72,10 @@ const onFileChange = (ev: Event) => {
         Riwayat
       </h6>
 
-      <q-markup-table flat>
+      <q-markup-table
+        flat
+        class="h-50vh"
+      >
         <thead>
           <tr>
             <th class="text-left">
@@ -78,27 +86,39 @@ const onFileChange = (ev: Event) => {
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="item in listRequest"
-            :key="item.id"
-          >
-            <td class="text-grey text-left w-8ch">
-              {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
-            </td>
-            <td>
-              <a
-                :href="item.attachment_url"
-                target="_blank"
-              >
-                {{ item.created_at.getTime() }}.pdf
-                <q-icon name="open_in_new" />
-              </a>
-            </td>
-            <td class="text-center w-6ch">
-              <q-chip
-                :label="REQUEST_STATUS_LABELS[item.status]"
-                :color="REQUEST_STATUS_COLORS[item.status]"
-              />
+          <template v-if="listRequest.length">
+            <tr
+              v-for="item in listRequest"
+              :key="item.id"
+            >
+              <td class="text-grey text-left w-8ch">
+                {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
+              </td>
+              <td>
+                <a
+                  :href="item.attachment_url"
+                  target="_blank"
+                >
+                  {{ item.created_at.getTime() }}.pdf
+                  <q-icon name="open_in_new" />
+                </a>
+              </td>
+              <td class="text-center w-6ch">
+                <q-chip
+                  :label="REQUEST_STATUS_LABELS[item.status]"
+                  :color="REQUEST_STATUS_COLORS[item.status]"
+                  :text-color="REQUEST_STATUS_TEXT_COLORS[item.status]"
+                />
+              </td>
+            </tr>
+          </template>
+
+          <tr v-else>
+            <td
+              class="text-center"
+              colspan="3"
+            >
+              Tidak ada riwayat bukti pembayaran
             </td>
           </tr>
         </tbody>

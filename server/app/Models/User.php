@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,6 +59,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => UserRole::class,
     ];
 
     public function img()

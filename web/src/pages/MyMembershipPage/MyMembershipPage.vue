@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import { useAuthStore } from 'src/stores/auth';
-import { computed, ref } from 'vue';
+import { computed, defineAsyncComponent, ref } from 'vue';
 import MembershipRequest from './MembershipRequest.vue';
+
+const VerifyMembership = defineAsyncComponent(() => import('./VerifyMembership.vue'));
 
 const auth = useAuthStore();
 
 const isAdmin = computed(() => auth.user?.role === 'admin');
 const tab = ref('verifyPayment');
-// const statusSelected = ref('PENDING');
 </script>
 
 <template>
@@ -41,7 +42,6 @@ const tab = ref('verifyPayment');
       <q-tab-panels
         v-model="tab"
         animated
-        keep-alive
       >
         <q-tab-panel name="verifyPayment">
           <membership-request />
@@ -52,19 +52,7 @@ const tab = ref('verifyPayment');
           name="pendingVerificationList"
           class="q-gutter-y-md"
         >
-          <!-- <div class="full-width flex justify-end items-center q-gutter-x-md">
-            <span class="text-subtitle-2 text-grey-5">Status: </span>
-
-            <q-select
-              v-model="statusSelected"
-              :options="[...VERIFICATION_REQUEST_STATUS]"
-              dense
-            />
-          </div>
-
-          <div class="full-width">
-            <pending-verification-list :where-status="statusSelected" />
-          </div> -->
+          <verify-membership flat />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -52,5 +53,14 @@ Route::prefix('/user')->group(function () {
 Route::get('/member/me', [MembershipController::class, 'showMy'])
     ->middleware('auth:sanctum');
 Route::apiResource('/member', MembershipController::class);
-Route::apiResource(('/membership'), MembershipRequestController::class);
+Route::apiResource('/membership', MembershipRequestController::class);
 Route::apiResource('/course', CourseController::class);
+
+Route::group([
+    'prefix' => '/admin',
+    'as' => 'admin.',
+    'middleware' => 'auth:sanctum',
+], function () {
+    Route::get('/membership', [AdminController::class, 'membershipRequestList']);
+    Route::put('/membership/{membershipRequest}', [AdminController::class, 'membershipRequestApprove']);
+});

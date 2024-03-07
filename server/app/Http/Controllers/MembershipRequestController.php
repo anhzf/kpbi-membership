@@ -20,7 +20,6 @@ class MembershipRequestController extends Controller
     {
         /** @var EducationProgramHead */
         $headProgram = request()->user()->headProgramOf->first();
-
         return $headProgram->program->membership->load('requests')->requests->append('attachment_url');
     }
 
