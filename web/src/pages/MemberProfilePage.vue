@@ -39,7 +39,9 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get(String(
         #="{state: isVerified}"
       >
         <div :class="['text-center py-.5 mb-1 text-white', isVerified ? 'bg-positive' : 'bg-negative']">
-          {{ isVerified ? 'Terverifikasi' : 'Belum Terverifikasi' }}
+          {{ isVerified
+            ? `Terverifikasi sampai ${data.period_end.toLocaleString('id', {dateStyle: 'short'})}`
+            : 'Belum Terverifikasi' }}
         </div>
       </define-state>
 
