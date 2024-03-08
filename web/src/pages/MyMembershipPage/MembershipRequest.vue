@@ -3,9 +3,10 @@ import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import { Dialog, Notify } from 'quasar';
 import { useLoading } from 'src/composables/use-loading';
-import memberService from 'src/services/member';
+import memberService, { isMemberVerified } from 'src/services/member';
 import type { MembershipRequestStatus } from 'src/types/constants';
 import { getErrMsg } from 'src/utils/simpler';
+import { computed } from 'vue';
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
   pending: 'Menunggu',
@@ -14,19 +15,23 @@ const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
 };
 
 const REQUEST_STATUS_COLORS: Record<MembershipRequestStatus, string> = {
-  pending: 'grey-4',
+  pending: 'blue-grey',
   approved: 'positive',
   rejected: 'negative',
 };
 
-const REQUEST_STATUS_TEXT_COLORS: {[k in MembershipRequestStatus]?: string} = {
+const REQUEST_STATUS_TEXT_COLORS: Record<MembershipRequestStatus, string> = {
+  pending: 'white',
   approved: 'white',
   rejected: 'white',
 };
 
 const [isLoading, loading] = useLoading();
 
+const { state: membership, isLoading: isMembershipLoading } = useAsyncState(() => memberService.get('me'), null);
 const { state: listRequest, execute: refresh, isLoading: listRequestLoading } = useAsyncState(memberService.listRequest, []);
+
+const isVerified = computed(() => !!membership.value && isMemberVerified(membership.value));
 
 const onFileChange = (ev: Event) => {
   const target = ev.target as HTMLInputElement;
@@ -55,6 +60,7 @@ const onFileChange = (ev: Event) => {
       <q-btn
         label="Unggah bukti pembayaran"
         icon="upload"
+        :disable="isVerified"
       >
         <label class="absolute inset-0 cursor-pointer">
           <input
@@ -65,6 +71,11 @@ const onFileChange = (ev: Event) => {
           >
         </label>
       </q-btn>
+
+      <div
+        v-if="isVerified"
+        class="absolute inset-0 bg-slate/20"
+      />
     </q-card-section>
 
     <q-card-section>
@@ -81,8 +92,8 @@ const onFileChange = (ev: Event) => {
             <th class="text-left">
               Tanggal
             </th>
-            <th>Nama berkas</th>
             <th>Status</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -94,20 +105,31 @@ const onFileChange = (ev: Event) => {
               <td class="text-grey text-left w-8ch">
                 {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
               </td>
+
               <td>
-                <a
+                <div class="flex items-center gap-1">
+                  <q-chip
+                    :label="REQUEST_STATUS_LABELS[item.status]"
+                    :color="REQUEST_STATUS_COLORS[item.status]"
+                    :text-color="REQUEST_STATUS_TEXT_COLORS[item.status]"
+                  />
+                  <div
+                    v-if="item.valid_until"
+                    class="flex gap-1 text-positive"
+                  >
+                    <span>Diperpanjang sampai</span>
+                    <time>{{ item.valid_until.toLocaleString('id', {dateStyle: 'short'}) }}</time>
+                  </div>
+                </div>
+              </td>
+
+              <td class="text-right">
+                <q-btn
+                  label="Lihat"
+                  icon="open_in_new"
                   :href="item.attachment_url"
                   target="_blank"
-                >
-                  {{ item.created_at.getTime() }}.pdf
-                  <q-icon name="open_in_new" />
-                </a>
-              </td>
-              <td class="text-center w-6ch">
-                <q-chip
-                  :label="REQUEST_STATUS_LABELS[item.status]"
-                  :color="REQUEST_STATUS_COLORS[item.status]"
-                  :text-color="REQUEST_STATUS_TEXT_COLORS[item.status]"
+                  flat
                 />
               </td>
             </tr>
@@ -125,6 +147,6 @@ const onFileChange = (ev: Event) => {
       </q-markup-table>
     </q-card-section>
 
-    <q-inner-loading :showing="isLoading || listRequestLoading" />
+    <q-inner-loading :showing="isLoading || listRequestLoading || isMembershipLoading" />
   </q-card>
 </template>

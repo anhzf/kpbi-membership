@@ -6,3 +6,5 @@ export const getMemberDisplayName = (member: Membership & { education_program: R
   member.education_program.name,
   short ? member.education_program.college.short_name : member.education_program.college.name,
 ].join(' ');
+
+export const isMemberVerified = (member: Membership) => member.period_end > new Date();

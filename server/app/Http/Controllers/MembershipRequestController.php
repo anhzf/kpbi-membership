@@ -7,6 +7,7 @@ use App\Http\Requests\StoreMembershipRequestRequest;
 use App\Http\Requests\UpdateMembershipRequestRequest;
 use App\Models\EducationProgramHead;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\UploadedFile;
 
 class MembershipRequestController extends Controller
@@ -20,10 +21,12 @@ class MembershipRequestController extends Controller
     {
         /** @var EducationProgramHead */
         $headProgram = request()->user()->headProgramOf->first();
-        return $headProgram->program->membership->load('requests')
+        return $headProgram->program->membership
+            ->load(['requests' => function (HasMany $query) {
+                $query->orderBy('requested_date', 'desc');
+            }])
             ->requests
-            ->orderBy('requested_date', 'desc')
-            ->append('attachment_url');
+            ->append(['attachment', 'attachment_url']);
     }
 
     /**
