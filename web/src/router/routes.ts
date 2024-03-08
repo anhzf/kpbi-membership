@@ -69,6 +69,16 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/document/:documentId',
+    children: [
+      {
+        path: 'view',
+        name: 'DocumentView',
+        component: () => import('pages/DocumentViewPage.vue'),
+      },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it
