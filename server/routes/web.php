@@ -12,10 +12,3 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::view('/', 'welcome');
-
-// Route::get('/{any}', function () {
-//     return File::get(public_path('app/index.html'));
-// })
-//     ->where('any', '.*');
