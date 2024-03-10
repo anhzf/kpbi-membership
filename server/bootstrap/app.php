@@ -41,6 +41,10 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+if ($public = $_ENV['APP_PUBLIC_PATH'] ?? env('APP_PUBLIC_PATH')) {
+    $app->bind('path.public', fn () => base_path($public));
+}
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
