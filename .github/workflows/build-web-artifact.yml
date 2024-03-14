@@ -1,0 +1,25 @@
+name: Deploy Web
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          npm install
+          npx -w web quasar build
+      - name: Upload artifact
+        id: artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: web/dist/spa
+      - run: echo "${{ steps.artifact.outputs.artifact-id }}"
