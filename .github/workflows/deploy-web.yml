@@ -16,11 +16,11 @@ jobs:
       - name: Get runner credentials
         id: runner-creds
         run: |
-          echo "username=$(whoami)@$()" >> $GITHUB_OUTPUT
+          echo "username=$(whoami)@$(hostname -I)" >> $GITHUB_OUTPUT
       - name: Build
         run: |
           npm ci
-          npx quasar build -w web
+          npx -w web quasar build
           cd web/dist/spa
           zip -r dist.zip *
           mv dist.zip ../../../dist.zip
