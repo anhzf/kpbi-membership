@@ -19,7 +19,7 @@ jobs:
           echo "username=$(whoami)@$(hostname -I)" >> $GITHUB_OUTPUT
       - name: Build
         run: |
-          npm ci
+          npm install
           npx -w web quasar build
           cd web/dist/spa
           zip -r dist.zip *
