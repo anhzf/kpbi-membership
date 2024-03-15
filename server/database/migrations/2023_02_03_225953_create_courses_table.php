@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('credits');
             $table->text('description')->nullable();
             $table->string('lecturer');
-            $table->json('info')->default('{}'); // CPMK will be stored here
+            $table->json('info')->nullable(); // CPMK will be stored here
             $table->enum('semester', SemesterType::toArray());
             $table->timestamps();
         });
