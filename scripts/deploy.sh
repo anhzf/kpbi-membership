@@ -22,6 +22,8 @@ curl -L \
   https://api.github.com/repos/$REPO/actions/artifacts/$ARTIFACT/zip \
   -o dist.zip
 
-rm -rf www
+rm -rf www dist
+
+APP_PUBLIC_PATH='.../www' php server/artisan storage:link
 
 unzip dist.zip -d www
