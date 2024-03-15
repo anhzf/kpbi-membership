@@ -15,11 +15,11 @@
   RewriteRule ^ %1 [L,R=301]
 
   # Rewrite requests with /api prefix to index.php (Laravel app)
-  RewriteRule ^api/(.*)$ /index.php/$1 [L]
+  RewriteRule ^api(.*)$ /index.php/$1 [L]
 
   # Check if requested file exists, if so serve it directly
   RewriteCond %{REQUEST_FILENAME} !-f
 
   # Rewrite all other requests to index.html
-  RewriteRule ^(.+)$ index.html [L]
+  RewriteRule ^(.*)$ index.html [L]
 </IfModule>
