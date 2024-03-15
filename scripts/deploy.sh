@@ -22,4 +22,6 @@ curl -L \
   https://api.github.com/repos/$REPO/actions/artifacts/$ARTIFACT/zip \
   -o dist.zip
 
+rm -rf www
+
 unzip dist.zip -d www
