@@ -44,7 +44,12 @@ class College extends Model implements HasMedia
 
     public function img(): Attribute
     {
-        return Attribute::get(fn () => $this->getFirstMedia());
+        return Attribute::get(fn () => $this->getFirstMedia('logo'));
+    }
+
+    public function imgUrl(): Attribute
+    {
+        return Attribute::get(fn () => $this->img?->getUrl());
     }
 
     public function accreditations()
@@ -55,5 +60,11 @@ class College extends Model implements HasMedia
     public function educationPrograms()
     {
         return $this->hasMany(EducationProgram::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('logo')
+            ->singleFile();
     }
 }

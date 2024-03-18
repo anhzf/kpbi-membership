@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { Notify } from 'quasar';
 import { useAuthStore } from 'src/stores/auth';
 import { requiredRule } from 'src/utils/input-rules';
-import { onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 const auth = useAuthStore();
 const fields = reactive({

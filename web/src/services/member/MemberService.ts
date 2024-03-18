@@ -1,5 +1,7 @@
 import type { AcademicDegree } from 'src/types/constants';
-import type { MemberInList, MemberProfile, MembershipRequest } from 'src/types/models';
+import type {
+  College, MemberInList, MemberProfile, MembershipRequest,
+} from 'src/types/models';
 
 export interface GetMember {
   (id: string): Promise<MemberProfile | undefined>;
@@ -31,10 +33,19 @@ export interface ListRequestMembership {
   (): Promise<MembershipRequest[]>;
 }
 
+export interface UpdateCollegePayload extends Partial<Omit<College, 'img'>> {
+  img?: File;
+}
+
+export interface UpdateCollege {
+  (payload: UpdateCollegePayload): Promise<void>;
+}
+
 export interface MemberService {
   get: GetMember;
   list: GetMemberList;
   register: RegisterMember;
   request: RequestMembership;
   listRequest: ListRequestMembership;
+  updateCollege: UpdateCollege;
 }

@@ -36,6 +36,15 @@ class Course extends Model
     ];
 
     /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'info' => '{}',
+    ];
+
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array

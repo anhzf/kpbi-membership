@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Loading } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { useAuthStore } from 'src/stores/auth';
@@ -27,7 +28,9 @@ const inferRoute = (guard: GuardType, store: ReturnType<typeof useAuthStore>) =>
 export default boot(({ router }) => {
   const auth = useAuthStore();
 
-  auth.refresh();
+  auth.refresh()
+    // Ignore first error
+    .catch(() => { /*  */ });
 
   // Prevent user from accessing routes that are not allowed.
   router.beforeEach((to) => {

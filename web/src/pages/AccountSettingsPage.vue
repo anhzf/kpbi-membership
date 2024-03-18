@@ -84,7 +84,47 @@ onMounted(() => {
             />
           </q-item-section>
         </q-item>
+      </q-list>
 
+      <q-card-section class="flex flex-col">
+        <q-avatar
+          size="8rem"
+          color="grey"
+          class="group self-center"
+        >
+          <q-img :src="auth.user?.img" />
+
+          <q-btn
+            icon="upload"
+            flat
+            round
+            class="opacity-0 group-hover:!opacity-100 absolute-full transition-opacity"
+          >
+            <label>
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                class="absolute-full cursor-pointer opacity-0"
+              >
+            </label>
+          </q-btn>
+        </q-avatar>
+
+        <h6 class="relative self-center text-center flex items-center">
+          {{ auth.user?.name }}
+
+          <div class="absolute left-full">
+            <q-btn
+              icon="edit"
+              flat
+              round
+              color="grey"
+            />
+          </div>
+        </h6>
+      </q-card-section>
+
+      <q-list padding>
         <q-item v-if="auth.user">
           <q-item-section>
             <q-item-label>Email</q-item-label>

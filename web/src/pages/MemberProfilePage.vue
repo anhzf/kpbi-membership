@@ -47,7 +47,8 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get(String(
 
       <q-card-section>
         <card-header
-          :college-img="data.college.img"
+          :edit-mode="isOwner"
+          :college-img="data.college.img_url"
           :degree="data.education_program.degree"
           :college-name="data.college.name"
           :college-short-name="data.college.short_name"

@@ -96,6 +96,7 @@ module.exports = configure((/* ctx */) => ({
     open: true, // opens browser window automatically
     proxy: {
       '/api': 'http://127.0.0.1:8000',
+      '/storage': 'http://127.0.0.1:8000',
     },
   },
 

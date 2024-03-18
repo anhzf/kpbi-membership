@@ -1,7 +1,11 @@
 <script lang="ts" setup>
-import { AcademicDegree, ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
+import memberService from 'src/services/member';
+import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
+import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
+import { ref, toRaw } from 'vue';
 
 interface Props {
+  editMode?: boolean;
   degree: AcademicDegree;
   programName: string;
   collegeName: string;
@@ -11,7 +15,19 @@ interface Props {
   faculty?: string;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+const modified = ref(toRaw(props) as Props);
+
+const onPhotoChange = async (ev: Event) => {
+  const target = ev.target as HTMLInputElement;
+  if (target.files?.length) {
+    const file = target.files[0];
+
+    await toastErrorIfAny(pageLoading(memberService.updateCollege({ img: file })));
+
+    modified.value.collegeImg = URL.createObjectURL(file);
+  }
+};
 </script>
 
 <template>
@@ -19,8 +35,26 @@ defineProps<Props>();
     <q-avatar
       size="10rem"
       color="grey-5"
+      class="group"
     >
-      <q-img :src="collegeImg" />
+      <q-img :src="modified.collegeImg" />
+
+      <q-btn
+        v-if="editMode"
+        icon="upload"
+        flat
+        round
+        class="opacity-0 group-hover:!opacity-100 absolute-full transition-opacity"
+      >
+        <label>
+          <input
+            type="file"
+            accept="image/jpg, image/jpeg, image/png"
+            class="absolute-full cursor-pointer opacity-0"
+            @change="onPhotoChange"
+          >
+        </label>
+      </q-btn>
     </q-avatar>
 
     <div class="column">

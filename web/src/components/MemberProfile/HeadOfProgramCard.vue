@@ -34,7 +34,7 @@ defineProps<Props>();
               Nama
             </q-item-label>
             <q-item-label>
-              {{ name }}
+              {{ name || '-' }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -46,10 +46,10 @@ defineProps<Props>();
             </q-item-label>
             <q-item-label>
               <a
-                :href="`mailto:${email}`"
+                :href="email && `mailto:${email}`"
                 target="_blank"
               >
-                {{ email }}
+                {{ email || '-' }}
               </a>
             </q-item-label>
           </q-item-section>
@@ -60,7 +60,7 @@ defineProps<Props>();
             <q-item-label caption>
               Nomor HP
             </q-item-label>
-            <q-item-label>{{ phoneNumber }}</q-item-label>
+            <q-item-label>{{ phoneNumber || '-' }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>

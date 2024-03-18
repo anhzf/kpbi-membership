@@ -56,7 +56,7 @@ class Membership extends Model
             'accreditations'
         ]);
         $this->educationProgram->college
-            ->append('img')
+            ->append('img_url')
             ->makeHidden('media');
 
         return $this;

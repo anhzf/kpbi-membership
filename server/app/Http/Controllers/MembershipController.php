@@ -108,21 +108,35 @@ class MembershipController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Membership  $membership
+     * @param  \App\Models\Membership  $member
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Membership $membership)
+    public function update(Request $request, Membership $member)
     {
-        //
+        /** @var \App\Models\User */
+        $user = $request->user();
+
+        // Check if $member program is head by the user
+        if ($member->educationProgram->heads->where('user_id', $user->id)->isEmpty()) {
+            return response('Unauthorized', 401);
+        }
+
+        $payload = Validator::make($request->all(), [
+            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ])->safe();
+
+        $member->educationProgram->college
+            ->addMedia($payload->img)
+            ->toMediaCollection('logo');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Membership  $membership
+     * @param  \App\Models\Membership  $member
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Membership $membership)
+    public function destroy(Membership $member)
     {
         //
     }

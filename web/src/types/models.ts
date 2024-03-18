@@ -55,6 +55,7 @@ export interface College extends Accreditable, Timestamps {
   short_name: string;
   type: CollegeType;
   img?: string;
+  img_url?: string;
   city: string;
   province: string;
   street_address: string;
