@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AcademicDegree;
 use App\Http\Requests\StoreMembershipRequest;
 use App\Models\College;
 use App\Models\EducationProgram;
@@ -117,39 +118,77 @@ class MembershipController extends Controller
         /** @var \App\Models\User */
         $user = $request->user();
 
-        if ($request->_entity === 'college') {
-            // TODO: Move this logic into guard/gate/policy/related
-            // Check if $member program is head by the user
-            if ($member->educationProgram->heads->where('user_id', $user->id)->isEmpty()) {
-                return response('Unauthorized', 401);
-            }
+        // TODO: Move this logic into guard/gate/policy/related
+        // Check if $member program is head by the user
+        if ($member->educationProgram->heads->where('user_id', $user->id)->isEmpty()) {
+            return response('Unauthorized', 401);
+        }
 
-            $payload = Validator::make($request->all(), [
-                'name' => 'sometimes|string',
-                'short_name' => 'sometimes|string',
-                'img' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
-                'type' => ['sometimes', Rule::enum(CollegeType::class)],
-                'city' => 'sometimes|string',
-                'state' => 'sometimes|string',
-                'street_address' => 'sometimes|string',
-            ])->safe();
+        // TODO: refactor same logic into a method
+        switch ($request->_entity) {
+            case 'college':
+                $payload = Validator::make($request->all(), [
+                    'name' => 'sometimes|string',
+                    'short_name' => 'sometimes|string',
+                    'type' => ['sometimes', Rule::enum(CollegeType::class)],
+                    'city' => 'sometimes|string',
+                    'state' => 'sometimes|string',
+                    'street_address' => 'sometimes|string',
+                    'img' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+                ])->safe();
 
-            $college = $member->educationProgram->college;
+                $college = $member->educationProgram->college;
 
-            if (isset($payload?->img)) {
-                $college->addMedia($payload->img)
-                    ->toMediaCollection('logo');
-            }
-
-            $COLLEGE_ATTRS = ['name', 'short_name', 'type', 'city', 'state', 'street_address'];
-
-            foreach ($COLLEGE_ATTRS as $attr) {
-                if (isset($payload->$attr)) {
-                    $college->$attr = $payload->$attr;
+                if (isset($payload?->img)) {
+                    $college->addMedia($payload->img)
+                        ->toMediaCollection('logo');
                 }
-            }
 
-            $college->save();
+                $COLLEGE_ATTRS = ['name', 'short_name', 'type', 'city', 'state', 'street_address'];
+
+                foreach ($COLLEGE_ATTRS as $attr) {
+                    if (isset($payload->$attr)) {
+                        $college->$attr = $payload->$attr;
+                    }
+                }
+
+                $college->save();
+
+                break;
+
+            case 'program':
+                $payload = Validator::make($request->all(), [
+                    'name' => 'sometimes|string',
+                    'degree' => ['sometimes', Rule::enum(AcademicDegree::class)],
+                    'department' => 'sometimes|string',
+                    'faculty' => 'sometimes|string',
+                    'email' => 'sometimes|email',
+                    'phone_number' => 'sometimes|string',
+                    'external_link' => 'sometimes|url',
+                    'img' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+                ])->safe();
+
+                $program = $member->educationProgram;
+
+                if (isset($payload?->img)) {
+                    $program->addMedia($payload->img)
+                        ->toMediaCollection('logo');
+                }
+
+                $PROGRAM_ATTRS = ['name', 'degree', 'department', 'faculty', 'email', 'phone_number', 'external_link'];
+
+                foreach ($PROGRAM_ATTRS as $attr) {
+                    if (isset($payload->$attr)) {
+                        $program->$attr = $payload->$attr;
+                    }
+                }
+
+                $program->save();
+
+                break;
+
+            default:
+                return response('Invalid entity', 400);
         }
     }
 

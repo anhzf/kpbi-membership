@@ -1,6 +1,6 @@
 import type { AcademicDegree } from 'src/types/constants';
 import type {
-  College, MemberInList, MemberProfile, MembershipRequest,
+  College, EducationProgram, MemberInList, MemberProfile, MembershipRequest,
 } from 'src/types/models';
 
 export interface GetMember {
@@ -33,12 +33,20 @@ export interface ListRequestMembership {
   (): Promise<MembershipRequest[]>;
 }
 
-export interface UpdateCollegePayload extends Partial<Omit<College, 'img' | 'img_url'>> {
+export interface UpdateCollegePayload extends Partial<Omit<College, 'img' | 'img_url' | 'accreditations'>> {
   img?: File;
 }
 
 export interface UpdateCollege {
   (payload: UpdateCollegePayload): Promise<void>;
+}
+
+export interface UpdateProgramPayload extends Partial<Omit<EducationProgram, 'img' | 'img_url' | 'accreditations'>> {
+  img?: File;
+}
+
+export interface UpdateProgram {
+  (payload: UpdateProgramPayload): Promise<void>;
 }
 
 export interface MemberService {
@@ -48,4 +56,5 @@ export interface MemberService {
   request: RequestMembership;
   listRequest: ListRequestMembership;
   updateCollege: UpdateCollege;
+  updateProgram: UpdateProgram;
 }

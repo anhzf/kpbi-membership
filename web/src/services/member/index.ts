@@ -5,6 +5,7 @@ import type {
   ListRequestMembership,
   MemberService, RegisterMember,
   RequestMembership, UpdateCollege,
+  UpdateProgram,
 } from 'src/services/member/MemberService';
 import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import { api } from 'src/services/utils';
@@ -64,6 +65,16 @@ const updateCollege: UpdateCollege = async (payload) => {
   await api.post(`${ENDPOINT}/${states.meId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
 };
 
+const updateProgram: UpdateProgram = async (payload) => {
+  if (!states.meId) throw new Error('cannot determine the member id.', { cause: 'meId is not set' });
+  const fd = toFormData(omitByFilterValue(payload, (v) => !!v));
+  // Workaround for the PUT method
+  // https://laracasts.com/discuss/channels/laravel/axios-returns-empty-array-on-put-request-with-formdata-to-laravel-api
+  fd.append('_method', 'PUT');
+  fd.append('_entity', 'program');
+  await api.post(`${ENDPOINT}/${states.meId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+};
+
 const memberService: MemberService = {
   get,
   list,
@@ -71,6 +82,7 @@ const memberService: MemberService = {
   request,
   listRequest,
   updateCollege,
+  updateProgram,
 };
 
 export default memberService;

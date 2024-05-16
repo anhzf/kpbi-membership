@@ -29,6 +29,7 @@ const onUpdateFormSubmit = async () => {
   );
 
   emit('updated');
+  showForm.value = false;
 };
 </script>
 
@@ -56,7 +57,7 @@ const onUpdateFormSubmit = async () => {
           Akreditasi
         </q-item-label>
         <q-item
-          v-for="accreditation in data?.accreditations"
+          v-for="accreditation in data.accreditations"
           :key="accreditation.id"
         >
           <q-item-section>

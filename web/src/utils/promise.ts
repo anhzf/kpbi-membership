@@ -1,11 +1,7 @@
-/**
- * @param ms default 3000
- * @param value value to resolve
- */
-export const sleep = <T = void>(ms?: number, value?: T) => (
-  new Promise<T>((resolve) => {
+export const sleep = (ms = 3000) => (
+  new Promise<void>((resolve) => {
     setTimeout(() => {
-      resolve(value as T);
-    }, ms || 3000);
+      resolve();
+    }, ms);
   })
 );

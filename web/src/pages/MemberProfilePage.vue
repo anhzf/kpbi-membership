@@ -64,10 +64,8 @@ const {
         <div class="col-6 column q-col-gutter-sm">
           <div>
             <program-card
-              :accreditations="data.education_program.accreditations"
-              :email="data.education_program.email"
-              :phone-number="data.education_program.phone_number"
-              :external-link="data.education_program.external_link"
+              :data="data.education_program"
+              @updated="refresh"
             />
           </div>
 

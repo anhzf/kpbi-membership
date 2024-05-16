@@ -1,14 +1,35 @@
 <script lang="ts" setup>
+import memberService from 'src/services/member';
 import { MemberProfile } from 'src/types/models';
+import { inferDiffs } from 'src/utils/object';
+import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
+import { ref } from 'vue';
+import ProgramFields from './ProgramFields.vue';
 
 interface Props {
-  accreditations: MemberProfile['education_program']['accreditations'];
-  email?: string;
-  phoneNumber?: string;
-  externalLink?: string;
+  data: MemberProfile['education_program'];
 }
 
-defineProps<Props>();
+interface Emits {
+  (ev: 'updated'): void;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
+
+const elmFields = ref<typeof ProgramFields>();
+const showForm = ref(false);
+
+const onUpdateFormSubmit = async () => {
+  const fields = inferDiffs(elmFields.value?.fields, props.data);
+
+  await toastErrorIfAny(
+    pageLoading(memberService.updateProgram(fields)),
+  );
+
+  emit('updated');
+  showForm.value = false;
+};
 </script>
 
 <template>
@@ -17,9 +38,18 @@ defineProps<Props>();
     bordered
   >
     <q-card-section>
-      <h3 class="text-h6 m-0">
-        Program Pendidikan
-      </h3>
+      <div class="flex justify-between items-center gap-2">
+        <h3 class="text-h6 m-0">
+          Program Pendidikan
+        </h3>
+        <q-btn
+          icon="edit"
+          color="grey"
+          flat
+          round
+          @click="showForm = true"
+        />
+      </div>
 
       <q-list>
         <q-item-label header>
@@ -27,7 +57,7 @@ defineProps<Props>();
         </q-item-label>
 
         <q-item
-          v-for="accreditation in accreditations"
+          v-for="accreditation in data.accreditations"
           :key="accreditation.id"
         >
           <q-item-section>
@@ -65,10 +95,10 @@ defineProps<Props>();
             </q-item-label>
             <q-item-label>
               <a
-                :href="email && `mailto:${email}`"
+                :href="data.email && `mailto:${data.email}`"
                 target="_blank"
               >
-                {{ email || '-' }}
+                {{ data.email || '-' }}
               </a>
             </q-item-label>
           </q-item-section>
@@ -79,7 +109,7 @@ defineProps<Props>();
             <q-item-label caption>
               Nomor Telpon kantor
             </q-item-label>
-            <q-item-label>{{ phoneNumber || '-' }}</q-item-label>
+            <q-item-label>{{ data.phone_number || '-' }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -90,15 +120,51 @@ defineProps<Props>();
             </q-item-label>
             <q-item-label>
               <a
-                :href="externalLink"
+                :href="data.external_link"
                 target="_blank"
               >
-                {{ externalLink || '-' }}
+                {{ data.external_link || '-' }}
               </a>
             </q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
     </q-card-section>
+
+    <q-dialog
+      v-model="showForm"
+      persistent
+    >
+      <q-card class="w-prose max-w-90vw">
+        <q-form @submit.prevent="onUpdateFormSubmit">
+          <q-card-section>
+            <div class="text-h6">
+              Perbarui Program Pendidikan
+            </div>
+          </q-card-section>
+
+          <q-card-section class="flex flex-col gap-2">
+            <program-fields
+              ref="elmFields"
+              :data="data"
+            />
+          </q-card-section>
+
+          <q-card-actions>
+            <q-btn
+              label="Batal"
+              flat
+              @click="showForm = false"
+            />
+            <q-space />
+            <q-btn
+              label="Simpan"
+              color="primary"
+              type="submit"
+            />
+          </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </q-card>
 </template>
