@@ -33,7 +33,7 @@ export interface ListRequestMembership {
   (): Promise<MembershipRequest[]>;
 }
 
-export interface UpdateCollegePayload extends Partial<Omit<College, 'img'>> {
+export interface UpdateCollegePayload extends Partial<Omit<College, 'img' | 'img_url'>> {
   img?: File;
 }
 

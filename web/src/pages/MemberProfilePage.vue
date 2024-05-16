@@ -11,7 +11,9 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const isOwner = computed(() => route.params.memberId === 'me');
-const { state: data, isLoading } = useAsyncState(() => memberService.get(String(route.params.memberId)), undefined);
+const {
+  state: data, isLoading, execute: refresh,
+} = useAsyncState(() => memberService.get(String(route.params.memberId)), undefined);
 </script>
 
 <template>
@@ -82,11 +84,8 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get(String(
         <div class="col-6 column q-col-gutter-sm">
           <div>
             <college-card
-              :accreditations="data.college.accreditations"
-              :street-address="data.college.street_address"
-              :city="data.college.city"
-              :province="data.college.province"
-              :kind="data.college.type"
+              :data="data.college"
+              @updated="refresh"
             />
           </div>
         </div>

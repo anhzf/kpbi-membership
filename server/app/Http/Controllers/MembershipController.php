@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMembershipRequest;
 use App\Models\College;
 use App\Models\EducationProgram;
+use App\Models\Enums\CollegeType;
 use App\Models\Membership;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -116,18 +117,40 @@ class MembershipController extends Controller
         /** @var \App\Models\User */
         $user = $request->user();
 
-        // Check if $member program is head by the user
-        if ($member->educationProgram->heads->where('user_id', $user->id)->isEmpty()) {
-            return response('Unauthorized', 401);
+        if ($request->_entity === 'college') {
+            // TODO: Move this logic into guard/gate/policy/related
+            // Check if $member program is head by the user
+            if ($member->educationProgram->heads->where('user_id', $user->id)->isEmpty()) {
+                return response('Unauthorized', 401);
+            }
+
+            $payload = Validator::make($request->all(), [
+                'name' => 'sometimes|string',
+                'short_name' => 'sometimes|string',
+                'img' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+                'type' => ['sometimes', Rule::enum(CollegeType::class)],
+                'city' => 'sometimes|string',
+                'state' => 'sometimes|string',
+                'street_address' => 'sometimes|string',
+            ])->safe();
+
+            $college = $member->educationProgram->college;
+
+            if (isset($payload?->img)) {
+                $college->addMedia($payload->img)
+                    ->toMediaCollection('logo');
+            }
+
+            $COLLEGE_ATTRS = ['name', 'short_name', 'type', 'city', 'state', 'street_address'];
+
+            foreach ($COLLEGE_ATTRS as $attr) {
+                if (isset($payload->$attr)) {
+                    $college->$attr = $payload->$attr;
+                }
+            }
+
+            $college->save();
         }
-
-        $payload = Validator::make($request->all(), [
-            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ])->safe();
-
-        $member->educationProgram->college
-            ->addMedia($payload->img)
-            ->toMediaCollection('logo');
     }
 
     /**

@@ -10,10 +10,15 @@ export const pageLoading = async <T>(promise: Promise<T>, opts?: QLoadingShowOpt
 
 export const toastErrorIfAny = async <T>(promise: Promise<T>): Promise<T> => promise
   .catch((err) => {
-    console.error(err);
     Notify.create({
       type: 'negative',
-      message: getErrMsg(err.message),
+      message: getErrMsg(err),
+      actions: [
+        {
+          label: 'Log to console',
+          handler: () => console.log({ err }),
+        },
+      ],
     });
     return Promise.reject(err);
   });

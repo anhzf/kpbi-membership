@@ -1,21 +1,34 @@
-import { AxiosError, toFormData } from 'axios';
+import { toFormData } from 'axios';
 import { fromMembershipRaw, fromMembershipRequestRaw } from 'src/services/converter';
 import type {
-  GetMember, GetMemberList, MemberService, RegisterMember, ListRequestMembership, RequestMembership, UpdateCollege,
+  GetMember, GetMemberList,
+  ListRequestMembership,
+  MemberService, RegisterMember,
+  RequestMembership, UpdateCollege,
 } from 'src/services/member/MemberService';
 import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import { api } from 'src/services/utils';
+import { omitByFilterValue } from 'src/utils/object';
 
 const ENDPOINT = '/member';
 const MEMBERSHIP_ENDPOINT = '/membership';
 
-let meId: string;
+const states = {
+  get meId(): string | null {
+    return import.meta.hot?.data.meId ?? null;
+  },
+  set meId(value: string | null) {
+    if (import.meta.hot) {
+      import.meta.hot.data.meId = value;
+    }
+  },
+};
 
 const get: GetMember = async (id) => {
   const { data } = await api.get<MemberRaw>(`${ENDPOINT}/${id}`);
 
   if (id === 'me') {
-    meId = data.id;
+    states.meId = data.id;
   }
 
   return fromMembershipRaw(data);
@@ -42,12 +55,13 @@ const listRequest: ListRequestMembership = async () => {
 };
 
 const updateCollege: UpdateCollege = async (payload) => {
-  if (!meId) throw new Error('cannot determine the member id.', { cause: 'meId is not set' });
-  const fd = toFormData(payload);
+  if (!states.meId) throw new Error('cannot determine the member id.', { cause: 'meId is not set' });
+  const fd = toFormData(omitByFilterValue(payload, (v) => !!v));
   // Workaround for the PUT method
   // https://laracasts.com/discuss/channels/laravel/axios-returns-empty-array-on-put-request-with-formdata-to-laravel-api
   fd.append('_method', 'PUT');
-  await api.post(`${ENDPOINT}/${meId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+  fd.append('_entity', 'college');
+  await api.post(`${ENDPOINT}/${states.meId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
 };
 
 const memberService: MemberService = {
