@@ -37,7 +37,7 @@ const guestNavItems: INavItem[] = [
 
 const authNavItems: INavItem[] = [
   {
-    title: 'Profil Saya',
+    title: 'Profil Keanggotaan',
     icon: 'perm_identity',
     to: { name: 'Member', params: { memberId: 'me' } },
     exact: true,
