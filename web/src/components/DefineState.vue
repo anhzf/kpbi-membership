@@ -1,11 +1,18 @@
 <script lang="ts" setup generic="T">
+import { Ref, ref } from 'vue';
+
 interface Props {
-  value: T
+  value: T;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const state = ref(props.value) as Ref<T>;
+const setState = (value: T) => {
+  state.value = value;
+};
 </script>
 
 <template>
-  <slot :state="value" />
+  <slot :states="([state, setState] as const)" />
 </template>

@@ -1,15 +1,18 @@
-import axios from 'axios';
+import axios, { toFormData } from 'axios';
 import { Notify } from 'quasar';
 import { api } from 'src/services/utils';
 import { APIResponse, isAPIValidationError } from 'src/types/common';
 import { getErrMsg } from 'src/utils/simpler';
+import { omitByFilterValue } from 'src/utils/object';
 import { handleValidationError } from '../utils';
 import {
   ChangePassword,
   ResetPassword, SendEmailVerificationRequest, SendResetPasswordRequest, UserService,
+  type UpdateProfile,
 } from './UserService';
 
 const ENDPOINT = '/user';
+const ENDPOINT_ME = '/me';
 
 const sendResetPasswordRequest: SendResetPasswordRequest = async (payload) => {
   try {
@@ -123,11 +126,42 @@ const changePassword: ChangePassword = async (payload) => {
   }
 };
 
+const updateProfile: UpdateProfile = async (payload) => {
+  try {
+    const fd = toFormData(omitByFilterValue(payload, (v) => !!v));
+    // Workaround for the PUT method
+    // https://laracasts.com/discuss/channels/laravel/axios-returns-empty-array-on-put-request-with-formdata-to-laravel-api
+    fd.append('_method', 'PUT');
+    const { data } = await api.post<APIResponse>(ENDPOINT_ME, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+
+    if (data.message) {
+      Notify.create({
+        type: 'positive',
+        message: data.message,
+      });
+    }
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const resp = err.response?.data as APIResponse;
+
+      if (isAPIValidationError(resp)) {
+        handleValidationError(resp);
+      }
+    }
+
+    Notify.create({
+      type: 'negative',
+      message: getErrMsg(err),
+    });
+  }
+};
+
 const userService: UserService = {
   sendResetPasswordRequest,
   resetPassword,
   sendEmailVerificationRequest,
   changePassword,
+  updateProfile,
 };
 
 export default userService;

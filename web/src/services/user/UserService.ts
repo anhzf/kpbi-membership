@@ -31,9 +31,20 @@ export interface ChangePassword {
   (payload: ChangePasswordPayload): Promise<void>;
 }
 
+export interface UpdateProfilePayload {
+  name?: string;
+  email?: string;
+  img?: File;
+}
+
+export interface UpdateProfile {
+  (payload: UpdateProfilePayload): Promise<void>;
+}
+
 export interface UserService {
   sendResetPasswordRequest: SendResetPasswordRequest;
   resetPassword: ResetPassword;
   sendEmailVerificationRequest: SendEmailVerificationRequest;
   changePassword: ChangePassword;
+  updateProfile: UpdateProfile;
 }

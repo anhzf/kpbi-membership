@@ -14,7 +14,7 @@ class AuthController extends Controller
      */
     public function index()
     {
-        return response()->json(Auth::user());
+        return response()->json(Auth::user()->append('img')->makeHidden('media'));
     }
 
     /**

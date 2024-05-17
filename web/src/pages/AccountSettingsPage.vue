@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import { Loading } from 'quasar';
+import DefineState from 'components/DefineState.vue';
 import userService from 'src/services/user';
 import { useAuthStore } from 'src/stores/auth';
 import { requiredRule, shouldEq } from 'src/utils/input-rules';
-import { computed, onMounted, reactive } from 'vue';
+import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
+import {
+  computed, onMounted, reactive, ref,
+} from 'vue';
 
 const _ui = reactive({
   showChangePasswordDialog: false,
@@ -16,6 +20,10 @@ const changePasswordField = reactive({
   newPasswordConfirmation: '',
 });
 
+const changedField = ref({
+  name: '',
+});
+
 const onSendEmailVerificationClick = async () => {
   try {
     Loading.show();
@@ -24,6 +32,7 @@ const onSendEmailVerificationClick = async () => {
     Loading.hide();
   }
 };
+
 const onChangePasswordClick = () => {
   _ui.showChangePasswordDialog = true;
 };
@@ -48,6 +57,37 @@ const onChangePasswordFormSubmit = async () => {
     Loading.hide();
     onChangePasswordFormReset();
   }
+};
+
+const onPhotoChange = async (ev: Event) => {
+  const target = ev.target as HTMLInputElement;
+
+  if (target.files?.length) {
+    if (window.confirm('Apakah Anda yakin ingin mengubah foto profil?') === false) {
+      target.value = '';
+      return;
+    }
+
+    const file = target.files[0];
+
+    await toastErrorIfAny(
+      pageLoading(userService.updateProfile({ img: file })),
+    );
+
+    target.value = '';
+
+    auth.refresh();
+  }
+};
+
+const onSaveNameClick = async () => {
+  if (!(changedField.value.name !== auth.user?.name)) return;
+
+  await toastErrorIfAny(
+    pageLoading(userService.updateProfile({ name: changedField.value.name })),
+  );
+
+  auth.refresh();
 };
 
 onMounted(() => {
@@ -105,23 +145,59 @@ onMounted(() => {
                 type="file"
                 accept="image/jpg, image/jpeg, image/png"
                 class="absolute-full cursor-pointer opacity-0"
+                @change="onPhotoChange"
               >
             </label>
           </q-btn>
         </q-avatar>
 
-        <h6 class="relative self-center text-center flex items-center">
-          {{ auth.user?.name }}
-
-          <div class="absolute left-full">
-            <q-btn
-              icon="edit"
-              flat
-              round
-              color="grey"
+        <!-- TODO: Use QPopupEdit -->
+        <define-state
+          :value="false"
+          #="{states: [isEditMode, setEditMode]}"
+        >
+          <h6 class="relative self-center text-center flex items-center">
+            <q-input
+              v-if="isEditMode"
+              :model-value="changedField.name || auth.user?.name"
+              label="Nama"
+              dense
+              @update:model-value="changedField.name = ($event as string)"
             />
-          </div>
-        </h6>
+            <template v-else>
+              {{ auth.user?.name }}
+            </template>
+
+            <div class="absolute left-full flex flex-nowrap">
+              <template v-if="isEditMode">
+                <q-btn
+                  icon="close"
+                  flat
+                  round
+                  color="negative"
+                  @click="setEditMode(false)"
+                />
+                <q-btn
+                  icon="check"
+                  flat
+                  round
+                  color="positive"
+                  :disabled="!(changedField.name && (changedField.name !== auth.user?.name))"
+                  @click="onSaveNameClick().then(() => setEditMode(false))"
+                />
+              </template>
+
+              <q-btn
+                v-else
+                icon="edit"
+                flat
+                round
+                color="grey"
+                @click="setEditMode(!isEditMode)"
+              />
+            </div>
+          </h6>
+        </define-state>
       </q-card-section>
 
       <q-list padding>

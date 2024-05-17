@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipRequestController;
 use App\Http\Controllers\VerificationController;
@@ -29,6 +30,13 @@ Route::prefix('/auth')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->middleware('auth:sanctum');
     Route::post('/', [AuthController::class, 'store']);
     Route::delete('/', [AuthController::class, 'destroy']);
+});
+
+Route::group([
+    'prefix' => '/me',
+    'middleware' => 'auth:sanctum',
+], function () {
+    Route::put('/', [MeController::class, 'update']);
 });
 
 Route::prefix('/user')->group(function () {

@@ -16,14 +16,16 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const modified = ref(toRaw(props) as Props);
+const modified = ref<Props>(toRaw(props));
 
 const onPhotoChange = async (ev: Event) => {
   const target = ev.target as HTMLInputElement;
   if (target.files?.length) {
     const file = target.files[0];
 
-    await toastErrorIfAny(pageLoading(memberService.updateCollege({ img: file })));
+    await toastErrorIfAny(
+      pageLoading(memberService.updateCollege({ img: file })),
+    );
 
     modified.value.collegeImg = URL.createObjectURL(file);
   }

@@ -1,12 +1,14 @@
 <script lang="ts" setup>
+import { useAuthStore } from 'src/stores/auth';
+import { MemberProfile } from 'src/types/models';
+
 interface Props {
-  img?: string;
-  name?: string;
-  email?: string;
-  phoneNumber?: string;
+  data: MemberProfile['responsible'];
 }
 
 defineProps<Props>();
+
+const auth = useAuthStore();
 </script>
 
 <template>
@@ -15,16 +17,26 @@ defineProps<Props>();
     bordered
   >
     <q-card-section class="column">
-      <h3 class="text-h6 m-0">
-        Kepala Prodi
-      </h3>
+      <div class="flex justify-between items-center gap-2">
+        <h3 class="text-h6 m-0">
+          Kepala Prodi
+        </h3>
+        <q-btn
+          v-if="auth.user?.id === data.user.id"
+          icon="edit"
+          color="grey"
+          flat
+          round
+          :to="{ name: 'AccountSettings' }"
+        />
+      </div>
 
       <q-avatar
         size="8rem"
         color="grey"
         class="self-center"
       >
-        <q-img :src="img" />
+        <q-img :src="data.user.img" />
       </q-avatar>
 
       <q-list class="mt-2">
@@ -34,7 +46,7 @@ defineProps<Props>();
               Nama
             </q-item-label>
             <q-item-label>
-              {{ name || '-' }}
+              {{ data.user.name || '-' }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -46,10 +58,10 @@ defineProps<Props>();
             </q-item-label>
             <q-item-label>
               <a
-                :href="email && `mailto:${email}`"
+                :href="data.user.email && `mailto:${data.user.email}`"
                 target="_blank"
               >
-                {{ email || '-' }}
+                {{ data.user.email || '-' }}
               </a>
             </q-item-label>
           </q-item-section>
@@ -60,7 +72,7 @@ defineProps<Props>();
             <q-item-label caption>
               Nomor HP
             </q-item-label>
-            <q-item-label>{{ phoneNumber || '-' }}</q-item-label>
+            <q-item-label>{{ data.user.phone_number || '-' }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>

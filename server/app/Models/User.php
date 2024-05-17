@@ -62,10 +62,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'role' => UserRole::class,
     ];
 
-    public function img()
+    public function img(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->getFirstMedia('avatar'),
+            get: fn () => $this->getFirstMedia('avatar')?->getUrl(),
             set: fn (FileAdder $v) => $v->toMediaCollection('avatar')
         );
     }

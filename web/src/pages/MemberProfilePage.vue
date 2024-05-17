@@ -38,7 +38,7 @@ const {
     >
       <define-state
         :value="data.period_end > new Date()"
-        #="{state: isVerified}"
+        #="{states: [isVerified]}"
       >
         <div :class="['text-center py-.5 mb-1 text-white', isVerified ? 'bg-positive' : 'bg-negative']">
           {{ isVerified
@@ -71,10 +71,7 @@ const {
 
           <div>
             <head-of-program-card
-              :img="data.responsible.user.img"
-              :name="data.responsible.user.name"
-              :email="data.responsible.user.email"
-              :phone-number="data.responsible.user.phone_number"
+              :data="data.responsible"
             />
           </div>
         </div>
