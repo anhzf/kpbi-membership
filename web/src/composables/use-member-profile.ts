@@ -1,8 +1,8 @@
-import { createGlobalState, useAsyncState } from '@vueuse/core';
+import { createGlobalState, useAsyncState, whenever } from '@vueuse/core';
 import { AxiosError } from 'axios';
 import { Notify } from 'quasar';
 import memberService from 'src/services/member';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 const _useMemberProfile = () => {
@@ -30,7 +30,7 @@ const _useMemberProfile = () => {
     },
   );
 
-  watch(() => route.params.memberId, () => {
+  whenever(() => route.params.memberId, () => {
     refresh();
   });
 

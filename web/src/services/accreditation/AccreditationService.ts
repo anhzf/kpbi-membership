@@ -9,3 +9,16 @@ export interface AccreditationStorePayload
 export interface AccreditationStore {
   (payload: AccreditationStorePayload): Promise<string>;
 }
+
+export interface AccreditationUpdatePayload
+  extends Partial<Pick<Accreditation, 'label' | 'value' | 'valid_from' | 'valid_until'>> {
+  id: string;
+}
+
+export interface AccreditationUpdate {
+  (payload: AccreditationUpdatePayload): Promise<void>;
+}
+
+export interface AccreditationDestroy {
+  (id: string): Promise<void>;
+}

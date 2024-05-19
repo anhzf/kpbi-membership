@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useIsMemberItself } from 'src/composables/use-member-profile';
-import { accreditationStore } from 'src/services/accreditation';
+import { accreditationDestroy, accreditationStore, accreditationUpdate } from 'src/services/accreditation';
 import { AccreditationStorePayload } from 'src/services/accreditation/AccreditationService';
 import memberService from 'src/services/member';
 import { COLLEGE_TYPES_LABELS } from 'src/types/constants';
@@ -10,6 +10,8 @@ import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
 import { ref } from 'vue';
 import AccreditationForm from './AccreditationForm.vue';
 import CollegeFields from './CollegeFields.vue';
+import AccreditationListItems from './AccreditationListItems.vue';
+import type { Values as AccreditationFormValues } from './AccreditationForm.vue';
 
 interface Props {
   data: College;
@@ -27,6 +29,7 @@ const isMemberOwner = useIsMemberItself();
 const elmFields = ref<typeof CollegeFields>();
 const showForm = ref(false);
 const showAccreditationForm = ref(false);
+const accreditationFormValues = ref<Partial<AccreditationFormValues>>();
 
 const onUpdateFormSubmit = async () => {
   const fields = inferDiffs(elmFields.value?.fields, props.data);
@@ -39,13 +42,26 @@ const onUpdateFormSubmit = async () => {
   showForm.value = false;
 };
 
-const onAccreditationFormSubmit = async (values: AccreditationStorePayload) => {
+const onAccreditationFormSubmit = async (values: AccreditationFormValues) => {
   await toastErrorIfAny(
-    pageLoading(accreditationStore(values)),
+    pageLoading<unknown>(values.id ? accreditationUpdate(values)
+      : accreditationStore({
+        ...values,
+        entity: 'college',
+        entity_id: props.data.id,
+      })),
   );
 
   emit('updated');
   showAccreditationForm.value = false;
+};
+
+const onAccreditationRequestDelete = async (id: string) => {
+  await toastErrorIfAny(
+    pageLoading(accreditationDestroy(id)),
+  );
+
+  emit('updated');
 };
 </script>
 
@@ -73,36 +89,8 @@ const onAccreditationFormSubmit = async (values: AccreditationStorePayload) => {
         <q-item-label header>
           Akreditasi
         </q-item-label>
-        <q-item
-          v-for="accreditation in data.accreditations"
-          :key="accreditation.id"
-        >
-          <q-item-section>
-            <q-item-label class="font-medium text-blue-grey-10">
-              {{ accreditation.value }}
-            </q-item-label>
-            <q-item-label caption>
-              Exp:
-              {{ accreditation.valid_from?.toLocaleDateString() }} —
-              {{ accreditation.valid_until?.toLocaleDateString() }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section
-            side
-            top
-          >
-            {{ accreditation.label }}
-          </q-item-section>
-        </q-item>
 
-        <q-item v-if="isMemberOwner">
-          <q-btn
-            label="Tambah data akreditasi"
-            icon="add"
-            flat
-            @click="showAccreditationForm = true"
-          />
-        </q-item>
+        <AccreditationListItems :data="data.accreditations" />
 
         <q-separator />
 
@@ -151,6 +139,24 @@ const onAccreditationFormSubmit = async (values: AccreditationStorePayload) => {
             />
           </q-card-section>
 
+          <q-card-section>
+            <q-list
+              separator
+              bordered
+            >
+              <q-item-label header>
+                Akreditasi
+              </q-item-label>
+
+              <AccreditationListItems
+                edit-mode
+                :data="data.accreditations"
+                @request-form="(showAccreditationForm = true, accreditationFormValues = $event)"
+                @request-delete="onAccreditationRequestDelete($event)"
+              />
+            </q-list>
+          </q-card-section>
+
           <q-card-actions>
             <q-btn
               label="Batal"
@@ -168,12 +174,16 @@ const onAccreditationFormSubmit = async (values: AccreditationStorePayload) => {
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="showAccreditationForm">
-      <q-card class="w-prose max-w-90vw">
+    <q-dialog
+      v-model="showAccreditationForm"
+      @hide="(accreditationFormValues = undefined)"
+    >
+      <q-card class="w-55ch max-w-90vw">
         <AccreditationForm
-          title="Tambah Data Akreditasi"
-          :object-name="data.name"
-          @submit="onAccreditationFormSubmit({...$event, entity: 'college', entity_id: data.id})"
+          :title="accreditationFormValues ? 'Perbarui Data Akreditasi' : 'Tambah Data Akreditasi'"
+          :object-name="[accreditationFormValues?.label, data.name].filter(Boolean).join(' | ')"
+          :data="accreditationFormValues"
+          @submit="(onAccreditationFormSubmit($event))"
         />
       </q-card>
     </q-dialog>

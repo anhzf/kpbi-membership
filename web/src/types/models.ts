@@ -7,6 +7,9 @@ export interface HasId {
   id: unknown;
 }
 
+/**
+ * Pick all fields or picked (second type parameters) from T except 'id'.
+ */
 export type Relation<T extends HasId, Fields extends Exclude<keyof T, 'id'> = never> = Pick<T, Fields | 'id'>;
 
 export type RelationExpanded<T extends HasId> = Relation<T, Exclude<keyof T, 'id'>>;

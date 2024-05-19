@@ -73,7 +73,15 @@ class AccreditationController extends Controller
      */
     public function update(Request $request, Accreditation $accreditation)
     {
-        //
+        /** @var \Illuminate\Support\ValidatedInput */
+        $payload = Validator::make($request->all(), [
+            'label' => 'sometimes|string',
+            'value' => ['sometimes', Rule::in(Accreditation::VALUES)],
+            'valid_from' => 'sometimes|date',
+            'valid_until' => 'sometimes|date',
+        ])->safe();
+
+        $accreditation->update($payload->all());
     }
 
     /**
@@ -84,6 +92,6 @@ class AccreditationController extends Controller
      */
     public function destroy(Accreditation $accreditation)
     {
-        //
+        $accreditation->delete();
     }
 }
