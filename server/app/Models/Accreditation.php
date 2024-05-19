@@ -24,6 +24,16 @@ class Accreditation extends Model
 
     const VALUES = ['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi'];
 
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = ['label', 'value', 'valid_from', 'valid_until'];
+
+    protected $casts = [
+        'valid_from' => 'date',
+        'valid_until' => 'date',
+    ];
+
     public function accreditable()
     {
         return $this->morphTo();

@@ -2,7 +2,7 @@ import { createGlobalState, useAsyncState } from '@vueuse/core';
 import { AxiosError } from 'axios';
 import { Notify } from 'quasar';
 import memberService from 'src/services/member';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const _useMemberProfile = () => {
@@ -34,7 +34,13 @@ const _useMemberProfile = () => {
     refresh();
   });
 
-  return returns;
+  return { ...returns, refresh };
+};
+
+export const useIsMemberItself = () => {
+  const route = useRoute();
+  const isOwner = computed(() => route.params.memberId === 'me');
+  return isOwner;
 };
 
 export default createGlobalState(_useMemberProfile);

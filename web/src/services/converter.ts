@@ -5,7 +5,22 @@ import type {
 
 export const fromMembershipRaw = (raw: MemberRaw): MemberProfile => ({
   ...raw,
-  college: raw.education_program.college,
+  college: {
+    ...raw.education_program.college,
+    accreditations: raw.education_program.college.accreditations.map((a) => ({
+      ...a,
+      valid_from: a.valid_from ? new Date(a.valid_from) : undefined,
+      valid_until: a.valid_until ? new Date(a.valid_until) : undefined,
+    })),
+  },
+  education_program: {
+    ...raw.education_program,
+    accreditations: raw.education_program.accreditations.map((a) => ({
+      ...a,
+      valid_from: a.valid_from ? new Date(a.valid_from) : undefined,
+      valid_until: a.valid_until ? new Date(a.valid_until) : undefined,
+    })),
+  },
   responsible: raw.education_program.heads.at(-1)!,
   period_end: new Date(raw.period_end),
   created_at: new Date(raw.created_at),

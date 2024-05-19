@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accreditation;
+use App\Models\College;
+use App\Models\EducationProgram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AccreditationController extends Controller
 {
@@ -25,7 +29,28 @@ class AccreditationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ENTITIES = [
+            'college' => College::class,
+            'program' => EducationProgram::class,
+        ];
+
+        /** @var \Illuminate\Support\ValidatedInput */
+        $payload = Validator::make($request->all(), [
+            'entity' => ['required', Rule::in(array_keys($ENTITIES))],
+            'entity_id' => 'required|integer',
+            'label' => 'required|string',
+            'value' => ['required', Rule::in(Accreditation::VALUES)],
+            'valid_from' => 'nullable|date',
+            'valid_until' => 'nullable|date',
+        ])->safe();
+
+        $type = $ENTITIES[$payload->entity];
+
+        $entity = $type::findOrFail($payload->entity_id);
+
+        $accreditation = $entity->accreditations()->create($payload->except('entity', 'entity_id'));
+
+        return response()->json(['data' => $accreditation->id], 201);
     }
 
     /**

@@ -1,10 +1,14 @@
 <script lang="ts" setup>
+import { useIsMemberItself } from 'src/composables/use-member-profile';
+import { accreditationStore } from 'src/services/accreditation';
+import { AccreditationStorePayload } from 'src/services/accreditation/AccreditationService';
 import memberService from 'src/services/member';
 import { COLLEGE_TYPES_LABELS } from 'src/types/constants';
 import { College } from 'src/types/models';
 import { inferDiffs } from 'src/utils/object';
 import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
 import { ref } from 'vue';
+import AccreditationForm from './AccreditationForm.vue';
 import CollegeFields from './CollegeFields.vue';
 
 interface Props {
@@ -18,8 +22,11 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const isMemberOwner = useIsMemberItself();
+
 const elmFields = ref<typeof CollegeFields>();
 const showForm = ref(false);
+const showAccreditationForm = ref(false);
 
 const onUpdateFormSubmit = async () => {
   const fields = inferDiffs(elmFields.value?.fields, props.data);
@@ -30,6 +37,15 @@ const onUpdateFormSubmit = async () => {
 
   emit('updated');
   showForm.value = false;
+};
+
+const onAccreditationFormSubmit = async (values: AccreditationStorePayload) => {
+  await toastErrorIfAny(
+    pageLoading(accreditationStore(values)),
+  );
+
+  emit('updated');
+  showAccreditationForm.value = false;
 };
 </script>
 
@@ -44,6 +60,7 @@ const onUpdateFormSubmit = async () => {
           Kampus
         </h3>
         <q-btn
+          v-if="isMemberOwner"
           icon="edit"
           color="grey"
           flat
@@ -61,26 +78,30 @@ const onUpdateFormSubmit = async () => {
           :key="accreditation.id"
         >
           <q-item-section>
-            <q-item-label overline>
-              {{ accreditation.label }}
+            <q-item-label class="font-medium text-blue-grey-10">
+              {{ accreditation.value }}
             </q-item-label>
-            <q-item-label>
-              <span class="text-h6 m-0">
-                {{ accreditation.value }}
-              </span>
+            <q-item-label caption>
+              Exp:
+              {{ accreditation.valid_from?.toLocaleDateString() }} —
+              {{ accreditation.valid_until?.toLocaleDateString() }}
             </q-item-label>
           </q-item-section>
           <q-item-section
             side
             top
           >
-            <q-item-label caption>
-              {{ accreditation.valid_from?.toLocaleDateString() }}—
-            </q-item-label>
-            <q-item-label caption>
-              {{ accreditation.valid_until?.toLocaleDateString() }}
-            </q-item-label>
+            {{ accreditation.label }}
           </q-item-section>
+        </q-item>
+
+        <q-item v-if="isMemberOwner">
+          <q-btn
+            label="Tambah data akreditasi"
+            icon="add"
+            flat
+            @click="showAccreditationForm = true"
+          />
         </q-item>
 
         <q-separator />
@@ -144,6 +165,16 @@ const onUpdateFormSubmit = async () => {
             />
           </q-card-actions>
         </q-form>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="showAccreditationForm">
+      <q-card class="w-prose max-w-90vw">
+        <AccreditationForm
+          title="Tambah Data Akreditasi"
+          :object-name="data.name"
+          @submit="onAccreditationFormSubmit({...$event, entity: 'college', entity_id: data.id})"
+        />
       </q-card>
     </q-dialog>
   </q-card>

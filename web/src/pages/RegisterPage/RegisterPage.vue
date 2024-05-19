@@ -1,4 +1,92 @@
 <!-- TODO: Add selection for University from database -->
+
+<script lang="ts" setup>
+import { useAsyncState } from '@vueuse/core';
+import axios from 'axios';
+import { Notify } from 'quasar';
+import memberService from 'src/services/member';
+import { useAuthStore } from 'src/stores/auth';
+import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
+import { requiredRule, shouldEq } from 'src/utils/input-rules';
+import { getErrMsg } from 'src/utils/simpler';
+import {
+  computed, reactive, ref, watch,
+} from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const auth = useAuthStore();
+
+const step = ref(1);
+
+const errMsg = ref('');
+
+const showPassword = ref(false);
+const fields = reactive({
+  degree: '' as AcademicDegree,
+  collegeName: '',
+  _collegeShortName: '',
+  get collegeShortName() {
+    return this._collegeShortName;
+  },
+  set collegeShortName(v) {
+    this._collegeShortName = v.toLocaleUpperCase();
+  },
+  programName: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+});
+const isProgramValid = computed(() => fields.degree && fields.collegeName && fields.collegeShortName && fields.programName);
+
+const { execute: onSubmit, isLoading: onSubmitLoading } = useAsyncState<void>(async () => {
+  try {
+    await memberService.register({
+      degree: fields.degree,
+      college_name: fields.collegeName,
+      college_short_name: fields.collegeShortName,
+      program_name: fields.programName,
+      email: fields.email,
+      password: fields.password,
+      password_confirmation: fields.passwordConfirmation,
+    });
+
+    await auth.login({
+      username: fields.email,
+      password: fields.password,
+    });
+
+    return void router.push({ name: 'MyProfile' });
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status && (err.response?.status >= 400 || err.response?.status < 500)) {
+        errMsg.value = getErrMsg(err);
+        return Promise.resolve();
+      }
+
+      Notify.create({
+        type: 'negative',
+        message: `Terjadi kesalahan pada server. ${getErrMsg(err)}`,
+      });
+
+      return console.error({ err });
+    }
+
+    throw err;
+  }
+}, undefined, { immediate: false });
+
+watch(step, (v) => {
+  router.replace({ query: { step: v } });
+});
+
+const degreeOptions = Object.entries(ACADEMIC_DEGREES_LABELS).map(([key, value]) => ({
+  label: `${value} - ${key.toUpperCase()}`,
+  value: key as AcademicDegree,
+}));
+</script>
+
 <template>
   <q-page
     padding
@@ -166,90 +254,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script lang="ts" setup>
-import { useAsyncState } from '@vueuse/core';
-import axios from 'axios';
-import { Notify } from 'quasar';
-import memberService from 'src/services/member';
-import { useAuthStore } from 'src/stores/auth';
-import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
-import { requiredRule, shouldEq } from 'src/utils/input-rules';
-import { getErrMsg } from 'src/utils/simpler';
-import {
-  computed, reactive, ref, watch,
-} from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const auth = useAuthStore();
-
-const step = ref(1);
-
-const errMsg = ref('');
-
-const showPassword = ref(false);
-const fields = reactive({
-  degree: '' as AcademicDegree,
-  collegeName: '',
-  _collegeShortName: '',
-  get collegeShortName() {
-    return this._collegeShortName;
-  },
-  set collegeShortName(v) {
-    this._collegeShortName = v.toLocaleUpperCase();
-  },
-  programName: '',
-  email: '',
-  password: '',
-  passwordConfirmation: '',
-});
-const isProgramValid = computed(() => fields.degree && fields.collegeName && fields.collegeShortName && fields.programName);
-
-const { execute: onSubmit, isLoading: onSubmitLoading } = useAsyncState<void>(async () => {
-  try {
-    await memberService.register({
-      degree: fields.degree,
-      college_name: fields.collegeName,
-      college_short_name: fields.collegeShortName,
-      program_name: fields.programName,
-      email: fields.email,
-      password: fields.password,
-      password_confirmation: fields.passwordConfirmation,
-    });
-
-    await auth.login({
-      username: fields.email,
-      password: fields.password,
-    });
-
-    return void router.push({ name: 'MyProfile' });
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      if (err.response?.status && (err.response?.status >= 400 || err.response?.status < 500)) {
-        errMsg.value = getErrMsg(err);
-        return Promise.resolve();
-      }
-
-      Notify.create({
-        type: 'negative',
-        message: `Terjadi kesalahan pada server. ${getErrMsg(err)}`,
-      });
-
-      return console.error({ err });
-    }
-
-    throw err;
-  }
-}, undefined, { immediate: false });
-
-watch(step, (v) => {
-  router.replace({ query: { step: v } });
-});
-
-const degreeOptions = Object.entries(ACADEMIC_DEGREES_LABELS).map(([key, value]) => ({
-  label: `${value} - ${key.toUpperCase()}`,
-  value: key as AcademicDegree,
-}));
-</script>

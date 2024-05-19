@@ -14,5 +14,8 @@ const setState = (value: T) => {
 </script>
 
 <template>
-  <slot :states="([state, setState] as const)" />
+  <slot
+    :states="([state, setState] as const)"
+    :bind-v-model="{modelValue: state, 'onUpdate:modelValue': setState}"
+  />
 </template>

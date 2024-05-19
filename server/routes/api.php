@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccreditationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
@@ -63,6 +64,7 @@ Route::get('/member/me', [MembershipController::class, 'showMy'])
 Route::apiResource('/member', MembershipController::class);
 Route::apiResource('/membership', MembershipRequestController::class);
 Route::apiResource('/course', CourseController::class);
+Route::apiResource('/accreditation', AccreditationController::class);
 
 Route::group([
     'prefix' => '/admin',

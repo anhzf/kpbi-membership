@@ -1,19 +1,13 @@
 <script lang="ts" setup>
-import { useAsyncState } from '@vueuse/core';
+import DefineState from 'components/DefineState.vue';
 import CardHeader from 'components/MemberProfile/CardHeader.vue';
 import CollegeCard from 'components/MemberProfile/CollegeCard.vue';
 import HeadOfProgramCard from 'components/MemberProfile/HeadOfProgramCard.vue';
 import ProgramCard from 'components/MemberProfile/ProgramCard.vue';
-import DefineState from 'components/DefineState.vue';
-import memberService from 'src/services/member';
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import useMemberProfile, { useIsMemberItself } from 'src/composables/use-member-profile';
 
-const route = useRoute();
-const isOwner = computed(() => route.params.memberId === 'me');
-const {
-  state: data, isLoading, execute: refresh,
-} = useAsyncState(() => memberService.get(String(route.params.memberId)), undefined);
+const isOwner = useIsMemberItself();
+const { state: data, isLoading, refresh } = useMemberProfile();
 </script>
 
 <template>

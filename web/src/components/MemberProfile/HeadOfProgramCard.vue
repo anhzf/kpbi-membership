@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useIsMemberItself } from 'src/composables/use-member-profile';
 import { useAuthStore } from 'src/stores/auth';
 import { MemberProfile } from 'src/types/models';
 
@@ -9,6 +10,8 @@ interface Props {
 defineProps<Props>();
 
 const auth = useAuthStore();
+
+const isMemberOwner = useIsMemberItself();
 </script>
 
 <template>
@@ -22,7 +25,7 @@ const auth = useAuthStore();
           Kepala Prodi
         </h3>
         <q-btn
-          v-if="auth.user?.id === data.user.id"
+          v-if="isMemberOwner && auth.user?.id === data.user.id"
           icon="edit"
           color="grey"
           flat

@@ -17,6 +17,7 @@ interface INavItem extends Partial<RouterLinkProps> {
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
+
 const publicNavItems: INavItem[] = [
   {
     title: 'Daftar Anggota',
@@ -43,7 +44,7 @@ const authNavItems: INavItem[] = [
     exact: true,
   },
   {
-    title: 'Keanggotaan Saya',
+    title: 'Status Keanggotaan',
     icon: 'card_membership',
     to: { name: 'Membership' },
     exact: true,
@@ -60,6 +61,7 @@ const authNavItems: INavItem[] = [
     onClick: () => auth.logout(),
   },
 ];
+
 const leftDrawerOpen = ref(false);
 const authorizedNavItems = computed(() => (auth.user ? authNavItems : guestNavItems));
 const toggleLeftDrawer = () => {
@@ -120,7 +122,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
         />
 
         <q-toolbar-title>
-          KPBI
+          Keanggotaan KPBI
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
