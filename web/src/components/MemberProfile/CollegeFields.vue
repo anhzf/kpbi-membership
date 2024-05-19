@@ -19,7 +19,13 @@ const props = defineProps<Props>();
 
 const fields = ref({
   name: props.data?.name || '',
-  short_name: props.data?.short_name || '',
+  _short_name: props.data?.name || '',
+  get short_name() {
+    return this._short_name;
+  },
+  set short_name(v) {
+    this._short_name = v.toLocaleUpperCase();
+  },
   type: props.data?.type || '',
   city: props.data?.city || '',
   province: props.data?.province || '',
