@@ -55,7 +55,7 @@ export default boot(({ router }) => {
   // Show loading screen while auth is not ready, preventing user for any interaction.
   watch(() => auth.isReady, () => {
     if (auth.isReady) Loading.hide();
-    else {
+    else if (['auth', 'guest'].includes(router.currentRoute.value.meta.guard!)) {
       Loading.show({
         message: 'Authenticating...',
       });
