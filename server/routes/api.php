@@ -61,6 +61,7 @@ Route::prefix('/user')->group(function () {
 
 Route::get('/member/me', [MembershipController::class, 'showMy'])
     ->middleware('auth:sanctum');
+Route::get('/member/document', [MembershipController::class, 'showCertificate']);
 Route::apiResource('/member', MembershipController::class);
 Route::apiResource('/membership', MembershipRequestController::class);
 Route::apiResource('/course', CourseController::class);

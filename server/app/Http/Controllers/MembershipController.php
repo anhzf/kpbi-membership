@@ -202,4 +202,45 @@ class MembershipController extends Controller
     {
         //
     }
+
+    public function showCertificate()
+    {
+        $script = base_path('../scripts/get-pdf.mjs');
+        $command = "node $script http://localhost:9000/document/any/view";
+        $descriptorSpec = [
+            0 => ["pipe", "r"],  // stdin is a pipe that the child will read from
+            1 => ["pipe", "w"],  // stdout is a pipe that the child will write to
+            2 => ["pipe", "w"]   // stderr is a pipe that the child will write to
+        ];
+
+        $process = proc_open($command, $descriptorSpec, $pipes, null, null);
+
+        if (!is_resource($process)) {
+            return response()->json(['error' => 'Unable to execute the command'], 500);
+        }
+
+        $output = '';
+
+        while (!feof($pipes[1])) {
+            $buffer = fread($pipes[1], 8192); // Read 8KB at a time
+            if ($buffer !== false) {
+                $output .= $buffer;
+            }
+        }
+
+        // Close pipes
+        fclose($pipes[0]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+
+        // Terminate the process and get the status
+        $status = proc_get_status($process);
+        if ($status['running']) {
+            proc_terminate($process);
+        }
+
+        proc_close($process);
+
+        return response($output)->header('Content-Type', 'application/pdf');
+    }
 }

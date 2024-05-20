@@ -22,5 +22,8 @@
   "workspaces": [
     "server",
     "web"
-  ]
+  ],
+  "dependencies": {
+    "puppeteer": "^22.9.0"
+  }
 }

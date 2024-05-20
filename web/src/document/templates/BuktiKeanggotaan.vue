@@ -19,8 +19,7 @@ const qrString = `Prodi ${_d.name} keanggotaan berlaku mulai ${_d.period[0].toLo
 
 <template>
   <div
-    class="w-full h-full bg-[url('/images/membership-certificate-frame.webp')] bg-no-repeat bg-contain [background-position-y:center]
-  flex flex-col flex-nowrap justify-center items-center gap-4 p-8 text-lg text-zinc-900 text-center"
+    class="w-full h-full bg-[url(/images/membership-certificate-frame.webp)] bg-no-repeat bg-contain [background-position-x:center] [background-position-y:center] flex flex-col flex-nowrap justify-center items-center gap-4 p-8 text-lg text-zinc-900 text-center"
   >
     <img
       src="/images/Optimized-ICON_KPBI.png"

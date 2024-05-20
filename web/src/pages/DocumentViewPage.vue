@@ -2,11 +2,11 @@
 import { DOCUMENT_TEMPLATES } from 'src/document/templates';
 
 const template = DOCUMENT_TEMPLATES['bukti-keanggotaan'];
-const size = template.root.size || 'A4 portrait';
+const size = template.root.size || 'A4 landscape';
 </script>
 
 <template>
-  <main class="root w-297mm h-210mm">
+  <main class="root w-297mm h-210mm p-1">
     <component
       :is="template.component"
       :data="{
@@ -19,16 +19,9 @@ const size = template.root.size || 'A4 portrait';
   </main>
 </template>
 
-<!-- <style lang="scss" scoped>
-.root {
-  size: v-bind(size);
-}
-</style> -->
-
-<!-- <style lang="scss">
-@media print {
-  @page {
-    size: v-bind(size);
-  }
-}
-</style> -->
+<style lang="scss">
+// @page {
+//   size: v-bind(size);
+//   margin: 0.2in 0.15in;
+// }
+</style>
