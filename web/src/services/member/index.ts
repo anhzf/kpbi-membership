@@ -2,6 +2,7 @@ import { toFormData } from 'axios';
 import { fromMembershipRaw, fromMembershipRequestRaw } from 'src/services/converter';
 import type {
   GetMember, GetMemberList,
+  ListMembershipRequestOfMember,
   ListRequestMembership,
   MemberService, RegisterMember,
   RequestMembership, UpdateCollege,
@@ -55,6 +56,11 @@ const listRequest: ListRequestMembership = async () => {
   return data.map(fromMembershipRequestRaw);
 };
 
+const listRequestOf: ListMembershipRequestOfMember = async (id) => {
+  const { data } = await api.get<MembershipRequestRaw[]>(`${MEMBERSHIP_ENDPOINT}/${id}/request`);
+  return data.map((el) => fromMembershipRequestRaw(el));
+};
+
 const updateCollege: UpdateCollege = async (payload) => {
   if (!states.meId) throw new Error('cannot determine the member id.', { cause: 'meId is not set' });
   const fd = toFormData(omitByFilterValue(payload, (v) => !!v));
@@ -83,6 +89,7 @@ const memberService: MemberService = {
   listRequest,
   updateCollege,
   updateProgram,
+  listRequestOf,
 };
 
 export default memberService;

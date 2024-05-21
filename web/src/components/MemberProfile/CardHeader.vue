@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import useMemberProfile from 'src/composables/use-member-profile';
 import memberService from 'src/services/member';
 import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
 import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
@@ -17,6 +18,8 @@ interface Props {
 
 const props = defineProps<Props>();
 const modified = ref<Props>(toRaw(props));
+
+const { state: data } = useMemberProfile();
 
 const onPhotoChange = async (ev: Event) => {
   const target = ev.target as HTMLInputElement;
@@ -61,8 +64,10 @@ const onPhotoChange = async (ev: Event) => {
 
     <div class="column">
       <h1 class="column m-0">
-        <span class="text-h3">
-          {{ ACADEMIC_DEGREES_LABELS[degree] }} {{ programName }}
+        <span class="text-h3 flex items-center">
+          <span>
+            {{ ACADEMIC_DEGREES_LABELS[degree] }} {{ programName }}
+          </span>
         </span>
         <span class="text-h5 text-blue-grey-10">
           {{ collegeName }} ({{ collegeShortName }})
@@ -78,6 +83,14 @@ const onPhotoChange = async (ev: Event) => {
           :to="{name: 'Courses'}"
           outline
         />
+        <q-btn
+          v-if="data?.period_end && data?.period_end > new Date()"
+          label="Lihat Sertifikat"
+          :to="{name: 'DocumentMembership', params: { memberId: data?.id }}"
+          target="_blank"
+          outline
+        />
+        <!-- :href="`/api/member/${data?.id}/document`" -->
       </div>
     </div>
   </div>

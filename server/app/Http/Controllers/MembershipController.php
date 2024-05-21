@@ -203,6 +203,11 @@ class MembershipController extends Controller
         //
     }
 
+    public function listRequest(Membership $membership)
+    {
+        return $membership->requests()->get();
+    }
+
     public function showCertificate()
     {
         $script = base_path('../scripts/get-pdf.mjs');

@@ -49,6 +49,10 @@ export interface UpdateProgram {
   (payload: UpdateProgramPayload): Promise<void>;
 }
 
+export interface ListMembershipRequestOfMember {
+  (id: string): Promise<MembershipRequest[]>;
+}
+
 export interface MemberService {
   get: GetMember;
   list: GetMemberList;
@@ -57,4 +61,5 @@ export interface MemberService {
   listRequest: ListRequestMembership;
   updateCollege: UpdateCollege;
   updateProgram: UpdateProgram;
+  listRequestOf: ListMembershipRequestOfMember;
 }

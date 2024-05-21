@@ -1,21 +1,31 @@
 <script lang="ts" setup>
-import { DOCUMENT_TEMPLATES } from 'src/document/templates';
+// import { DOCUMENT_TEMPLATES } from 'src/document/templates';
+// import { documentGet } from 'src/services/document';
+// import type { Component } from 'vue';
+// import { useRoute } from 'vue-router';
 
-const template = DOCUMENT_TEMPLATES['bukti-keanggotaan'];
-const size = template.root.size || 'A4 landscape';
+// const route = useRoute();
+
+// const doc = await documentGet(route.params.documentId as string);
+
+// const template = DOCUMENT_TEMPLATES[doc.template as keyof typeof DOCUMENT_TEMPLATES];
+// const size = template.root.size || 'A4 landscape';
 </script>
 
 <template>
   <main class="root w-297mm h-210mm p-1">
-    <component
-      :is="template.component"
-      :data="{
-        number: '055/02/KPBI/2024',
-        name: 'Prodi S1 Pendidikan Biologi, FKIP, Universitas Kapuas Sintang',
-        period: [new Date('2024-01-01'), new Date('2025-12-31')],
-        date: new Date(),
-      }"
-    />
+    <Suspense>
+      <RouterView />
+
+      <template #fallback="payload">
+        Oops! Something went wrong.
+        <pre>{{ payload }}</pre>
+      </template>
+    </Suspense>
+    <!-- <component
+      :is="(template.component as Component)"
+      v-bind="doc.payload"
+    /> -->
   </main>
 </template>
 

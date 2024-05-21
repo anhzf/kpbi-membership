@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Loading } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { useAuthStore } from 'src/stores/auth';

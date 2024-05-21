@@ -90,6 +90,7 @@ export interface EducationProgramHead extends Timestamps {
 
 export interface Membership extends Timestamps {
   id: string;
+  registration_id?: string;
   period_end: Date;
   education_program: Relation<EducationProgram, 'name'>;
 }

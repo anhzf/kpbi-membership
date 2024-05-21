@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $education_program_id
+ * @property int|null $registration_id a custom id provided by the admin
  * @property \Illuminate\Support\Carbon $period_end
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
