@@ -64,6 +64,7 @@ Route::get('/member/me', [MembershipController::class, 'showMy'])
 Route::get('/member/{member}/document', [MembershipController::class, 'showCertificate']);
 Route::apiResource('/member', MembershipController::class);
 Route::apiResource('/membership', MembershipRequestController::class);
+Route::get('/membership/{membership}/request', [MembershipController::class, 'listRequest']);
 Route::apiResource('/course', CourseController::class);
 Route::apiResource('/accreditation', AccreditationController::class);
 

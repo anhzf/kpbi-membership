@@ -208,14 +208,15 @@ class MembershipController extends Controller
         return $membership->requests()->get();
     }
 
-    public function showCertificate()
+    public function showCertificate(Membership $member)
     {
-        $script = base_path('../scripts/get-pdf.mjs');
-        $command = "node $script http://localhost:9000/document/any/view";
+        $script = base_path('node-apps/get-pdf.mjs');
+        $command = "node {$script} " . env('APP_URL') . "/document/keanggotaan/{$member->id}";
+
         $descriptorSpec = [
-            0 => ["pipe", "r"],  // stdin is a pipe that the child will read from
-            1 => ["pipe", "w"],  // stdout is a pipe that the child will write to
-            2 => ["pipe", "w"]   // stderr is a pipe that the child will write to
+            0 => ['pipe', 'r'],  // stdin is a pipe that the child will read from
+            1 => ['pipe', 'w'],  // stdout is a pipe that the child will write to
+            2 => ['pipe', 'w']   // stderr is a pipe that the child will write to
         ];
 
         $process = proc_open($command, $descriptorSpec, $pipes, null, null);
@@ -226,10 +227,15 @@ class MembershipController extends Controller
 
         $output = '';
 
-        while (!feof($pipes[1])) {
+        while (!(feof($pipes[1]) || feof($pipes[2]))) {
             $buffer = fread($pipes[1], 8192); // Read 8KB at a time
+            $errBuffer = fread($pipes[2], 8192); // Read 8KB at a time
             if ($buffer !== false) {
+                error_log($buffer);
                 $output .= $buffer;
+            }
+            if ($errBuffer !== false) {
+                error_log($errBuffer);
             }
         }
 
@@ -243,8 +249,6 @@ class MembershipController extends Controller
         if ($status['running']) {
             proc_terminate($process);
         }
-
-        proc_close($process);
 
         return response($output)->header('Content-Type', 'application/pdf');
     }
