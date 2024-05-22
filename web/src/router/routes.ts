@@ -71,13 +71,14 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/document',
-    component: () => import('pages/DocumentViewPage.vue'),
+    component: () => import('layouts/DocumentLayout.vue'),
     children: [
       {
         path: 'keanggotaan/:memberId',
         name: 'DocumentMembership',
         props: true,
-        component: () => import('src/document/templates/BuktiKeanggotaan.vue'),
+        component: () => import('pages/document-templates/BuktiKeanggotaan.vue'),
+        meta: { landscape: true },
       },
     ],
   },
