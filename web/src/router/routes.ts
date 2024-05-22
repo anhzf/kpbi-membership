@@ -80,6 +80,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/document-templates/BuktiKeanggotaan.vue'),
         meta: { landscape: true },
       },
+      {
+        path: 'pembayaran/:memberId',
+        name: 'DocumentInvoice',
+        props: true,
+        component: () => import('pages/document-templates/BuktiPembayaran.vue'),
+      },
     ],
   },
 
