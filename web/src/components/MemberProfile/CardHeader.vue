@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import useMemberProfile from 'src/composables/use-member-profile';
 import memberService from 'src/services/member';
+import { pdfGetUrl } from 'src/services/pdf';
 import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
 import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
 import { ref, toRaw } from 'vue';
+import AsyncState from '../AsyncState.vue';
 
 interface Props {
   editMode?: boolean;
@@ -83,14 +85,21 @@ const onPhotoChange = async (ev: Event) => {
           :to="{name: 'Courses'}"
           outline
         />
-        <q-btn
+        <AsyncState
           v-if="data?.period_end && data?.period_end > new Date()"
-          label="Lihat Sertifikat"
-          :to="{name: 'DocumentMembership', params: { memberId: data?.id }}"
-          target="_blank"
-          outline
-        />
+          :value="pdfGetUrl(`keanggotaan/${data?.id}`, {format: 'A4', landscape: true, margin: 0, printBackground: true})"
+          init="#"
+          #="{state}"
+        >
+          <q-btn
+            label="Lihat Sertifikat"
+            :href="state"
+            target="_blank"
+            outline
+          />
         <!-- :href="`/api/member/${data?.id}/document`" -->
+        <!-- :to="{name: 'DocumentMembership', params: { memberId: data?.id }}" -->
+        </AsyncState>
       </div>
     </div>
   </div>

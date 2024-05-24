@@ -4,6 +4,12 @@ import memberService from 'src/services/member';
 import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
 
+declare global {
+  interface Window {
+    readyToPrint?: () => void;
+  }
+}
+
 interface Props {
   memberId: string;
 }
@@ -34,6 +40,8 @@ const qrUrl = await toDataURL(
   `Prodi ${fullname} keanggotaan berlaku mulai ${_d.created_at.toLocaleString('id', { dateStyle: 'long' })} s.d. ${request!.valid_until?.toLocaleString('id', { dateStyle: 'long' })} dengan nomor keanggotaan ${number}`,
   { margin: 0 },
 );
+
+window.readyToPrint?.();
 </script>
 
 <template>
