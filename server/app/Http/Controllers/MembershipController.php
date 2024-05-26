@@ -211,7 +211,7 @@ class MembershipController extends Controller
     public function showCertificate(Membership $member)
     {
         $script = base_path('node-apps/get-pdf.mjs');
-        $command = "node {$script} " . env('APP_URL') . "/document/keanggotaan/{$member->id}";
+        $command = "node {$script} " . env('APP_URL') . "/document/pembayaran/{$member->id}";
 
         $descriptorSpec = [
             0 => ['pipe', 'r'],  // stdin is a pipe that the child will read from
