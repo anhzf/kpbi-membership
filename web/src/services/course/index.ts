@@ -3,7 +3,7 @@ import {
   CourseService, CreateCourse, DeleteCourse, GetCourse, ListCourse, UpdateCourse,
 } from './CourseService';
 
-const ENDPOINT = '/courses';
+const ENDPOINT = '/course';
 
 const get: GetCourse = async (id) => {
   const { data } = await api.get(`${ENDPOINT}/${id}`);

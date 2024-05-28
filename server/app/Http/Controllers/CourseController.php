@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\EducationProgram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
@@ -24,8 +25,10 @@ class CourseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
+    // public function index(EducationProgram $educationProgram)
     {
-        return EducationProgram::find($request->query('program_id'))->courses;
+        return EducationProgram::findOrFail($request->query('program_id'))?->courses ?? [];
+        // return $educationProgram->courses;
     }
 
     /**
@@ -34,19 +37,20 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $payload = Validator::make($request->all(), [
             'name' => 'required|string',
             'code' => 'required|string',
             'credits' => 'required|integer',
             'description' => 'nullable|string',
+            'capacity' => 'nullable|integer',
             'info.cpmk' => 'required|string',
             'lecturer' => 'required|string',
             'semester' => 'required|string',
             'education_program_id' => 'required|exists:App\Models\EducationProgram,id',
-        ]);
+        ])->safe();
 
         /** @var EducationProgram */
-        $program = EducationProgram::find($request->get('education_program_id'));
+        $program = EducationProgram::findOrFail($payload->education_program_id);
 
         $data = $request->except('education_program_id');
         $program->courses()->create($data);
@@ -76,6 +80,7 @@ class CourseController extends Controller
             'info.cpmk' => 'string',
             'lecturer' => 'string',
             'semester' => 'string',
+            'capacity' => 'integer',
         ]);
 
         $course->update($validated);

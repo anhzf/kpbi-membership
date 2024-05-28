@@ -142,5 +142,6 @@ export interface Course extends Timestamps {
   description?: string;
   info: Record<string, any>;
   lecturer: string;
+  capacity?: number;
   semester: CourseSemesterType;
 }

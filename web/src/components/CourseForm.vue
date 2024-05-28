@@ -31,6 +31,7 @@ const onFormReset = () => {
   field.value.info!.cpmk = '';
   field.value.lecturer = '';
   field.value.description = '';
+  field.value.capacity = undefined;
 };
 
 const onFormSubmit = () => {
@@ -127,6 +128,14 @@ const onFormSubmit = () => {
             outlined
             :disable="!field.semester"
             :rules="[requiredRule]"
+          />
+
+          <q-input
+            v-model="field.capacity"
+            type="number"
+            label="Kapasitas"
+            outlined
+            :disable="!field.semester"
           />
         </q-card-section>
       </q-slide-transition>

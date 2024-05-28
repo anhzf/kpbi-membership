@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useAsyncState, whenever } from '@vueuse/core';
 import { Dialog, Notify, QForm } from 'quasar';
-import CardCourse from 'src/components/CardCourse.vue';
-import FormCourse from 'src/components/FormCourse.vue';
+import CourseCard from 'src/components/CourseCard.vue';
+import CourseForm from 'src/components/CourseForm.vue';
 import useMemberProfile from 'src/composables/use-member-profile';
 import courseServices from 'src/services/course';
 import { Course } from 'src/types/models';
@@ -37,7 +37,7 @@ const {
 } = useAsyncState<Course[]>(
   () => {
     try {
-      return courseServices.list(profile.value!.id);
+      return courseServices.list(profile.value!.education_program.id);
     } catch (err) {
       Notify.create({ message: getErrMsg(err), color: 'negative' });
     }
@@ -156,7 +156,7 @@ whenever(() => profile.value?.id, () => {
           :key="course.id"
           class="col-3"
         >
-          <card-course
+          <CourseCard
             :title="course.name"
             :description="course.description"
             :credits="course.credits"
@@ -164,6 +164,7 @@ whenever(() => profile.value?.id, () => {
             :lecturer="course.lecturer"
             :cpmk="course.info.cpmk"
             :code="course.code"
+            :capacity="course.capacity"
             @update-click="onUpdateCourseClick(course)"
             @delete-click="onDeleteCourseClick(course)"
           />
@@ -172,7 +173,8 @@ whenever(() => profile.value?.id, () => {
 
       <template v-else-if="isCoursesError">
         <div class="col-12">
-          <p class="text-center">
+          <p class="text-center text-negative">
+            <q-icon name="warning" />
             Terjadi kesalahan dalam mengambil data.
           </p>
         </div>
@@ -194,7 +196,7 @@ whenever(() => profile.value?.id, () => {
     v-model="_ui.showAddCourseDialog"
     persistent
   >
-    <form-course
+    <CourseForm
       :model-value="courseFormField"
       :is-loading="_ui.isCourseFormDialogLoading"
       @update:model-value="onCourseFormSubmit"
@@ -202,11 +204,11 @@ whenever(() => profile.value?.id, () => {
       <q-separator />
 
       <q-card-actions>
-        <q-btn
+        <!-- <q-btn
           label="Kosongkan"
           type="reset"
           flat
-        />
+        /> -->
 
         <q-space />
 
@@ -222,6 +224,6 @@ whenever(() => profile.value?.id, () => {
           color="primary"
         />
       </q-card-actions>
-    </form-course>
+    </CourseForm>
   </q-dialog>
 </template>

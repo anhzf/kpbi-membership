@@ -8,7 +8,8 @@ export interface ListCourse {
   (programId: string): Promise<Course[]>;
 }
 
-export interface CreateCoursePayload extends Omit<Course, 'id' | 'education_program' | 'created_at' | 'updated_at'> {
+export interface CreateCoursePayload
+  extends Omit<Course, 'id' | 'education_program' | 'created_at' | 'updated_at'> {
   education_program_id: string;
 }
 
@@ -16,7 +17,8 @@ export interface CreateCourse {
   (payload: CreateCoursePayload): Promise<void>;
 }
 
-export interface UpdateCoursePayload extends Partial<CreateCoursePayload> {
+export interface UpdateCoursePayload
+  extends Partial<CreateCoursePayload> {
   id: string;
 }
 

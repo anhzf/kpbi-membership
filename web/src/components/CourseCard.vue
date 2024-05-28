@@ -11,6 +11,7 @@ interface Props {
   cpmk?: string;
   lecturer?: string;
   description?: string;
+  capacity?: number;
 }
 
 interface Emits {
@@ -90,6 +91,15 @@ const onDeleteClick = () => {
             <q-item-label>Deskripsi</q-item-label>
             <q-item-label caption>
               {{ description }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item>
+          <q-item-section>
+            <q-item-label>Kapasitas</q-item-label>
+            <q-item-label caption>
+              {{ capacity || '-' }}
             </q-item-label>
           </q-item-section>
         </q-item>
