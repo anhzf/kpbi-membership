@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +16,19 @@ use Illuminate\Database\Eloquent\Model;
  * Relationships
  * @property EducationProgram $educationProgram
  * @property \Illuminate\Database\Eloquent\Collection<MembershipRequest> $requests
+ * @property \Illuminate\Database\Eloquent\Collection<Invoice> $invoices
  */
 class Membership extends Model
 {
     use HasFactory;
+
+    const BILL_INVOICE_ITEMS = [
+        'membership' => [
+            'price' => 300_000,
+            'qty' => 1,
+            'desc' => 'Membership fee'
+        ],
+    ];
 
     /**
      * The attributes that should be cast.
@@ -46,6 +56,11 @@ class Membership extends Model
         return $this->hasMany(MembershipRequest::class);
     }
 
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'receipt_to');
+    }
+
     public function loadFullProfile()
     {
         $this->educationProgram
@@ -61,5 +76,26 @@ class Membership extends Model
             ->makeHidden('media');
 
         return $this;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<Invoice>
+     */
+    public function getActiveBills()
+    {
+        return $this->invoices()->where('paid_at', null)->get();
+    }
+
+    public function createBill()
+    {
+        return new Invoice([
+            'receipt_to_details' => [
+                'name' => $this->educationProgram->name,
+                'membership_id' => $this->id,
+                'addresses' => $this->educationProgram->college->addresses,
+            ],
+            'items' => self::BILL_INVOICE_ITEMS,
+            'due_at' => now()->addYear(),
+        ]);
     }
 }

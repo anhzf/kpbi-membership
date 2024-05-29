@@ -26,6 +26,7 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property \Spatie\MediaLibrary\MediaCollections\Models\Media|null $img
  * Relationships
  * @property \Illuminate\Database\Eloquent\Collection<EducationProgramHead> $headProgramOf
+ * @property \Illuminate\Database\Eloquent\Collection<Invoice> $invoices
  */
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
@@ -73,6 +74,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function headProgramOf()
     {
         return $this->hasMany(EducationProgramHead::class);
+    }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'receipt_to');
     }
 
     public function registerMediaCollections(): void

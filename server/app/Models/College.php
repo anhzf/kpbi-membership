@@ -12,14 +12,16 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $id
  * @property string $name
  * @property string $short_name
- * @property \App\Models\Enums\CollegeType|null $type
- * @property string|null $city
- * @property string|null $province
- * @property string|null $street_address
+ * @property ?\App\Models\Enums\CollegeType $type
+ * @property ?string $city
+ * @property ?string $province
+ * @property ?string $street_address
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * Computed
- * @property \Spatie\MediaLibrary\MediaCollections\Models\Media|null $img
+ * Getter
+ * @property ?\Spatie\MediaLibrary\MediaCollections\Models\Media $img
+ * @property ?string $imgUrl
+ * @property string $addresses
  * Relationships
  * @property \Illuminate\Database\Eloquent\Collection<int, Accreditation> $accreditations
  * @property \Illuminate\Database\Eloquent\Collection<int, EducationProgram> $educationPrograms
@@ -50,6 +52,15 @@ class College extends Model implements HasMedia
     public function imgUrl(): Attribute
     {
         return Attribute::get(fn () => $this->img?->getUrl());
+    }
+
+    public function addresses(): Attribute
+    {
+        return Attribute::get(fn () => join(', ', [
+            $this->street_address,
+            $this->city,
+            $this->province
+        ]));
     }
 
     public function accreditations()
