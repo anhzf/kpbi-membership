@@ -145,3 +145,26 @@ export interface Course extends Timestamps {
   capacity?: number;
   semester: CourseSemesterType;
 }
+
+export interface InvoiceItem {
+  price: number;
+  qty: number;
+  desc: string;
+}
+
+export interface Invoice extends Timestamps {
+  id: string;
+  // receipt_to: {
+  //   id: string;
+  //   [k: string]: unknown;
+  // };
+  receipt_to_id: string;
+  receipt_to_type: string;
+  receipt_to_details: {
+    name: string;
+    [k: string]: unknown;
+  };
+  items: Record<string, InvoiceItem>;
+  due_at: Date;
+  paid_at?: Date;
+}

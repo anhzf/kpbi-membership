@@ -1,8 +1,16 @@
 import type {
   MemberProfile, EducationProgram, RelationExpanded, Accreditation, College, EducationProgramHead, User, MembershipRequest,
+  Timestamps,
+  Invoice,
 } from 'src/types/models';
 
-export interface MemberRaw extends Omit<MemberProfile, 'education_program' | 'college' | 'responsible' | 'created_at' | 'updated_at'> {
+export interface TimestampsRaw {
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MemberRaw
+  extends Omit<MemberProfile, 'education_program' | 'college' | 'responsible' | 'created_at' | 'updated_at'> {
   education_program: Omit<EducationProgram, 'accreditations'> & {
     accreditations: RelationExpanded<Accreditation>[];
     college: RelationExpanded<College>;
@@ -12,8 +20,15 @@ export interface MemberRaw extends Omit<MemberProfile, 'education_program' | 'co
   updated_at: string;
 }
 
-export interface MembershipRequestRaw extends Omit<MembershipRequest, 'created_at' | 'updated_at' | 'requested_date'> {
+export interface MembershipRequestRaw
+  extends Omit<MembershipRequest, 'created_at' | 'updated_at' | 'requested_date'> {
   created_at: string;
   updated_at: string;
   requested_date: string;
+}
+
+export interface InvoiceRaw
+  extends Omit<Invoice, keyof Timestamps | 'due_at' | 'paid_at'>, TimestampsRaw {
+  due_at: string;
+  paid_at?: string;
 }

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { toDataURL } from 'qrcode';
-import useMemberProfile from 'src/composables/use-member-profile';
 import { toDateTimeUnit, toIndonesianWords, toRoman } from 'src/utils/number';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { invoiceGet } from 'src/services/invoice';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
 
 const DATE_TIME_UNITS = {
@@ -16,45 +16,44 @@ const DATE_TIME_UNITS = {
   detik: 1000,
 };
 
+const ITEM_NAME = 'membership';
+
 const ITEM = {
   period: 365, // in days
   amount: 300_000,
 };
 
+interface Props {
+  invoiceId: string;
+}
+
 const formatCurrency = (amount: number) => `${amount.toLocaleString('id', {
   style: 'currency', currency: 'IDR', minimumFractionDigits: 0,
 }).replace(/\u00A0/g, ' ')},-`;
 
-const router = useRouter();
-const { state: member } = await useMemberProfile();
+const props = defineProps<Props>();
 
-const data = ref({
-  id: '4',
-  itemCount: 1,
-  date: new Date('2024-04-01'),
-  dueDate: new Date('2024-04-30'),
-  receiptTo: {
-    name: 'S1 Pendidikan Biologi UNKHAIR',
-    address: 'Jl. Bandara Babullah Kampus 1 Kel Akehuda Kota Ternate Utara',
-  },
-});
+const router = useRouter();
+
+const data = await invoiceGet(props.invoiceId);
+if (!data) throw new Error('Data not found');
 
 const invoiceNumber = [
-  data.value.id.toString().padStart(4, '0'),
-  toRoman(data.value.date.getMonth()),
+  data.id.toString().padStart(4, '0'),
+  toRoman(data.created_at.getMonth()),
   'KPBI',
-  data.value.date.getFullYear(),
+  data.created_at.getFullYear(),
 ].join('/');
 
-const invoiceDate = data.value.date.toLocaleString('id-ID', { dateStyle: 'long' });
+const invoiceDate = data.created_at.toLocaleString('id-ID', { dateStyle: 'long' });
 
-const invoiceLink = `${window.location.origin}${router.resolve({ name: 'DocumentInvoice', params: { memberId: member.value?.id } }).href}`;
+const invoiceLink = `${window.location.origin}${router.resolve({ name: 'DocumentInvoice', params: { memberId: props.invoiceId } }).href}`;
 
 const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
 </script>
 
 <template>
-  <div class="w-full h-full p-6 flex flex-col shadow-lg">
+  <div class="w-full h-full p-6 flex flex-col shadow-xl">
     <header class="pb-4 flex justify-center items-center gap-4 border-b-double">
       <img
         src="/images/Optimized-ICON_KPBI.png"
@@ -85,10 +84,10 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
           Kepada Yth. Kaprodi
         </p>
         <p class="q-my-sm">
-          <strong>{{ data.receiptTo.name }}</strong>
+          <strong>{{ data.receipt_to_details.name }}</strong>
         </p>
         <p class="q-my-sm">
-          <strong>{{ data.receiptTo.address }}</strong>
+          <strong>{{ data.receipt_to_details.address }}</strong>
         </p>
       </div>
 
@@ -114,7 +113,7 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.date.getFullYear() }}</td>
+              <td>{{ data.created_at.getFullYear() }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -141,7 +140,7 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ formatCurrency(ITEM.amount * data.itemCount) }}</td>
+              <td>{{ formatCurrency(data.items[ITEM_NAME].price * data.items[ITEM_NAME].qty) }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -151,7 +150,7 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
                 :
               </td>
               <td class="font-[Lucida_Handwriting] font-bold">
-                {{ toIndonesianWords(ITEM.amount * data.itemCount) }} rupiah
+                {{ toIndonesianWords(data.items[ITEM_NAME].price * data.items[ITEM_NAME].qty) }} rupiah
               </td>
             </tr>
             <tr>
@@ -161,7 +160,7 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.dueDate.toLocaleString('id', {dateStyle: 'long'}) }}</td>
+              <td>{{ data.due_at.toLocaleString('id', {dateStyle: 'long'}) }}</td>
             </tr>
           </tbody>
         </table>
@@ -188,7 +187,7 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
           <tbody>
             <tr>
               <td class="relative leading-tight">
-                <div>Surakarta, {{ (new Date()).toLocaleString('id', {dateStyle: 'long'}) }}</div>
+                <div>Surakarta, {{ data.paid_at?.toLocaleString('id', {dateStyle: 'long'}) }}</div>
                 <div>Ketua</div>
                 <div class="h-4.5em" />
                 <div>Dr. Bowo Sugiharto, M.Pd.</div>

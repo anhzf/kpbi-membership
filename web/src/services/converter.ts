@@ -1,7 +1,19 @@
-import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import type {
+  InvoiceRaw,
+  MemberRaw,
+  MembershipRequestRaw,
+  TimestampsRaw,
+} from 'src/services/types';
+import type {
+  Invoice,
   MemberProfile, MembershipRequest,
+  Timestamps,
 } from 'src/types/models';
+
+export const fromTimestampsRaw = ({ created_at, updated_at }: TimestampsRaw): Timestamps => ({
+  created_at: new Date(created_at),
+  updated_at: new Date(updated_at),
+});
 
 export const fromMembershipRaw = (raw: MemberRaw): MemberProfile => ({
   ...raw,
@@ -34,4 +46,11 @@ export const fromMembershipRequestRaw = (raw: MembershipRequestRaw): MembershipR
   requested_date: new Date(raw.requested_date),
   authorized_at: raw.requested_date ? new Date(raw.requested_date) : undefined,
   valid_until: raw.valid_until ? new Date(raw.valid_until) : undefined,
+});
+
+export const fromInvoiceRaw = (raw: InvoiceRaw): Invoice => ({
+  ...raw,
+  ...fromTimestampsRaw(raw),
+  due_at: new Date(raw.due_at),
+  paid_at: raw.paid_at ? new Date(raw.paid_at) : undefined,
 });

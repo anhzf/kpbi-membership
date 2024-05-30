@@ -13,8 +13,8 @@ const auth = useAuthStore();
 const isAdmin = computed(() => auth.user?.role === 'admin');
 const tab = ref('verifyPayment');
 
-onMounted(async () => {
-  console.log(await memberServiceBill());
+onMounted(() => {
+  memberServiceBill();
 });
 </script>
 

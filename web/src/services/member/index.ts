@@ -11,6 +11,7 @@ import type {
 import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import { api } from 'src/services/utils';
 import { omitByFilterValue } from 'src/utils/object';
+import { shouldWait } from 'src/utils/promise';
 
 const ENDPOINT = '/member';
 const MEMBERSHIP_ENDPOINT = '/membership';
@@ -35,6 +36,15 @@ const get: GetMember = async (id) => {
 
   return fromMembershipRaw(data);
 };
+
+/* TODO: Reduce get() call */
+const ensureMeId = shouldWait(async () => {
+  if (!states.meId) {
+    await get('me');
+  }
+
+  return states.meId!;
+});
 
 const list: GetMemberList = async () => {
   const { data } = await api.get(ENDPOINT);
@@ -82,8 +92,7 @@ const updateProgram: UpdateProgram = async (payload) => {
 };
 
 export const memberServiceBill: MemberServiceBill = async () => {
-  if (!states.meId) throw new Error('cannot determine the member id.', { cause: 'meId is not set' });
-  await api.post(`${ENDPOINT}/${states.meId}/bill`);
+  await api.post(`${ENDPOINT}/${await ensureMeId()}/bill`);
 };
 
 const memberService: MemberService = {

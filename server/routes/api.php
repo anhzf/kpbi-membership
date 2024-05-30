@@ -67,6 +67,7 @@ Route::post('/member/{member}/bill', [MembershipController::class, 'bill']);
 Route::apiResource('/course', CourseController::class);
 Route::apiResource('/membership', MembershipRequestController::class);
 Route::get('/membership/{membership}/request', [MembershipController::class, 'listRequest']);
+Route::apiResource('/invoice', InvoiceController::class);
 Route::apiResource('/accreditation', AccreditationController::class);
 
 Route::group([
