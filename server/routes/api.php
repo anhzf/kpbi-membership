@@ -63,6 +63,7 @@ Route::get('/member/me', [MembershipController::class, 'showMy'])
     ->middleware('auth:sanctum');
 Route::get('/member/{member}/document', [MembershipController::class, 'showCertificate']);
 Route::apiResource('/member', MembershipController::class);
+Route::post('/member/{member}/bill', [MembershipController::class, 'bill']);
 Route::apiResource('/course', CourseController::class);
 Route::apiResource('/membership', MembershipRequestController::class);
 Route::get('/membership/{membership}/request', [MembershipController::class, 'listRequest']);

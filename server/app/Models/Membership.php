@@ -61,6 +61,13 @@ class Membership extends Model
         return $this->morphMany(Invoice::class, 'receipt_to');
     }
 
+    public function name(): Attribute
+    {
+        return Attribute::get(fn () => join(' ', array_filter([
+            $this->educationProgram->name,
+        ])));
+    }
+
     public function loadFullProfile()
     {
         $this->educationProgram
@@ -78,24 +85,31 @@ class Membership extends Model
         return $this;
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<Invoice>
-     */
-    public function getActiveBills()
+    private function createBill()
     {
-        return $this->invoices()->where('paid_at', null)->get();
-    }
-
-    public function createBill()
-    {
-        return new Invoice([
+        return $this->invoices()->create([
             'receipt_to_details' => [
-                'name' => $this->educationProgram->name,
+                'name' => $this->educationProgram->fullname,
                 'membership_id' => $this->id,
                 'addresses' => $this->educationProgram->college->addresses,
             ],
             'items' => self::BILL_INVOICE_ITEMS,
             'due_at' => now()->addYear(),
         ]);
+    }
+
+    public function bill()
+    {
+        if ($isDue = $this->period_end?->isPast() ?? true) {
+            $activeBills = $this->invoices()->where('paid_at', null)->get();
+
+            if ($activeBills->isEmpty()) {
+                return [$this->createBill()];
+            }
+
+            return $activeBills;
+        }
+
+        return [];
     }
 }

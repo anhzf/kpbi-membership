@@ -4,7 +4,7 @@ import type {
   GetMember, GetMemberList,
   ListMembershipRequestOfMember,
   ListRequestMembership,
-  MemberService, RegisterMember,
+  MemberService, MemberServiceBill, RegisterMember,
   RequestMembership, UpdateCollege,
   UpdateProgram,
 } from 'src/services/member/MemberService';
@@ -79,6 +79,11 @@ const updateProgram: UpdateProgram = async (payload) => {
   fd.append('_method', 'PUT');
   fd.append('_entity', 'program');
   await api.post(`${ENDPOINT}/${states.meId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+};
+
+export const memberServiceBill: MemberServiceBill = async () => {
+  if (!states.meId) throw new Error('cannot determine the member id.', { cause: 'meId is not set' });
+  await api.post(`${ENDPOINT}/${states.meId}/bill`);
 };
 
 const memberService: MemberService = {

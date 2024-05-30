@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { useAuthStore } from 'src/stores/auth';
-import { computed, defineAsyncComponent, ref } from 'vue';
+import {
+  computed, defineAsyncComponent, onMounted, ref,
+} from 'vue';
+import { memberServiceBill } from 'src/services/member';
 import MembershipRequest from './MembershipRequest.vue';
 
 const VerifyMembership = defineAsyncComponent(() => import('./VerifyMembership.vue'));
@@ -9,6 +12,10 @@ const auth = useAuthStore();
 
 const isAdmin = computed(() => auth.user?.role === 'admin');
 const tab = ref('verifyPayment');
+
+onMounted(async () => {
+  console.log(await memberServiceBill());
+});
 </script>
 
 <template>

@@ -45,6 +45,20 @@ class Invoice extends Model
      */
     protected $guarded = [];
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [/* 'receiptTo' */];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [/* 'receipt_to_id', 'receipt_to_type' */];
+
     public function receiptTo()
     {
         return $this->morphTo();

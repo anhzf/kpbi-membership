@@ -252,4 +252,9 @@ class MembershipController extends Controller
 
         return response($output)->header('Content-Type', 'application/pdf');
     }
+
+    public function bill(Membership $member)
+    {
+        return $member->bill();
+    }
 }

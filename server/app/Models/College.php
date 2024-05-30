@@ -56,11 +56,11 @@ class College extends Model implements HasMedia
 
     public function addresses(): Attribute
     {
-        return Attribute::get(fn () => join(', ', [
+        return Attribute::get(fn () => join(', ', array_filter([
             $this->street_address,
             $this->city,
             $this->province
-        ]));
+        ])));
     }
 
     public function accreditations()

@@ -1,3 +1,4 @@
+/* TODO: Uses modular instead of in object services */
 import type { AcademicDegree } from 'src/types/constants';
 import type {
   College, EducationProgram, MemberInList, MemberProfile, MembershipRequest,
@@ -51,6 +52,10 @@ export interface UpdateProgram {
 
 export interface ListMembershipRequestOfMember {
   (id: string): Promise<MembershipRequest[]>;
+}
+
+export interface MemberServiceBill {
+  (): Promise<void>;
 }
 
 export interface MemberService {
