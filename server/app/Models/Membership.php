@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $id
@@ -13,6 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon $period_end
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
+ * Accessors
+ * @property-read string $name
+ * @property-read bool $is_active
  * Relationships
  * @property EducationProgram $educationProgram
  * @property \Illuminate\Database\Eloquent\Collection<MembershipRequest> $requests
@@ -22,8 +26,10 @@ class Membership extends Model
 {
     use HasFactory;
 
+    const BILL_INVOICE_ITEM_NAME = 'membership';
+
     const BILL_INVOICE_ITEMS = [
-        'membership' => [
+        self::BILL_INVOICE_ITEM_NAME => [
             'price' => 300_000,
             'qty' => 1,
             'desc' => 'Membership fee'
@@ -64,8 +70,13 @@ class Membership extends Model
     public function name(): Attribute
     {
         return Attribute::get(fn () => join(' ', array_filter([
-            $this->educationProgram->name,
+            $this->educationProgram->fullname,
         ])));
+    }
+
+    public function isActive(): Attribute
+    {
+        return Attribute::get(fn () => $this->period_end?->isFuture() ?? false);
     }
 
     public function loadFullProfile()
@@ -98,18 +109,22 @@ class Membership extends Model
         ]);
     }
 
+    /**
+     * Return active bills, create a bill if meet the condition
+     *
+     * @return \App\Models\Invoice[]
+     */
     public function bill()
     {
-        if ($isDue = $this->period_end?->isPast() ?? true) {
-            $activeBills = $this->invoices()->where('paid_at', null)->get();
+        /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Invoice> */
+        $activeBills = $this->invoices()->where('paid_at', null)->get();
 
-            if ($activeBills->isEmpty()) {
-                return [$this->createBill()];
-            }
-
-            return $activeBills;
+        if (($isDue = $this->period_end?->isPast() ?? true)
+            || $activeBills->isEmpty()
+        ) {
+            $activeBills->push($this->createBill());
         }
 
-        return [];
+        return $activeBills;
     }
 }

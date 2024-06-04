@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipRequestController;

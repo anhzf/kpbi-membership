@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MembershipRequestReviewed;
 use App\Models\Enums\MembershipRequestStatus;
 use App\Models\Enums\UserRole;
 use App\Models\MembershipRequest;
@@ -87,9 +88,9 @@ class AdminController extends Controller
 
     public function membershipRequestApprove(MembershipRequest $membershipRequest, Request $request)
     {
-        $payload = (object) Validator::make($request->all(), [
+        $payload = Validator::make($request->all(), [
             'valid_until' => 'nullable|date|after:today',
-        ])->validate();
+        ])->safe();
 
         DB::transaction(function () use ($membershipRequest, $request, $payload) {
             $membershipRequest->authorizedBy()->associate($request->user());
@@ -102,5 +103,7 @@ class AdminController extends Controller
 
             $membershipRequest->push();
         });
+
+        new MembershipRequestReviewed($membershipRequest);
     }
 }

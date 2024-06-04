@@ -6,6 +6,7 @@ use App\Models\Enums\MembershipRequestStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\FileAdder;
@@ -16,21 +17,23 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property int $user_id
  * @property \Illuminate\Support\Carbon $requested_date
  * @property \App\Models\Enums\MembershipRequestStatus $status
- * @property int|null $authorized_by_id
- * @property \Illuminate\Support\Carbon|null $authorized_at
- * @property \Illuminate\Support\Carbon|null $valid_until
+ * @property ?int $authorized_by_id
+ * @property ?\Illuminate\Support\Carbon $authorized_at
+ * @property ?\Illuminate\Support\Carbon $valid_until
+ * @property ?string $notes
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * Accessors
  * @property string $attachment_url
+ * @property boolean $isAccepted
  * Relationships
  * @property User $user
- * @property User|null $authorizedBy
+ * @property ?User $authorizedBy
  * @property Membership $membership
  */
 class MembershipRequest extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Notifiable;
 
     const STATUS_DEFAULT = MembershipRequestStatus::PENDING;
 
@@ -40,6 +43,7 @@ class MembershipRequest extends Model implements HasMedia
      * @var array<string, string>
      */
     protected $casts = [
+        'status' => MembershipRequestStatus::class,
         'requested_date' => 'datetime',
         'authorized_at' => 'datetime',
         'valid_until' => 'datetime',
@@ -87,9 +91,35 @@ class MembershipRequest extends Model implements HasMedia
         return $this->belongsTo(Membership::class);
     }
 
+    public function isAccepted(): Attribute
+    {
+        return Attribute::get(fn () => $this->status === MembershipRequestStatus::APPROVED);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('membership_requests')
             ->singleFile();
+    }
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array|string
+     */
+    public function routeNotificationForMail($notification)
+    {
+        // All head programs and the program itself
+        return collect([
+            $this->membership->educationProgram->email => $this->membership->name,
+            ...$this->membership->educationProgram->load([
+                'heads:id,program_id,user_id' => [
+                    'user:id,email',
+                ],
+            ])->heads
+                ->pluck('user.email')
+                ->mapWithKeys(fn ($email) => [$email => $this->membership->name])
+        ])->filter(fn ($v, $k) => $k)->all();
     }
 }
