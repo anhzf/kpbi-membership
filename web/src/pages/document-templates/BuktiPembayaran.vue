@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { toDataURL } from 'qrcode';
 import { toDateTimeUnit, toIndonesianWords, toRoman } from 'src/utils/number';
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { invoiceGet } from 'src/services/invoice';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
@@ -50,6 +49,8 @@ const invoiceDate = data.created_at.toLocaleString('id-ID', { dateStyle: 'long' 
 const invoiceLink = `${window.location.origin}${router.resolve({ name: 'DocumentInvoice', params: { memberId: props.invoiceId } }).href}`;
 
 const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
+
+window.readyToPrint?.();
 </script>
 
 <template>
@@ -71,11 +72,20 @@ const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
       </div>
     </header>
 
-    <div class="text-center p-2 font-serif">
+    <div class="relative text-center p-2 font-serif">
       <h2 class="text-h5 q-my-none">
         INVOICE
       </h2>
       <div>No: INV-{{ invoiceNumber }}, Tanggal: {{ invoiceDate }}</div>
+
+      <div class="absolute-top-right">
+        <div
+          class="q-ma-sm q-px-md q-py-sm border-6 border-double border-inside font-semibold"
+          :class="data.paid_at ? 'border-emerald text-emerald-500' : 'border-red text-red-500'"
+        >
+          {{ data.paid_at ? 'PAID' : 'UNPAID' }}
+        </div>
+      </div>
     </div>
 
     <main class="py-4 flex flex-col gap-4 font-serif">

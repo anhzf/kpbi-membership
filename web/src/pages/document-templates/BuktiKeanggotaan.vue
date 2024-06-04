@@ -4,12 +4,6 @@ import memberService from 'src/services/member';
 import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
 
-declare global {
-  interface Window {
-    readyToPrint?: () => void;
-  }
-}
-
 interface Props {
   memberId: string;
 }
