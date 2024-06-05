@@ -58,7 +58,10 @@ const register: RegisterMember = async (payload) => {
 const request: RequestMembership = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
-  await api.post(MEMBERSHIP_ENDPOINT, formData);
+
+  await api.post(MEMBERSHIP_ENDPOINT, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
 const listRequest: ListRequestMembership = async () => {
