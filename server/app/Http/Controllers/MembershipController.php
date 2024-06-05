@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MembershipController extends Controller
 {
@@ -210,6 +211,8 @@ class MembershipController extends Controller
 
     public function showCertificate(Membership $member)
     {
+        throw new HttpException(501, 'Not implemented');
+
         $script = base_path('node-apps/get-pdf.mjs');
         $command = "node {$script} " . env('APP_URL') . "/document/pembayaran/{$member->id}";
 
