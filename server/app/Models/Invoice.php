@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * @property int $id
  * @property object $receipt_to_details
- * @property Collection $items
+ * @property Collection<string, object> $items
  * @property \Illuminate\Support\Carbon $due_at
  * @property ?\Illuminate\Support\Carbon $paid_at
  * @property \Illuminate\Support\Carbon $created_at

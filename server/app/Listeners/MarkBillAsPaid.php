@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\MembershipRequestReviewed;
 use App\Models\Enums\MembershipRequestStatus;
-use App\Models\Invoice;
+use App\Models\Membership;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -30,6 +30,14 @@ class MarkBillAsPaid
         if ($event->membershipRequest->status === MembershipRequestStatus::APPROVED) {
             if ($bill = collect($event->membershipRequest->membership->bill())->last()) {
                 $bill->paid_at = now();
+
+                $bill->items = $bill->items->map(function ($item, $key) {
+                    if ($key === Membership::BILL_INVOICE_ITEM_NAME) {
+                        $item['ref'] = 1;
+                    }
+                    return $item;
+                });
+
                 $bill->save();
             }
         }
