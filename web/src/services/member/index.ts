@@ -38,7 +38,7 @@ const get: GetMember = async (id) => {
 };
 
 /* TODO: Reduce get() call */
-const ensureMeId = shouldWait(async () => {
+export const ensureMemberId = shouldWait(async () => {
   if (!states.meId) {
     await get('me');
   }
@@ -92,7 +92,7 @@ const updateProgram: UpdateProgram = async (payload) => {
 };
 
 export const memberServiceBill: MemberServiceBill = async () => {
-  await api.post(`${ENDPOINT}/${await ensureMeId()}/bill`);
+  await api.post(`${ENDPOINT}/${await ensureMemberId()}/bill`);
 };
 
 const memberService: MemberService = {

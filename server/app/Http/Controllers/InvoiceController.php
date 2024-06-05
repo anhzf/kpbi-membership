@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Membership;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -12,9 +13,13 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($membershipId = $request->query('membership')) {
+            return Membership::findOrFail($membershipId)->invoices;
+        }
+
+        return [];
     }
 
     /**

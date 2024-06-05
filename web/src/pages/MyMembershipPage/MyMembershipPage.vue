@@ -5,6 +5,7 @@ import {
 } from 'vue';
 import { memberServiceBill } from 'src/services/member';
 import MembershipRequest from './MembershipRequest.vue';
+import InvoiceList from './InvoiceList.vue';
 
 const VerifyMembership = defineAsyncComponent(() => import('./VerifyMembership.vue'));
 
@@ -38,6 +39,10 @@ onMounted(() => {
           label="Verifikasi keanggotaan"
         />
         <q-tab
+          name="invoiceList"
+          label="Tagihan"
+        />
+        <q-tab
           v-if="isAdmin"
           name="pendingVerificationList"
           label="Permintaan Verifikasi"
@@ -51,7 +56,11 @@ onMounted(() => {
         animated
       >
         <q-tab-panel name="verifyPayment">
-          <membership-request />
+          <MembershipRequest />
+        </q-tab-panel>
+
+        <q-tab-panel name="invoiceList">
+          <InvoiceList flat />
         </q-tab-panel>
 
         <q-tab-panel
@@ -59,7 +68,7 @@ onMounted(() => {
           name="pendingVerificationList"
           class="q-gutter-y-md"
         >
-          <verify-membership flat />
+          <VerifyMembership flat />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>

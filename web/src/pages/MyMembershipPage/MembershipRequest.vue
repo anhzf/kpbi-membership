@@ -124,13 +124,24 @@ const onFileChange = (ev: Event) => {
               </td>
 
               <td class="text-right">
-                <q-btn
-                  label="Lihat"
-                  icon="open_in_new"
-                  :href="item.attachment_url"
-                  target="_blank"
-                  flat
-                />
+                <div class="column items-end q-gutter-xs">
+                  <!-- <q-btn
+                    label="Tagihan"
+                    icon="attachment"
+                    :href="item.attachment_url"
+                    target="_blank"
+                    flat
+                    dense
+                  /> -->
+                  <q-btn
+                    label="Bukti Pembayaran"
+                    icon="attachment"
+                    :href="item.attachment_url"
+                    target="_blank"
+                    flat
+                    dense
+                  />
+                </div>
               </td>
             </tr>
           </template>
