@@ -90,6 +90,7 @@ class AdminController extends Controller
     {
         $payload = Validator::make($request->all(), [
             'valid_until' => 'nullable|date|after:today',
+            'registration_id' => 'nullable|string',
         ])->safe();
 
         DB::transaction(function () use ($membershipRequest, $request, $payload) {
@@ -100,6 +101,7 @@ class AdminController extends Controller
 
             // TODO: Uses event instead of direct update
             $membershipRequest->membership->period_end = $payload->valid_until;
+            $membershipRequest->membership->registration_id = $payload->registration_id;
 
             $membershipRequest->push();
         });

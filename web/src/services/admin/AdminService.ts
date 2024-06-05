@@ -8,8 +8,9 @@ export interface MembershipRequestApprove {
   /**
    * @param id - Membership request ID
    * @param validUntil - When not provided, the request is rejected
+   * @param registrationId - Custom ID (Old ID)
    */
-  (id: string, validUntil?: Date): Promise<void>;
+  (id: string, validUntil?: Date, registrationId?: string): Promise<void>;
 }
 
 export interface AdminService {

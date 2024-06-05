@@ -8,6 +8,7 @@ import { getMemberDisplayName } from 'src/services/member';
 import { MembershipRequestStatus } from 'src/types/constants';
 import { MembershipRequest } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
+import VerifyMembershipDialog from './VerifyMembershipDialog.vue';
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
   pending: 'Menunggu',
@@ -48,18 +49,13 @@ const onRejectClick = async (item: MembershipRequest) => {
 
 const onAcceptClick = async (item: MembershipRequest) => {
   Dialog.create({
-    title: 'Terima Ajuan Keanggotaan',
-    message: 'Mohon masukkan masa berlaku keanggotaan',
-    prompt: {
-      model: new Date(Date.now() + 3600_000 * 24 * 365).toISOString().slice(0, 10),
-      type: 'date',
-    },
-    ok: true,
-    cancel: true,
+    component: VerifyMembershipDialog,
   })
-    .onOk(async (validUntil) => {
+    .onOk(async ({ validUntil, registrationId }) => {
       try {
-        await overlayLoading(adminService.membershipRequestApprove(item.id, new Date(validUntil)));
+        await overlayLoading(
+          adminService.membershipRequestApprove(item.id, new Date(validUntil), registrationId),
+        );
         refresh();
         Notify.create('Ajuan berhasil disetujui');
       } catch (err) {

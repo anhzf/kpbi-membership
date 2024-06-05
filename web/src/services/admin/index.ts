@@ -10,8 +10,11 @@ const membershipRequestList: MembershipRequestList = async () => {
   return data.map(fromMembershipRequestRaw);
 };
 
-const membershipRequestApprove: MembershipRequestApprove = async (id, validUntil) => {
-  await api.put(`${ENDPOINT_MEMBERSHIP}/${id}`, { valid_until: validUntil || null });
+const membershipRequestApprove: MembershipRequestApprove = async (id, validUntil, registrationId) => {
+  await api.put(`${ENDPOINT_MEMBERSHIP}/${id}`, {
+    valid_until: validUntil || null,
+    registration_id: registrationId,
+  });
 };
 
 const adminService: AdminService = {
