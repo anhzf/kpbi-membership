@@ -104,6 +104,6 @@ class AdminController extends Controller
             $membershipRequest->push();
         });
 
-        new MembershipRequestReviewed($membershipRequest);
+        event(new MembershipRequestReviewed($membershipRequest));
     }
 }
