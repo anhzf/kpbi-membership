@@ -46,8 +46,10 @@ export const ensureMemberId = shouldWait(async () => {
   return states.meId!;
 });
 
-const list: GetMemberList = async () => {
-  const { data } = await api.get(ENDPOINT);
+const list: GetMemberList = async ({
+  active = true,
+} = {}) => {
+  const { data } = await api.get(ENDPOINT, { params: { active: active ? 1 : 0 } });
   return data;
 };
 

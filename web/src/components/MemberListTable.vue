@@ -1,59 +1,17 @@
-<template>
-  <q-table
-    :columns="cols"
-    :rows="data"
-    row-key="action"
-    :pagination="pagination"
-    :loading="isLoading"
-  >
-    <template #body-cell-numb="props">
-      <q-th
-        :props="props"
-        auto-width
-      >
-        {{ props.rowIndex + 1 }}
-      </q-th>
-    </template>
-
-    <template #body-cell-webProdi="props">
-      <q-td :props="props">
-        <template v-if="props.value">
-          <a
-            :href="props.value"
-            target="_blank"
-          >
-            {{ props.value }}
-          </a>
-          <q-icon
-            name="open_in_new"
-            color="blue-13"
-            class="q-ml-xs"
-          />
-        </template>
-        <span v-else>-</span>
-      </q-td>
-    </template>
-
-    <template #body-cell-action="props">
-      <q-td :props="props">
-        <slot
-          name="action"
-          :data="props"
-        >
-          {{ props.value }}
-        </slot>
-      </q-td>
-    </template>
-  </q-table>
-</template>
-
 <script lang="ts" setup>
 import { useAsyncState } from '@vueuse/core';
 import { QTableProps } from 'quasar';
-import memberService from 'src/services/member';
+import memberService, { GetMemberListQuery } from 'src/services/member';
 import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
 import { MemberInList } from 'src/types/models';
 import { q } from 'src/types/q';
+import { watch } from 'vue';
+
+interface Props {
+  query?: GetMemberListQuery;
+}
+
+const props = defineProps<Props>();
 
 const cols = [
   {
@@ -109,7 +67,7 @@ const cols = [
   },
 ] as q.Table.ColumnDefinition<MemberInList>[];
 
-const { state: data, isLoading, execute } = useAsyncState(memberService.list, []);
+const { state: data, isLoading, execute } = useAsyncState(() => memberService.list(props.query), []);
 
 defineExpose({
   refresh: execute,
@@ -118,4 +76,57 @@ defineExpose({
 const pagination = {
   rowsPerPage: 10,
 } as QTableProps['pagination'];
+
+watch(props.query!, () => {
+  execute();
+});
 </script>
+
+<template>
+  <q-table
+    :columns="cols"
+    :rows="data"
+    row-key="action"
+    :pagination="pagination"
+    :loading="isLoading"
+  >
+    <template #body-cell-numb="scopedProps">
+      <q-th
+        :props="scopedProps"
+        auto-width
+      >
+        {{ scopedProps.rowIndex + 1 }}
+      </q-th>
+    </template>
+
+    <template #body-cell-webProdi="scopedProps">
+      <q-td :props="scopedProps">
+        <template v-if="scopedProps.value">
+          <a
+            :href="scopedProps.value"
+            target="_blank"
+          >
+            {{ scopedProps.value }}
+          </a>
+          <q-icon
+            name="open_in_new"
+            color="blue-13"
+            class="q-ml-xs"
+          />
+        </template>
+        <span v-else>-</span>
+      </q-td>
+    </template>
+
+    <template #body-cell-action="scopedProps">
+      <q-td :props="scopedProps">
+        <slot
+          name="action"
+          :data="scopedProps"
+        >
+          {{ scopedProps.value }}
+        </slot>
+      </q-td>
+    </template>
+  </q-table>
+</template>

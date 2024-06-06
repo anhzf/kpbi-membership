@@ -24,12 +24,14 @@ class MembershipController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $isActive = !!json_decode($request->query('active', true));
         $relations = ['educationProgram:id,name,degree,college_id,external_link', 'educationProgram.college:id,name,short_name'];
         $fields = ['id', 'education_program_id'];
         $hide = ['education_program.college_id', 'education_program_id'];
-        return Membership::with($relations)->get($fields)->makeHidden($hide);
+        return Membership::active($isActive)
+            ->with($relations)->get($fields)->makeHidden($hide);
     }
 
     /**

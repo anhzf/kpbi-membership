@@ -8,8 +8,12 @@ export interface GetMember {
   (id: string): Promise<MemberProfile | undefined>;
 }
 
+export interface GetMemberListQuery {
+  active?: boolean;
+}
+
 export interface GetMemberList {
-  (): Promise<MemberInList[]>;
+  (q?: GetMemberListQuery): Promise<MemberInList[]>;
 }
 
 export interface RegisterMemberPayload {

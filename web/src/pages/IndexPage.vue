@@ -1,3 +1,18 @@
+<script lang="ts" setup>
+import MemberListTable from 'src/components/MemberListTable.vue';
+import { ref } from 'vue';
+
+const search = ref('');
+const query = ref({
+  active: true,
+});
+const refTable = ref<typeof MemberListTable>();
+
+const onRefreshClick = () => {
+  refTable.value?.refresh();
+};
+</script>
+
 <template>
   <q-page
     padding
@@ -17,7 +32,11 @@
         </q-input>
       </div>
 
-      <div class="col-shrink">
+      <div class="col-shrink row gap-x-2">
+        <q-checkbox
+          v-model="query.active"
+          label="Aktif"
+        />
         <q-btn
           label="refresh"
           icon="refresh"
@@ -27,8 +46,9 @@
       </div>
     </div>
 
-    <member-list-table
+    <MemberListTable
       ref="refTable"
+      :query="query"
       :filter="search"
       class="max-h-full"
     >
@@ -40,18 +60,6 @@
           :to="{name: 'Member', params: {memberId: data.value}}"
         />
       </template>
-    </member-list-table>
+    </MemberListTable>
   </q-page>
 </template>
-
-<script lang="ts" setup>
-import MemberListTable from 'src/components/MemberListTable.vue';
-import { ref } from 'vue';
-
-const search = ref('');
-const refTable = ref<typeof MemberListTable>();
-
-const onRefreshClick = () => {
-  refTable.value?.refresh();
-};
-</script>

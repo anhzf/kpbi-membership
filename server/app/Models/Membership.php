@@ -127,4 +127,12 @@ class Membership extends Model
 
         return $activeBills;
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public  static function active($active = true)
+    {
+        return self::where('period_end', $active ? '>' : '<', now());
+    }
 }
