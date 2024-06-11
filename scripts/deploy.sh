@@ -24,6 +24,8 @@ curl -L \
 
 rm -rf www
 
-APP_PUBLIC_PATH='../www' php ./server/artisan storage:link
+cd server
+APP_PUBLIC_PATH='../www' php artisan storage:link
+cd ..
 
 unzip dist.zip -d www
