@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->morphs('receipt_to');
-            $table->json('receipt_to_details')->default('{}');
-            $table->json('items')->default('{}');
+            $table->json('receipt_to_details');
+            $table->json('items');
             $table->dateTime('due_at');
             $table->dateTime('paid_at')->nullable();
             $table->timestamps();

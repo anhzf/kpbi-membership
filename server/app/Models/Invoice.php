@@ -39,6 +39,16 @@ class Invoice extends Model
     ];
 
     /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'receipt_to_details' => '{}',
+        'items' => '{}',
+    ];
+
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array
