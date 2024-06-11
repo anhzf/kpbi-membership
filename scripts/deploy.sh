@@ -22,7 +22,7 @@ curl -L \
   https://api.github.com/repos/$REPO/actions/artifacts/$ARTIFACT/zip \
   -o dist.zip
 
-rm -rf www dist.zip
+rm -rf www
 
 APP_PUBLIC_PATH='.../www' php ./server/artisan storage:link
 
