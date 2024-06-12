@@ -119,8 +119,9 @@ class Membership extends Model
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Invoice> */
         $activeBills = $this->invoices()->where('paid_at', null)->get();
 
-        if (($isDue = $this->period_end?->isPast() ?? true)
-            || $activeBills->isEmpty()
+        if (
+            $activeBills->isEmpty()
+            && ($isDue = $this->period_end?->isPast() ?? true)
         ) {
             $activeBills->push($this->createBill());
         }

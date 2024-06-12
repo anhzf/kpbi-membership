@@ -1,22 +1,22 @@
 <script lang="ts" setup>
+import memberService, { memberServiceBill } from 'src/services/member';
 import { useAuthStore } from 'src/stores/auth';
 import {
-  computed, defineAsyncComponent, onMounted, ref,
+  computed, defineAsyncComponent,
+  ref,
 } from 'vue';
-import { memberServiceBill } from 'src/services/member';
-import MembershipRequest from './MembershipRequest.vue';
 import InvoiceList from './InvoiceList.vue';
+import MembershipRequest from './MembershipRequest.vue';
 
 const VerifyMembership = defineAsyncComponent(() => import('./VerifyMembership.vue'));
 
 const auth = useAuthStore();
 
+memberService.get('me')
+  .then(() => memberServiceBill());
+
 const isAdmin = computed(() => auth.user?.role === 'admin');
 const tab = ref('verifyPayment');
-
-onMounted(() => {
-  memberServiceBill();
-});
 </script>
 
 <template>

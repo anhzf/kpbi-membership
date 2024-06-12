@@ -16,7 +16,9 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         if ($membershipId = $request->query('membership')) {
-            return Membership::findOrFail($membershipId)->invoices;
+            /** @var Membership */
+            $member = Membership::findOrFail($membershipId);
+            return $member->invoices;
         }
 
         return [];
