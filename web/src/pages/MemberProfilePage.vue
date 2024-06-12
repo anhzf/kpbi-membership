@@ -54,8 +54,8 @@ const { state: data, isLoading, refresh } = useMemberProfile();
         />
       </q-card-section>
 
-      <q-card-section class="row q-col-gutter-sm">
-        <div class="col-6 column q-col-gutter-sm">
+      <q-card-section class="flex flex-col lg:flex-row q-col-gutter-sm">
+        <div class="flex-1 column q-col-gutter-sm">
           <div>
             <ProgramCard
               :data="data.education_program"
@@ -70,7 +70,7 @@ const { state: data, isLoading, refresh } = useMemberProfile();
           </div>
         </div>
 
-        <div class="col-6 column q-col-gutter-sm">
+        <div class="flex-1 column q-col-gutter-sm">
           <div>
             <CollegeCard
               :data="data.college"
