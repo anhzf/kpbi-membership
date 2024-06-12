@@ -108,7 +108,11 @@ const onAcceptClick = async (item: MembershipRequest) => {
                   :to="{name: 'Member', params: {memberId: item.membership.id}}"
                   target="_blank"
                 >
-                  {{ getMemberDisplayName(item.membership as any, true) }}
+                  <!-- TODO: Fix typings -->
+                  {{ getMemberDisplayName({
+                    college: (item.membership.education_program as any).college,
+                    education_program: item.membership.education_program as any,
+                  }, true) }}
                   <q-icon name="open_in_new" />
                 </router-link>
               </td>

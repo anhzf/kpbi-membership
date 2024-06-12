@@ -10,6 +10,8 @@ import type {
 } from 'src/services/member/MemberService';
 import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import { api } from 'src/services/utils';
+import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
+import type { MemberProfile } from 'src/types/models';
 import { omitByFilterValue } from 'src/utils/object';
 import { shouldWait } from 'src/utils/promise';
 
@@ -97,7 +99,7 @@ const updateProgram: UpdateProgram = async (payload) => {
 };
 
 export const memberServiceBill: MemberServiceBill = async () => {
-  await api.post(`${ENDPOINT}/${await ensureMemberId()}/bill`);
+  await api.post(`${ENDPOINT}/${states.meId}/bill`);
 };
 
 const memberService: MemberService = {

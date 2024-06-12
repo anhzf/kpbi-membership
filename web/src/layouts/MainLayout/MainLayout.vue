@@ -6,6 +6,8 @@ import { getErrMsg } from 'src/utils/simpler';
 import { ref, computed, watch } from 'vue';
 import { RouterLinkProps, useRouter, useRoute } from 'vue-router';
 import { AxiosError } from 'axios';
+import AsyncState from 'src/components/AsyncState.vue';
+import memberService, { getMemberDisplayName } from 'src/services/member';
 import SideNavItem from './SideNavItem.vue';
 
 interface INavItem extends Partial<RouterLinkProps> {
@@ -140,18 +142,48 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
 
       <q-list>
         <q-item class="q-pt-lg q-pb-md">
-          <q-item-section avatar>
-            <q-img src="/images/Optimized-ICON_KPBI__no-text.png" />
-          </q-item-section>
+          <template v-if="auth.user">
+            <q-item-section avatar>
+              <q-avatar>
+                <q-img :src="auth.user.img" />
+              </q-avatar>
+            </q-item-section>
 
-          <q-item-section>
-            <q-item-label class="text-weight-medium">
-              KPBI
-            </q-item-label>
-            <q-item-label caption>
-              {{ auth.user?.email }}
-            </q-item-label>
-          </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-weight-medium">
+                {{ auth.user.name }}
+              </q-item-label>
+              <AsyncState
+                :value="memberService.get('me')"
+                :init="null"
+                #="{state}"
+              >
+                <q-item-label
+                  v-if="state"
+                  caption
+                >
+                  {{ getMemberDisplayName(state, true) }}
+                </q-item-label>
+              </AsyncState>
+            </q-item-section>
+          </template>
+
+          <template v-else>
+            <q-item-section avatar>
+              <q-avatar>
+                <q-img src="/images/Optimized-ICON_KPBI__no-text.png" />
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label class="text-weight-medium">
+                KPBI
+              </q-item-label>
+              <q-item-label caption>
+                Anda belum login
+              </q-item-label>
+            </q-item-section>
+          </template>
         </q-item>
 
         <q-separator spaced />

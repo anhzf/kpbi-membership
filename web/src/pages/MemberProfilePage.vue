@@ -30,7 +30,7 @@ const { state: data, isLoading, refresh } = useMemberProfile();
       square
       class="self-center items-start w-full max-w-screen-lg"
     >
-      <define-state
+      <DefineState
         :value="data.period_end > new Date()"
         #="{states: [isVerified]}"
       >
@@ -39,7 +39,7 @@ const { state: data, isLoading, refresh } = useMemberProfile();
             ? `Terverifikasi sampai ${data.period_end.toLocaleString('id', {dateStyle: 'short'})}`
             : 'Belum Terverifikasi' }}
         </div>
-      </define-state>
+      </DefineState>
 
       <q-card-section>
         <card-header
@@ -57,14 +57,14 @@ const { state: data, isLoading, refresh } = useMemberProfile();
       <q-card-section class="row q-col-gutter-sm">
         <div class="col-6 column q-col-gutter-sm">
           <div>
-            <program-card
+            <ProgramCard
               :data="data.education_program"
               @updated="refresh"
             />
           </div>
 
           <div>
-            <head-of-program-card
+            <HeadOfProgramCard
               :data="data.responsible"
             />
           </div>
@@ -72,7 +72,7 @@ const { state: data, isLoading, refresh } = useMemberProfile();
 
         <div class="col-6 column q-col-gutter-sm">
           <div>
-            <college-card
+            <CollegeCard
               :data="data.college"
               @updated="refresh"
             />

@@ -34,7 +34,7 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get('my'), 
       <q-card-section class="row q-col-gutter-sm">
         <div class="col-6 column q-col-gutter-sm">
           <div>
-            <program-card
+            <ProgramCard
               :accreditations="data.education_program.accreditations"
               :email="data.education_program.email"
               :phone-number="data.education_program.phone_number"
@@ -43,7 +43,7 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get('my'), 
           </div>
 
           <div>
-            <head-of-program-card
+            <HeadOfProgramCard
               :img="data.responsible.user.img"
               :name="data.responsible.user.name"
               :email="data.responsible.user.email"
@@ -54,7 +54,7 @@ const { state: data, isLoading } = useAsyncState(() => memberService.get('my'), 
 
         <div class="col-6 column q-col-gutter-sm">
           <div>
-            <college-card
+            <CollegeCard
               :accreditations="data.college.accreditations"
               :street-address="data.college.street_address"
               :city="data.college.city"
