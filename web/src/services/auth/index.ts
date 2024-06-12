@@ -1,5 +1,6 @@
 import { api } from 'src/services/utils';
 import { User } from 'src/types/models';
+import { getUserFallbackImg } from 'src/services/user/logics';
 import {
   AuthService, GetCurrentUser, Login, Logout,
 } from './AuthService';
@@ -18,6 +19,7 @@ interface LoginPayload {
 
 const fromRaw = (raw: UserRaw): User => ({
   ...raw,
+  img: raw.img ?? getUserFallbackImg(raw),
   created_at: new Date(raw.created_at),
   updated_at: new Date(raw.updated_at),
 });
