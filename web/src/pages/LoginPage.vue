@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import axios from 'axios';
+import { Notify } from 'quasar';
 import { useAuthStore } from 'src/stores/auth';
 import { requiredRule } from 'src/utils/input-rules';
+import { getErrMsg } from 'src/utils/simpler';
 import { reactive, ref } from 'vue';
 
 const auth = useAuthStore();
@@ -11,10 +14,18 @@ const fields = reactive({
 const hidePassword = ref(true);
 
 const onSubmit = async () => {
-  await auth.login({
-    username: fields.email,
-    password: fields.password,
-  });
+  try {
+    await auth.login({
+      username: fields.email,
+      password: fields.password,
+    });
+  } catch (err) {
+    Notify.create({ type: 'negative', message: getErrMsg(err) });
+    if (!(axios.isAxiosError(err) && err.response?.status
+          && (err.response.status >= 400 || err.response.status < 500))) {
+      console.error(err);
+    }
+  }
 };
 </script>
 
