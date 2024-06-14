@@ -92,6 +92,11 @@ class Membership extends Model
         $this->educationProgram->college
             ->append('img_url')
             ->makeHidden('media');
+        $this->educationProgram->heads->each(function (EducationProgramHead $head) {
+            $head->user
+                ->append('img')
+                ->makeHidden('media');
+        });
 
         return $this;
     }
