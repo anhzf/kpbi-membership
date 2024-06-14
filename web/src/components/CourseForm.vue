@@ -2,7 +2,7 @@
 import { QForm } from 'quasar';
 import { COURSE_SEMESTER_TYPES_LABELS } from 'src/types/constants';
 import { Course } from 'src/types/models';
-import { requiredRule } from 'src/utils/input-rules';
+import { minOrEq, requiredRule } from 'src/utils/input-rules';
 import { ref } from 'vue';
 
 interface Props {
@@ -101,7 +101,7 @@ const onFormSubmit = () => {
             type="number"
             outlined
             :disable="!field.semester"
-            :rules="[requiredRule]"
+            :rules="[minOrEq(1)]"
           />
 
           <q-input

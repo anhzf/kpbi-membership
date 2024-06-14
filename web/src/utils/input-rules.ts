@@ -15,3 +15,7 @@ export const urlRule = (v: unknown) => {
 export const shouldEq = (fieldName: string, match: string | (() => string)) => (
   (v: unknown) => (v === (typeof match === 'function' ? match() : match)) || `Harus sama dengan ${fieldName}`
 );
+
+export const minOrEq = (min: number) => (
+  (v: unknown) => (Number(v) >= min) || `Harus minimal/sama dengan ${min}`
+);
