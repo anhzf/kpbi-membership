@@ -67,7 +67,7 @@ const onSubmit = () => {
       <q-card-section class="flex flex-col gap-2">
         <q-input
           v-model="fields.label"
-          label="Label"
+          label="Instansi"
           :rules="[requiredRule]"
         />
 

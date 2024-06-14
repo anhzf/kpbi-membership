@@ -154,7 +154,7 @@ whenever(() => profile.value?.id, () => {
         <div
           v-for="course in courses"
           :key="course.id"
-          class="col-3"
+          class="col-4"
         >
           <CourseCard
             :title="course.name"

@@ -36,7 +36,7 @@ const { state: data, isLoading, refresh } = useMemberProfile();
       >
         <div :class="['text-center py-.5 mb-1 text-white', isVerified ? 'bg-positive' : 'bg-negative']">
           {{ isVerified
-            ? `Terverifikasi sampai ${data.period_end.toLocaleString('id', {dateStyle: 'short'})}`
+            ? `Aktif sampai ${data.period_end.toLocaleString('id', {dateStyle: 'short'})}`
             : 'Belum Terverifikasi' }}
         </div>
       </DefineState>

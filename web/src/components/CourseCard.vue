@@ -99,7 +99,7 @@ const onDeleteClick = () => {
           <q-item-section>
             <q-item-label>Kapasitas</q-item-label>
             <q-item-label caption>
-              {{ capacity || '-' }}
+              {{ capacity || '-' }} Mahasiswa
             </q-item-label>
           </q-item-section>
         </q-item>
