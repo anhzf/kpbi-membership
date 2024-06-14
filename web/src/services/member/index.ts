@@ -10,8 +10,6 @@ import type {
 } from 'src/services/member/MemberService';
 import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import { api } from 'src/services/utils';
-import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
-import type { MemberProfile } from 'src/types/models';
 import { omitByFilterValue } from 'src/utils/object';
 import { shouldWait } from 'src/utils/promise';
 
@@ -19,12 +17,18 @@ const ENDPOINT = '/member';
 const MEMBERSHIP_ENDPOINT = '/membership';
 
 const states = {
+  _meid: null as (string | null),
   get meId(): string | null {
-    return import.meta.hot?.data.meId ?? null;
+    if (import.meta.hot) {
+      return import.meta.hot.data.meId ?? null;
+    }
+    return this._meid;
   },
   set meId(value: string | null) {
     if (import.meta.hot) {
       import.meta.hot.data.meId = value;
+    } else {
+      this._meid = value;
     }
   },
 };
