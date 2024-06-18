@@ -117,10 +117,10 @@ class AdminController extends Controller
     public function setUserRole(User $user, Request $request)
     {
         $payload = Validator::make($request->all(), [
-            'role' => ['sometimes', new Enum(UserRole::class)],
+            'role' => ['sometimes', 'nullable', new Enum(UserRole::class)],
         ])->safe();
 
-        $user->role = $payload->role;
+        $user->role = $payload->role ?? null;
         $user->save();
     }
 }
