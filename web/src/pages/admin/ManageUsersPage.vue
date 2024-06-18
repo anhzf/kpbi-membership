@@ -8,6 +8,7 @@ import { USER_ROLES, UserRole } from 'src/types/constants';
 import { useLoading } from 'src/composables/use-loading';
 import axios from 'axios';
 import { getErrMsg } from 'src/utils/simpler';
+import { ref } from 'vue';
 
 const COLUMNS = <q.Table.ColumnDefinition<User>[]>[
   {
@@ -32,7 +33,7 @@ const COLUMNS = <q.Table.ColumnDefinition<User>[]>[
   {
     label: 'Role',
     name: 'role',
-    align: 'left',
+    align: 'center',
     required: true,
     field: (row) => row.role,
     sortable: true,
@@ -53,15 +54,19 @@ const PAGINATION = <QTableProps['pagination']>{
 
 const [isOverlayLoading, overlayLoading] = useLoading();
 
-const { data, isLoading, refetch } = useQuery({
+const { data, isFetching: isLoading, refetch } = useQuery({
   queryKey: ['admin', 'users'],
   queryFn: listUsers,
   initialData: [],
 });
 
+const filter = ref('');
+
 const onRoleSelect = async (row: User, role: string) => {
   try {
     await overlayLoading(setUserRole(row.id, role === 'default' ? undefined : role as UserRole));
+    const userIdx = data.value.findIndex((user) => user.id === row.id);
+    data.value[userIdx].role = role as UserRole;
     refetch();
     Notify.create({
       type: 'positive',
@@ -88,7 +93,21 @@ const onRoleSelect = async (row: User, role: string) => {
       :pagination="PAGINATION"
       :rows="data"
       :loading="isLoading"
+      :filter="filter"
     >
+      <template #top-right>
+        <q-input
+          v-model="filter"
+          outlined
+          placeholder="Cari pengguna"
+          dense
+        >
+          <template #append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
+
       <template #body-cell-role="scopedProps">
         <q-td :props="scopedProps">
           <q-btn-dropdown
@@ -101,16 +120,16 @@ const onRoleSelect = async (row: User, role: string) => {
                 v-for="role in ['default', ...USER_ROLES]"
                 :key="role"
                 clickable
+                :active="(scopedProps.value || 'default') === role"
                 @click="onRoleSelect(scopedProps.row, role)"
               >
                 <q-item-section avatar>
                   <q-icon
                     name="check"
-                    :color="(scopedProps.value || 'default') === role ? 'positive' : 'black'"
                   />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ role }}</q-item-label>
+                  <q-item-label>{{ role.toUpperCase() }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -130,6 +149,6 @@ const onRoleSelect = async (row: User, role: string) => {
       </template>
     </q-table>
 
-    <q-inner-loading :show="isOverlayLoading" />
+    <q-inner-loading :showing="isOverlayLoading" />
   </q-page>
 </template>
