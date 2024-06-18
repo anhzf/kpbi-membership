@@ -76,6 +76,9 @@ Route::group([
     'as' => 'admin.',
     'middleware' => 'auth:sanctum',
 ], function () {
+    Route::get('/user', [AdminController::class, 'listUsers']);
+    Route::put('/user/{user}/role', [AdminController::class, 'setUserRole']);
+
     Route::get('/membership', [AdminController::class, 'membershipRequestList']);
     Route::put('/membership/{membershipRequest}', [AdminController::class, 'membershipRequestApprove']);
 });

@@ -9,6 +9,11 @@ export interface TimestampsRaw {
   updated_at: string;
 }
 
+export interface UserRaw extends Omit<User, 'created_at' | 'updated_at'> {
+  created_at: string;
+  updated_at: string;
+}
+
 export interface MemberRaw
   extends Omit<MemberProfile, 'education_program' | 'college' | 'responsible' | 'created_at' | 'updated_at'> {
   education_program: Omit<EducationProgram, 'accreditations'> & {

@@ -3,16 +3,27 @@ import type {
   MemberRaw,
   MembershipRequestRaw,
   TimestampsRaw,
+  UserRaw,
 } from 'src/services/types';
+import { getUserFallbackImg } from 'src/services/user/logics';
 import type {
+  Document,
   Invoice,
   MemberProfile, MembershipRequest,
   Timestamps,
+  User,
 } from 'src/types/models';
 
 export const fromTimestampsRaw = ({ created_at, updated_at }: TimestampsRaw): Timestamps => ({
   created_at: new Date(created_at),
   updated_at: new Date(updated_at),
+});
+
+export const fromUserRaw = (raw: UserRaw): User => ({
+  ...raw,
+  img: raw.img ?? getUserFallbackImg(raw),
+  created_at: new Date(raw.created_at),
+  updated_at: new Date(raw.updated_at),
 });
 
 export const fromMembershipRaw = (raw: MemberRaw): MemberProfile => ({

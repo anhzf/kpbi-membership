@@ -6,11 +6,11 @@ use App\Events\MembershipRequestReviewed;
 use App\Models\Enums\MembershipRequestStatus;
 use App\Models\Enums\UserRole;
 use App\Models\MembershipRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 class AdminController extends Controller
 {
@@ -107,5 +107,20 @@ class AdminController extends Controller
         });
 
         event(new MembershipRequestReviewed($membershipRequest));
+    }
+
+    public function listUsers()
+    {
+        return User::all();
+    }
+
+    public function setUserRole(User $user, Request $request)
+    {
+        $payload = Validator::make($request->all(), [
+            'role' => ['sometimes', new Enum(UserRole::class)],
+        ])->safe();
+
+        $user->role = $payload->role;
+        $user->save();
     }
 }

@@ -1,6 +1,10 @@
 import { api } from 'src/boot/axios';
-import { fromMembershipRequestRaw } from 'src/services/converter';
-import type { AdminService, MembershipRequestApprove, MembershipRequestList } from './AdminService';
+import { fromMembershipRequestRaw, fromUserRaw } from 'src/services/converter';
+import type { UserRaw } from 'src/services/types';
+import type {
+  AdminService, ListUsers, MembershipRequestApprove, MembershipRequestList,
+  SetUserRole,
+} from './AdminService';
 
 const ENDPOINT = '/admin';
 const ENDPOINT_MEMBERSHIP = `${ENDPOINT}/membership`;
@@ -15,6 +19,15 @@ const membershipRequestApprove: MembershipRequestApprove = async (id, validUntil
     valid_until: validUntil || null,
     registration_id: registrationId,
   });
+};
+
+export const listUsers: ListUsers = async () => {
+  const { data } = await api.get<UserRaw[]>(`${ENDPOINT}/user`);
+  return data.map(fromUserRaw);
+};
+
+export const setUserRole: SetUserRole = async (id, role) => {
+  await api.put(`${ENDPOINT}/user/${id}/role`, { role });
 };
 
 const adminService: AdminService = {

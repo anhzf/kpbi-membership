@@ -32,6 +32,7 @@ module.exports = configure((/* ctx */) => ({
   boot: [
     'axios',
     'auth',
+    'simple-plugins',
   ],
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

@@ -64,6 +64,14 @@ const authNavItems: INavItem[] = [
   },
 ];
 
+const adminNavItems: INavItem[] = [
+  {
+    title: 'Kelola Pengguna',
+    icon: 'people',
+    to: { name: 'admin:ManageUsers' },
+  },
+];
+
 const leftDrawerOpen = ref(false);
 const authorizedNavItems = computed(() => (auth.user ? authNavItems : guestNavItems));
 const toggleLeftDrawer = () => {
@@ -221,6 +229,20 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
             :key="navItem.title"
             v-bind="navItem"
           />
+
+          <q-separator spaced />
+
+          <template v-if="auth.user?.role === 'admin'">
+            <q-item-label header>
+              Admin
+            </q-item-label>
+
+            <SideNavItem
+              v-for="navItem in adminNavItems"
+              :key="navItem.title"
+              v-bind="navItem"
+            />
+          </template>
         </template>
       </q-list>
     </q-drawer>
