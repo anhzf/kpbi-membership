@@ -35,7 +35,22 @@ const qrUrl = await toDataURL(
   { margin: 0 },
 );
 
-window.readyToPrint?.();
+// Ensure image are loaded
+(new Promise<void>((resolve, reject) => {
+  const img = new Image();
+  const onLoad = () => {
+    resolve();
+    img.removeEventListener('load', onLoad);
+  };
+  const onError = (err: unknown) => {
+    reject(err);
+    img.removeEventListener('error', onError);
+  };
+  img.addEventListener('load', onLoad);
+  img.addEventListener('error', onError);
+  img.src = '/images/membership-certificate-frame.webp';
+}))
+  .then(() => window.readyToPrint?.());
 </script>
 
 <template>
@@ -68,7 +83,7 @@ window.readyToPrint?.();
       </div>
 
       <div class="font-serif">
-        Periode {{ request!.created_at.toLocaleString('id', {dateStyle:'long'}) }}
+        Periode {{ _d!.created_at.toLocaleString('id', {dateStyle:'long'}) }}
         s.d. {{ request!.valid_until?.toLocaleString('id', {dateStyle:'long'}) }}
       </div>
     </div>
