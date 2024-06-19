@@ -2,6 +2,10 @@
 import { requiredRule } from 'src/utils/input-rules';
 import { ref } from 'vue';
 
+const ACCREDITATION_INSTITUTIONS_LOCAL = ['BAN-PT', 'LAMDIK'] as const;
+
+const ACCREDITATION_INSTITUTIONS_INT = ['ASIIN', 'AQAS', 'FBAA'] as const;
+
 const ACCREDITATION_VALUES = ['A', 'B', 'C', 'Unggul', 'Baik Sekali', 'Baik', 'Belum Terakreditasi'] as const;
 
 // const dateToInputString = (date: Date) => [
@@ -65,9 +69,11 @@ const onSubmit = () => {
       </q-card-section>
 
       <q-card-section class="flex flex-col gap-2">
-        <q-input
+        <q-select
           v-model="fields.label"
           label="Instansi"
+          :options="[...ACCREDITATION_INSTITUTIONS_INT, ...ACCREDITATION_INSTITUTIONS_LOCAL]"
+          use-input
           :rules="[requiredRule]"
         />
 
