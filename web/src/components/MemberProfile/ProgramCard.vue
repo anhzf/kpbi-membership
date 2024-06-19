@@ -71,7 +71,7 @@ const onAccreditationRequestDelete = async (id: string) => {
     <q-card-section>
       <div class="flex justify-between items-center gap-2">
         <h3 class="text-h6 m-0">
-          Program Pendidikan
+          Program Studi
         </h3>
         <q-btn
           v-if="isMemberOwner"
