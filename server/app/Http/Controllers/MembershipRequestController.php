@@ -20,7 +20,7 @@ class MembershipRequestController extends Controller
     public function index()
     {
         /** @var EducationProgramHead */
-        $headProgram = request()->user()->headProgramOf->first();
+        $headProgram = request()->user()->headOf();
         return $headProgram->program->membership
             ->load(['requests' => function (HasMany $query) {
                 $query->orderBy('requested_date', 'desc');

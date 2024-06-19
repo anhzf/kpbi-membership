@@ -86,4 +86,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         $this->addMediaCollection('avatar')
             ->singleFile();
     }
+
+    /**
+     * Current workaround is identify by the last of headProgram.
+     * This behavior is to support multiple headProgram for user.
+     */
+    public function headOf()
+    {
+        return $this->headProgramOf->last();
+    }
 }

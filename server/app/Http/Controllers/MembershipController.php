@@ -104,7 +104,7 @@ class MembershipController extends Controller
      */
     public function showMy(Request $request)
     {
-        $program = $request->user()->headProgramOf->last()->program;
+        $program = $request->user()->headOf()->program;
         $member = Membership::where('education_program_id', $program->id)->first();
         return $this->show($member);
     }
