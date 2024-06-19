@@ -5,7 +5,9 @@ import CourseCard from 'src/components/CourseCard.vue';
 import CourseForm from 'src/components/CourseForm.vue';
 import useMemberProfile from 'src/composables/use-member-profile';
 import courseServices from 'src/services/course';
+import { getMemberDisplayName } from 'src/services/member';
 import { Course } from 'src/types/models';
+import { getWhatsAppLink } from 'src/utils/common';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -134,12 +136,38 @@ whenever(() => profile.value?.id, () => {
     class="column gap-6"
   >
     <div class="row justify-between">
-      <q-btn
-        icon="arrow_back"
-        flat
-        round
-        @click="$router.back"
-      />
+      <div class="row items-center gap-4">
+        <q-btn
+          icon="arrow_back"
+          flat
+          round
+          @click="$router.back"
+        />
+
+        <div
+          v-if="profile"
+          class="column"
+        >
+          <div class="text-h6 q-my-none">
+            Matkul MBKM:
+            {{ getMemberDisplayName({
+              college: profile.college,
+              education_program: profile.education_program,
+            }) }}
+          </div>
+          <div
+            v-if="profile.responsible.user.phone_number"
+            class="text-subtitle1 text-blue-grey"
+          >
+            Hubungi Kaprodi untuk informasi lebih lanjut tentang Mata Kuliah
+            (<a
+              :href="getWhatsAppLink(profile.responsible.user.phone_number)"
+              target="_blank"
+              class="text-blue-8"
+            >{{ profile.responsible.user.phone_number }}</a>).
+          </div>
+        </div>
+      </div>
 
       <q-btn
         v-if="isOwner"
