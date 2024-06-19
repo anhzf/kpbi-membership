@@ -8,6 +8,9 @@ import type { MembershipRequestStatus } from 'src/types/constants';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed } from 'vue';
 
+const CONFIRMATION_NUMBER = '6281353506135';
+const CONFIRMATION_WORD = (program: string, college: string) => `Mohon diverifikasi keanggotaan Prodi ${program} Perguruan Tinggi ${college} pada Sistem Keanggotaan KPBI.`;
+
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
   pending: 'Menunggu',
   approved: 'Disetujui',
@@ -43,6 +46,15 @@ const onFileChange = (ev: Event) => {
       try {
         await loading(memberService.request(file));
         refresh();
+        Dialog.create({
+          message: 'Untuk pelayanan lebih cepat, Mohon konfirmasi pembayaran ke Admin melalui WhatsApp. Terima kasih.',
+          ok: {
+            label: 'Hubungi Admin',
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            href: `https://wa.me/${CONFIRMATION_NUMBER}?text=${encodeURIComponent(CONFIRMATION_WORD(membership.value!.education_program.name, membership.value!.college.name))}`,
+            target: '_blank',
+          },
+        });
       } catch (err) {
         Notify.create({ type: 'negative', message: getErrMsg(err) });
         if (!(axios.isAxiosError(err) && err.response?.status
