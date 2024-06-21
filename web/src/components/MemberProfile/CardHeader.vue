@@ -4,7 +4,8 @@ import memberService from 'src/services/member';
 import { pdfGetUrl } from 'src/services/pdf';
 import { ACADEMIC_DEGREES_LABELS, AcademicDegree } from 'src/types/constants';
 import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
-import { ref, toRaw } from 'vue';
+import { computed, ref, toRaw } from 'vue';
+import { Notify } from 'quasar';
 import AsyncState from '../AsyncState.vue';
 
 interface Props {
@@ -23,6 +24,17 @@ const modified = ref<Props>(toRaw(props));
 
 const { state: data } = useMemberProfile();
 
+const isViewCertificateClicked = ref(false);
+const certificateUrl = computed(() => (isViewCertificateClicked.value
+  ? pdfGetUrl(`keanggotaan/${data.value?.id}`, {
+    format: 'A4', landscape: true, margin: 0, printBackground: true,
+  }).then((v) => {
+    Notify.create('Sertifikat siap diunduh. Silakan klik kembali jika tidak terbuka otomatis.');
+    window.open(v, '_blank');
+    return v;
+  })
+  : Promise.resolve(undefined)));
+
 const onPhotoChange = async (ev: Event) => {
   const target = ev.target as HTMLInputElement;
   if (target.files?.length) {
@@ -34,6 +46,13 @@ const onPhotoChange = async (ev: Event) => {
 
     modified.value.collegeImg = URL.createObjectURL(file);
   }
+};
+
+const onViewCertificateClick = () => {
+  isViewCertificateClicked.value = true;
+  Notify.create({
+    message: 'Menyiapkan sertifikat...',
+  });
 };
 </script>
 
@@ -87,18 +106,20 @@ const onPhotoChange = async (ev: Event) => {
         />
         <AsyncState
           v-if="data?.period_end && data?.period_end > new Date()"
-          :value="pdfGetUrl(`keanggotaan/${data?.id}`, {format: 'A4', landscape: true, margin: 0, printBackground: true})"
-          init="#"
-          #="{state}"
+          :value="certificateUrl"
+          :init="undefined"
+          #="{state,isLoading,error}"
         >
           <q-btn
             label="Lihat Sertifikat"
             :href="state"
             target="_blank"
             outline
+            :loading="isLoading"
+            :title="error ? 'Document not available currently' : 'Lihat sertifikat keanggotaan'"
+            :disable="!!error"
+            @click.once="onViewCertificateClick"
           />
-        <!-- :href="`/api/member/${data?.id}/document`" -->
-        <!-- :to="{name: 'DocumentMembership', params: { memberId: data?.id }}" -->
         </AsyncState>
       </div>
     </div>

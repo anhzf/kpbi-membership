@@ -1,3 +1,5 @@
+import { sleep } from 'src/utils/promise';
+
 interface PdfGetUrlOptions extends Record<string, unknown> {
   waitEvent?: boolean;
 }
@@ -15,6 +17,8 @@ export const pdfGetUrl = async (documentPath: string, options?: PdfGetUrlOptions
     ),
     url: `${import.meta.env.VITE_APP_URL}/document/${documentPath}`,
   });
-
-  return `${import.meta.env.VITE_PDF_SERVICE_ENDPOINT}?${query.toString()}`;
+  const response = await fetch(`${import.meta.env.VITE_PDF_SERVICE_ENDPOINT}?${query.toString()}`);
+  const blob = await response.blob();
+  await sleep(2000);
+  return URL.createObjectURL(blob);
 };

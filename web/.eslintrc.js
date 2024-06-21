@@ -105,5 +105,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
 
     'camelcase': 'off',
+
+    'vue/no-async-in-computed-properties': 'off',
   }
 }

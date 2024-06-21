@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="T">
-import { useAsyncState } from '@vueuse/core';
+import { useAsyncState, whenever } from '@vueuse/core';
 
 interface Props {
   value: Promise<T>;
@@ -10,7 +10,9 @@ const props = defineProps<Props>();
 
 const {
   state, isLoading, execute, error,
-} = useAsyncState<T>(props.value, props.init);
+} = useAsyncState<T>(() => props.value, props.init);
+
+whenever(() => props.value, () => execute());
 </script>
 
 <template>
