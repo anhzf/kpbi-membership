@@ -5,6 +5,7 @@ import {
   computed, defineAsyncComponent,
   ref,
 } from 'vue';
+import { isFeatureAllowed } from 'src/services/features';
 import InvoiceList from './InvoiceList.vue';
 import MembershipRequest from './MembershipRequest.vue';
 
@@ -15,7 +16,6 @@ const auth = useAuthStore();
 memberService.get('me')
   .then(() => memberServiceBill());
 
-const isAdmin = computed(() => auth.user?.role === 'admin');
 const tab = ref('verifyPayment');
 </script>
 
@@ -43,7 +43,7 @@ const tab = ref('verifyPayment');
           label="Tagihan"
         />
         <q-tab
-          v-if="isAdmin"
+          v-if="auth.user?.role && isFeatureAllowed(auth.user?.role, 'VerifyPayment')"
           name="pendingVerificationList"
           label="Permintaan Verifikasi"
         />
@@ -64,7 +64,7 @@ const tab = ref('verifyPayment');
         </q-tab-panel>
 
         <q-tab-panel
-          v-if="isAdmin"
+          v-if="auth.user?.role && isFeatureAllowed(auth.user?.role, 'VerifyPayment')"
           name="pendingVerificationList"
           class="q-gutter-y-md"
         >

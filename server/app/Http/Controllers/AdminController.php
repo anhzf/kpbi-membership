@@ -17,7 +17,9 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware(
-            fn (Request $request, $next) => ($request->user()->role === UserRole::ADMIN)
+            fn (Request $request, $next) => (
+                array_search($request->user()->role, UserRole::toArray()) !== false
+            )
                 ? $next($request)
                 : abort(403)
         );
@@ -116,6 +118,10 @@ class AdminController extends Controller
 
     public function setUserRole(User $user, Request $request)
     {
+        if ($user->role !== UserRole::ADMIN) {
+            abort(403, 'Cannot change role of admin');
+        }
+
         $payload = Validator::make($request->all(), [
             'role' => ['sometimes', 'nullable', new Enum(UserRole::class)],
         ])->safe();

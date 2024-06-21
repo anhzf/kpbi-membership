@@ -10,6 +10,13 @@ import axios from 'axios';
 import { getErrMsg } from 'src/utils/simpler';
 import { ref } from 'vue';
 
+const ROLE_LABELS = {
+  default: 'Anggota',
+  admin: 'Admin',
+  secretary: 'Sekretaris',
+  treasurer: 'Bendahara',
+};
+
 const COLUMNS = <q.Table.ColumnDefinition<User>[]>[
   {
     label: '#',
@@ -58,6 +65,8 @@ const { data, isFetching: isLoading, refetch } = useQuery({
   queryKey: ['admin', 'users'],
   queryFn: listUsers,
   initialData: [],
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
 });
 
 const filter = ref('');
@@ -111,7 +120,7 @@ const onRoleSelect = async (row: User, role: string) => {
       <template #body-cell-role="scopedProps">
         <q-td :props="scopedProps">
           <q-btn-dropdown
-            :label="scopedProps.value || 'default'"
+            :label="ROLE_LABELS[(scopedProps.value || 'default') as keyof typeof ROLE_LABELS]"
             unelevated
           >
             <q-list>
@@ -125,11 +134,13 @@ const onRoleSelect = async (row: User, role: string) => {
               >
                 <q-item-section avatar>
                   <q-icon
-                    name="check"
+                    :name="(scopedProps.value || 'default') === role ? 'check' : ''"
                   />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ role.toUpperCase() }}</q-item-label>
+                  <q-item-label>
+                    {{ ROLE_LABELS[role as keyof typeof ROLE_LABELS] ?? role }}
+                  </q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>

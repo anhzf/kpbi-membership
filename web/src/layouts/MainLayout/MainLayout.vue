@@ -8,11 +8,14 @@ import { RouterLinkProps, useRouter, useRoute } from 'vue-router';
 import { AxiosError } from 'axios';
 import AsyncState from 'src/components/AsyncState.vue';
 import memberService, { getMemberDisplayName } from 'src/services/member';
+import { isFeatureAllowed, type Feature } from 'src/services/features';
+import DefineState from 'src/components/DefineState.vue';
 import SideNavItem from './SideNavItem.vue';
 
 interface INavItem extends Partial<RouterLinkProps> {
   title: string;
   icon?: string;
+  featureName?: Feature;
   [key: string]: unknown;
 }
 
@@ -66,6 +69,7 @@ const authNavItems: INavItem[] = [
 
 const adminNavItems: INavItem[] = [
   {
+    featureName: 'ManageUsers',
     title: 'Kelola Pengguna',
     icon: 'people',
     to: { name: 'admin:ManageUsers' },
@@ -86,7 +90,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
       const url = callbackUrl.startsWith('/') && api.defaults.baseURL
         ? callbackUrl.replace(new URL(api.defaults.baseURL!).pathname, '')
         : callbackUrl;
-      debugger;
+
       const { data, statusText } = await api.post(url);
 
       router.replace({ query: { callback_url: undefined } });
@@ -230,19 +234,27 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
             v-bind="navItem"
           />
 
-          <q-separator spaced />
+          <DefineState
+            v-if="auth.user?.role"
+            :value="adminNavItems.filter((item) => (item.featureName
+              ? isFeatureAllowed(auth.user!.role!, item.featureName)
+              : true))"
+            #="{states: [navItems]}"
+          >
+            <template v-if="navItems.length">
+              <q-separator spaced />
 
-          <template v-if="auth.user?.role === 'admin'">
-            <q-item-label header>
-              Admin
-            </q-item-label>
+              <q-item-label header>
+                Admin
+              </q-item-label>
 
-            <SideNavItem
-              v-for="navItem in adminNavItems"
-              :key="navItem.title"
-              v-bind="navItem"
-            />
-          </template>
+              <SideNavItem
+                v-for="navItem in navItems"
+                :key="navItem.title"
+                v-bind="navItem"
+              />
+            </template>
+          </DefineState>
         </template>
       </q-list>
     </q-drawer>
