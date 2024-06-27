@@ -38,12 +38,13 @@ jobs:
           overwrite: true
           strip_components: 3
 
-      # - name: Copy files via SSH
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: <your-instance-hostname>
-      #     username: <your-ssh-username>
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     script: |
-      #       mkdir -p /path/to/destination
-      #       cp -R /web/dist/spa /path/to/destination
+      - name: Link storage
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/domains/anggota.kpbi.or.id/public_html/source/server
+            APP_PUBLIC_PATH='../www' php artisan storage:link
