@@ -1,5 +1,7 @@
 <script lang="ts" setup>
+import useMemberProfile from 'src/composables/use-member-profile';
 import { CourseSemesterType, COURSE_SEMESTER_TYPES_LABELS } from 'src/types/constants';
+import { getWhatsAppLink } from 'src/utils/common';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -23,6 +25,9 @@ defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const route = useRoute();
+
+const { state: profile } = useMemberProfile();
+
 const isOwner = computed(() => route.params.memberId === 'me');
 
 const onUpdateClick = () => {
@@ -127,6 +132,22 @@ const onDeleteClick = () => {
           outline
           class="w-full"
           @click="onUpdateClick"
+        />
+      </q-card-actions>
+    </template>
+
+    <template v-if="profile?.responsible.user.phone_number">
+      <q-separator />
+
+      <q-card-actions class="no-wrap">
+        <q-btn
+          label="Informasi lebih lanjut"
+          :href="getWhatsAppLink(profile.responsible.user.phone_number, `Mohon informasi lebih lanjut tentang MK MBKM ${code} (${title})`)"
+          target="_blank"
+          icon="info"
+          color="secondary"
+          outline
+          class="w-full"
         />
       </q-card-actions>
     </template>
