@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Web
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /web
+        working-directory: web
 
     steps:
       - name: Checkout code
@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: web/dist/spa
+          source: dist/spa
           target: ~/domains/anggota.kpbi.or.id/public_html
           rm: true
 
