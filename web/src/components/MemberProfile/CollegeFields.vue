@@ -19,7 +19,7 @@ const props = defineProps<Props>();
 
 const fields = ref({
   name: props.data?.name || '',
-  _short_name: props.data?.name || '',
+  _short_name: props.data?.short_name || '',
   get short_name() {
     return this._short_name;
   },
