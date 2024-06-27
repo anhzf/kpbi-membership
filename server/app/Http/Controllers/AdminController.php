@@ -18,7 +18,7 @@ class AdminController extends Controller
     {
         $this->middleware(
             fn (Request $request, $next) => (
-                array_search($request->user()->role, UserRole::toArray()) !== false
+                array_search($request->user()->role, UserRole::cases()) !== false
             )
                 ? $next($request)
                 : abort(403)
