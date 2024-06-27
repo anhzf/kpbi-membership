@@ -47,4 +47,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/domains/anggota.kpbi.or.id/public_html/source/server
-            APP_PUBLIC_PATH='../www' php artisan storage:link
+            ln -s ../../storage/app/public ../www
