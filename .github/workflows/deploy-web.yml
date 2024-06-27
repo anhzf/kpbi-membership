@@ -32,10 +32,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: ${{ github.workspace }}/web/dist/spa
-          target: ~/domains/anggota.kpbi.or.id/public_html
+          source: web/dist/spa
+          target: ~/domains/anggota.kpbi.or.id/public_html/source/www
           rm: true
           overwrite: true
+          strip-components: 3
 
       # - name: Copy files via SSH
       #   uses: appleboy/ssh-action@v1.0.3
