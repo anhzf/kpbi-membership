@@ -25,11 +25,6 @@ jobs:
       - name: Build web
         run: npm run build
 
-      # - name: Setup SSH
-      #   uses: webfactory/ssh-agent@v0.9.0
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Deploy web
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -37,9 +32,10 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: dist/spa
+          source: ${{ github.workspace }}/web/dist/spa
           target: ~/domains/anggota.kpbi.or.id/public_html
           rm: true
+          overwrite: true
 
       # - name: Copy files via SSH
       #   uses: appleboy/ssh-action@v1.0.3
