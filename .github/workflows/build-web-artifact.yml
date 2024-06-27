@@ -1,11 +1,11 @@
 name: Build Web Artifact
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - web/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - web/**
   workflow_dispatch:
 
 jobs:

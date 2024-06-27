@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - web/**
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /web
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install -w web
+
+      - name: Build web
+        run: npm run build
+
+      # - name: Setup SSH
+      #   uses: webfactory/ssh-agent@v0.9.0
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy web
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: web/dist/spa
+          target: ~/domains/anggota.kpbi.or.id/public_html
+          rm: true
+
+      # - name: Copy files via SSH
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: <your-instance-hostname>
+      #     username: <your-ssh-username>
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     script: |
+      #       mkdir -p /path/to/destination
+      #       cp -R /web/dist/spa /path/to/destination
