@@ -113,9 +113,9 @@ const onDeleteClick = () => {
 
     <q-space />
 
-    <template v-if="isOwner">
-      <q-separator />
+    <q-separator />
 
+    <template v-if="isOwner">
       <q-card-actions class="no-wrap">
         <q-btn
           label="Hapus"
@@ -136,20 +136,23 @@ const onDeleteClick = () => {
       </q-card-actions>
     </template>
 
-    <template v-if="profile?.responsible.user.phone_number">
-      <q-separator />
-
-      <q-card-actions class="no-wrap">
-        <q-btn
-          label="Informasi lebih lanjut"
-          :href="getWhatsAppLink(profile.responsible.user.phone_number, `Mohon informasi lebih lanjut tentang MK MBKM ${code} (${title})`)"
-          target="_blank"
-          icon="info"
-          color="secondary"
-          outline
-          class="w-full"
-        />
-      </q-card-actions>
-    </template>
+    <q-card-actions class="no-wrap">
+      <q-btn
+        v-if="profile?.responsible.user.phone_number"
+        label="Informasi lebih lanjut"
+        :href="getWhatsAppLink(profile.responsible.user.phone_number, `Mohon informasi lebih lanjut tentang MK MBKM ${code} (${title})`)"
+        target="_blank"
+        icon="info"
+        color="secondary"
+        outline
+        class="w-full"
+      />
+      <div
+        v-else
+        class="text-blue-grey-5"
+      >
+        CP belum terdaftar
+      </div>
+    </q-card-actions>
   </q-card>
 </template>
