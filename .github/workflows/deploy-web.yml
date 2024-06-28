@@ -46,5 +46,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            export PATH=/opt/alt/php83/usr/bin:$PATH
             cd ~/domains/anggota.kpbi.or.id/public_html/source/server
-            ln -s ../../storage/app/public ../www
+            APP_PUBLIC_PATH='../www' php artisan storage:link
