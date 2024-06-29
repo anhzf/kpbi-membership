@@ -10,28 +10,28 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const _d = await memberService.get(props.memberId);
-if (!_d) throw new Error('Data not found');
+const member = await memberService.get(props.memberId);
+if (!member) throw new Error('Data not found');
 
-const requests = await memberService.listRequestOf(_d.id);
+const requests = await memberService.listRequestOf(member.id);
 const request = requests.findLast((r) => r.status === 'approved');
 if (!request) throw new Error('Data not found');
 
 const number = [
-  (_d.registration_id || _d.id).toString().padStart(3, '0'),
-  _d.created_at.getMonth().toString().padStart(2, '0'),
+  (member.registration_id || member.id).toString().padStart(3, '0'),
+  Number(member.created_at.getMonth().toString().padStart(2, '0')) + 1,
   'KPBI',
-  _d.created_at.getFullYear(),
+  member.created_at.getFullYear(),
 ].join('/');
 
 const fullname = [
-  `${ACADEMIC_DEGREES_LABELS[_d.education_program.degree]} ${_d.education_program.name}`,
-  _d.education_program.faculty,
-  _d.college.name,
+  `${ACADEMIC_DEGREES_LABELS[member.education_program.degree]} ${member.education_program.name}`,
+  member.education_program.faculty,
+  member.college.name,
 ].filter(Boolean).join(', ');
 
 const qrUrl = await toDataURL(
-  `Prodi ${fullname} keanggotaan berlaku mulai ${_d.created_at.toLocaleString('id', { dateStyle: 'long' })} s.d. ${request!.valid_until?.toLocaleString('id', { dateStyle: 'long' })} dengan nomor keanggotaan ${number}`,
+  `Prodi ${fullname} keanggotaan berlaku mulai ${member.created_at.toLocaleString('id', { dateStyle: 'long' })} s.d. ${request!.valid_until?.toLocaleString('id', { dateStyle: 'long' })} dengan nomor keanggotaan ${number}`,
   { margin: 0 },
 );
 
@@ -83,7 +83,7 @@ const qrUrl = await toDataURL(
       </div>
 
       <div class="font-serif">
-        Periode {{ _d!.created_at.toLocaleString('id', {dateStyle:'long'}) }}
+        Periode {{ member!.created_at.toLocaleString('id', {dateStyle:'long'}) }}
         s.d. {{ request!.valid_until?.toLocaleString('id', {dateStyle:'long'}) }}
       </div>
     </div>
