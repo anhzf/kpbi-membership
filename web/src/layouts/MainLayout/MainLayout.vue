@@ -25,7 +25,7 @@ const auth = useAuthStore();
 
 const publicNavItems: INavItem[] = [
   {
-    title: 'Daftar Anggota',
+    title: 'Anggota Terdaftar',
     icon: 'group',
     to: { name: 'Home' },
     exact: true,
