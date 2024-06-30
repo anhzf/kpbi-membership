@@ -55,6 +55,7 @@ export const fromMembershipRequestRaw = (raw: MembershipRequestRaw): MembershipR
   created_at: new Date(raw.created_at),
   updated_at: new Date(raw.updated_at),
   requested_date: new Date(raw.requested_date),
+  transfer_at: raw.transfer_at ? new Date(raw.transfer_at) : undefined,
   authorized_at: raw.requested_date ? new Date(raw.requested_date) : undefined,
   valid_until: raw.valid_until ? new Date(raw.valid_until) : undefined,
 });

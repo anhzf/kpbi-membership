@@ -37,15 +37,17 @@ class MembershipRequestController extends Controller
      */
     public function store(StoreMembershipRequestRequest $request)
     {
+        $payload = $request->safe();
+
         /** @var UploadedFile */
-        $file = $request->safe()->file;
+        $file = $payload->file;
         /** @var User */
         $user = $request->user();
-        /** @var EducationProgramHead */
-        $headProgram = $user->headProgramOf->first();
+        $headProgram = $user->headOf();
 
         $membershipRequest = $headProgram->program->membership->requests()->create([
             'requested_date' => now(),
+            'transfer_at' => $payload->transfer_at,
             'user_id' => $user->id,
             'status' => MembershipRequest::STATUS_DEFAULT,
         ]);

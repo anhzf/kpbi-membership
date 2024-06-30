@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property int $membership_id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon $requested_date
+ * @property ?\Illuminate\Support\Carbon $transfer_at
  * @property \App\Models\Enums\MembershipRequestStatus $status
  * @property ?int $authorized_by_id
  * @property ?\Illuminate\Support\Carbon $authorized_at
@@ -46,6 +47,7 @@ class MembershipRequest extends Model implements HasMedia
         'status' => MembershipRequestStatus::class,
         'requested_date' => 'datetime',
         'authorized_at' => 'datetime',
+        'transfer_at' => 'datetime',
         'valid_until' => 'datetime',
     ];
 

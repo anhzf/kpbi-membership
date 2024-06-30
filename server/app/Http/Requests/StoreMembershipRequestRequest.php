@@ -29,6 +29,7 @@ class StoreMembershipRequestRequest extends FormRequest
     {
         return [
             'file' => [Rule::file()->types(['application/pdf', 'image/*'])->max(2048)],
+            'transfer_at' => ['required', 'date'],
         ];
     }
 }

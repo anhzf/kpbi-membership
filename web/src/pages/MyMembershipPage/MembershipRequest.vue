@@ -41,10 +41,24 @@ const onFileChange = (ev: Event) => {
   const file = target.files?.[0];
   if (!file) return;
 
-  Dialog.create({ message: `Apakah Anda yakin ingin mengunggah "${file.name}" sebagai bukti pembayaran?`, ok: true, cancel: true })
-    .onOk(async () => {
+  Dialog.create({
+    title: 'Konfirmasi Unggah Bukti Pembayaran',
+    message: `Anda akan mengunggah "${file.name}" sebagai bukti pembayaran.`,
+    ok: {
+      label: 'Kirim',
+    },
+    cancel: true,
+    prompt: {
+      model: '',
+      type: 'datetime-local',
+      label: 'Tanggal transfer',
+      hint: 'Masukkan tanggal transfer',
+      required: true,
+    },
+  })
+    .onOk(async (transferAt) => {
       try {
-        await loading(memberService.request(file));
+        await loading(memberService.request(file, new Date(transferAt)));
         refresh();
         Dialog.create({
           message: 'Untuk pelayanan lebih cepat, Mohon konfirmasi pembayaran ke Admin melalui WhatsApp. Terima kasih.',
@@ -104,7 +118,10 @@ const onFileChange = (ev: Event) => {
         <thead>
           <tr>
             <th class="text-left">
-              Tanggal
+              Tanggal Pengajuan
+            </th>
+            <th>
+              Tanggal Transfer
             </th>
             <th>Status</th>
             <th />
@@ -120,8 +137,15 @@ const onFileChange = (ev: Event) => {
                 {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
               </td>
 
+              <td class="text-grey text-center w-8ch">
+                {{ item.transfer_at?.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
+              </td>
+
               <td>
-                <div class="flex items-center gap-1">
+                <div
+                  class="flex items-center gap-1"
+                  :class="{'justify-center': item.status === 'pending'}"
+                >
                   <q-chip
                     :label="REQUEST_STATUS_LABELS[item.status]"
                     :color="REQUEST_STATUS_COLORS[item.status]"

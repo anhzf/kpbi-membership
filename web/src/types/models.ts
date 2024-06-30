@@ -126,6 +126,7 @@ export interface MembershipRequest extends Timestamps {
   membership: Relation<Membership, 'education_program'>;
   user: Relation<User, 'name'>;
   requested_date: Date;
+  transfer_at?: Date;
   status: MembershipRequestStatus;
   authorized_by?: Relation<User, 'name'>;
   authorized_at?: Date;

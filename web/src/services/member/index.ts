@@ -63,11 +63,11 @@ const register: RegisterMember = async (payload) => {
   await api.post(ENDPOINT, payload);
 };
 
-const request: RequestMembership = async (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
+const request: RequestMembership = async (file, transferAt) => {
+  const fd = toFormData({ transfer_at: transferAt });
+  fd.append('file', file);
 
-  await api.post(MEMBERSHIP_ENDPOINT, formData, {
+  await api.post(MEMBERSHIP_ENDPOINT, fd, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };

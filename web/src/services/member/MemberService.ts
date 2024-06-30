@@ -31,7 +31,7 @@ export interface RegisterMember {
 }
 
 export interface RequestMembership {
-  (file: File): Promise<void>;
+  (file: File, transferAt: Date): Promise<void>;
 }
 
 export interface ListRequestMembership {
