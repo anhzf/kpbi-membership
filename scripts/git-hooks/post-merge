@@ -10,8 +10,12 @@ echo "=== Post-merge Hook Executed on $(date) ===" >> "$LOGFILE"
 
 # Your commands here
 echo "Running post-merge tasks..." >> "$LOGFILE" 2>&1
-# Example command
+
+chmod +x ./scripts/*
+
 ./scripts/setup-server.sh >> "$LOGFILE" 2>&1
+
+chmod reset --hard origin/main
 
 # Log completion
 echo "Post-merge hook completed." >> "$LOGFILE"
