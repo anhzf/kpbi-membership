@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         ResetPassword::createUrlUsing(function (User $user, string $token) {
-            $handlerUrl = (object) parse_url(request('handler_url'));
+            $handlerUrl = (object) parse_url(request('handler_url') ?? env('APP_URL'));
             $origin = Utils::buildOriginFromParsedUrl($handlerUrl);
             $query = [
                 'token' => $token,
@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         VerifyEmail::createUrlUsing(function (User $user) {
-            $handlerUrl = (object) parse_url(request('handler_url'));
+            $handlerUrl = (object) parse_url(request('handler_url') ?? env('APP_URL'));
             $handlerUrlPath = $handlerUrl->path ?? '';
             $origin = Utils::buildOriginFromParsedUrl($handlerUrl);
             $callbackUrl = URL::temporarySignedRoute(
