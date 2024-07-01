@@ -15,7 +15,7 @@ chmod +x ./scripts/*
 
 ./scripts/setup-server.sh >> "$LOGFILE" 2>&1
 
-chmod reset --hard origin/main
+git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
 
 # Log completion
 echo "Post-merge hook completed." >> "$LOGFILE"
