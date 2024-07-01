@@ -1,17 +1,10 @@
 <script lang="ts" setup>
 import memberService, { memberServiceBill } from 'src/services/member';
-import { useAuthStore } from 'src/stores/auth';
 import {
-  computed, defineAsyncComponent,
   ref,
 } from 'vue';
-import { isFeatureAllowed } from 'src/services/features';
 import InvoiceList from './InvoiceList.vue';
 import MembershipRequest from './MembershipRequest.vue';
-
-const VerifyMembership = defineAsyncComponent(() => import('./VerifyMembership.vue'));
-
-const auth = useAuthStore();
 
 memberService.get('me')
   .then(() => memberServiceBill());
@@ -42,11 +35,6 @@ const tab = ref('verifyPayment');
           name="invoiceList"
           label="Tagihan"
         />
-        <q-tab
-          v-if="auth.user?.role && isFeatureAllowed(auth.user?.role, 'VerifyPayment')"
-          name="pendingVerificationList"
-          label="Permintaan Verifikasi"
-        />
       </q-tabs>
 
       <q-separator />
@@ -61,14 +49,6 @@ const tab = ref('verifyPayment');
 
         <q-tab-panel name="invoiceList">
           <InvoiceList flat />
-        </q-tab-panel>
-
-        <q-tab-panel
-          v-if="auth.user?.role && isFeatureAllowed(auth.user?.role, 'VerifyPayment')"
-          name="pendingVerificationList"
-          class="q-gutter-y-md"
-        >
-          <VerifyMembership flat />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>

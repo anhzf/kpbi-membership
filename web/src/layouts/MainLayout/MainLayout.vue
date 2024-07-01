@@ -74,6 +74,12 @@ const adminNavItems: INavItem[] = [
     icon: 'people',
     to: { name: 'admin:ManageUsers' },
   },
+  {
+    featureName: 'VerifyPayment',
+    title: 'Permintaan Verifikasi',
+    icon: 'verified_user',
+    to: { name: 'admin:VerifyRequests' },
+  },
 ];
 
 const leftDrawerOpen = ref(false);

@@ -68,9 +68,19 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
-        path: 'admin/users',
-        name: 'admin:ManageUsers',
-        component: () => import('pages/admin/ManageUsersPage.vue'),
+        path: 'admin',
+        children: [
+          {
+            path: 'users',
+            name: 'admin:ManageUsers',
+            component: () => import('pages/admin/ManageUsersPage.vue'),
+          },
+          {
+            path: 'verify-requests',
+            name: 'admin:VerifyRequests',
+            component: () => import('pages/admin/VerifyMembershipRequestPage.vue'),
+          },
+        ],
       },
     ],
   },
