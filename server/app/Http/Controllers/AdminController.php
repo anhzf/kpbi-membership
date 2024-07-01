@@ -25,10 +25,10 @@ class AdminController extends Controller
         );
     }
 
-    public function membershipRequestList()
+    public function membershipRequestList(Request $request)
     {
         /** @var \Illuminate\Database\Eloquent\Builder */
-        $query =  MembershipRequest::where('status', MembershipRequestStatus::PENDING)
+        $query =  MembershipRequest::where('status', MembershipRequestStatus::from($request->input('status', MembershipRequestStatus::PENDING)))
             ->orderBy('requested_date', 'desc');
         return $query->with('membership.educationProgram.college')->get()->append(['attachment', 'attachment_url']);
     }
@@ -43,7 +43,8 @@ class AdminController extends Controller
 
         DB::transaction(function () use ($membershipRequest, $request, $payload) {
             $membershipRequest->authorizedBy()->associate($request->user());
-            $membershipRequest->status = $payload->valid_until ? MembershipRequestStatus::APPROVED : MembershipRequestStatus::REJECTED;
+            $membershipRequest->status = $payload->valid_until
+                ? MembershipRequestStatus::APPROVED : MembershipRequestStatus::REJECTED;
             $membershipRequest->authorized_at = now();
             $membershipRequest->valid_start = $payload->valid_start;
             $membershipRequest->valid_until = $payload->valid_until;

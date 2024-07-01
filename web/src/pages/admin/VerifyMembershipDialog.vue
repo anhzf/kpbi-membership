@@ -3,16 +3,27 @@ import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 
 const DEFAULT_FIELDS = {
-  validStart: new Date(new Date().getFullYear(), 0, 1).toISOString().slice(0, 10) /* Beginning of the year */,
-  validUntil: new Date(new Date().getFullYear(), 12, 0).toISOString().slice(0, 10) /* End of the year */,
+  validStart: new Date(new Date().getFullYear(), 0, 1) /* Beginning of the year */,
+  validUntil: new Date(new Date().getFullYear(), 12, 0) /* End of the year */,
   registrationId: '',
 };
 
+const toFields = (value: typeof DEFAULT_FIELDS) => ({
+  ...value,
+  validStart: value.validStart.toISOString().slice(0, 10),
+  validUntil: value.validUntil.toISOString().slice(0, 10),
+});
+
 interface Props {
+  mode?: 'edit' | 'accept';
   name: string;
+  value?: Partial<typeof DEFAULT_FIELDS>;
 }
 
-defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  mode: 'accept',
+  value: () => ({}),
+});
 
 defineEmits([
   ...useDialogPluginComponent.emits,
@@ -22,7 +33,7 @@ const {
   dialogRef, onDialogHide, onDialogOK, onDialogCancel,
 } = useDialogPluginComponent();
 
-const fields = ref(DEFAULT_FIELDS);
+const fields = ref(toFields({ ...DEFAULT_FIELDS, ...props.value }));
 
 function onOKClick() {
   onDialogOK(fields.value);
@@ -36,10 +47,10 @@ function onOKClick() {
   >
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-dialog__title">
-        Terima Ajuan Keanggotaan
+        {{ mode === 'accept' ? 'Terima Ajuan Keanggotaan' : 'Edit Keanggotaan' }}
       </q-card-section>
       <q-card-section class="q-dialog__message">
-        Mohon masukkan masa berlaku keanggotaan
+        Masukkan masa berlaku keanggotaan
         <div><b>{{ name }}</b>.</div>
       </q-card-section>
 

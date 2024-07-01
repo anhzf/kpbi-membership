@@ -1,8 +1,8 @@
-import type { UserRole } from 'src/types/constants';
+import type { MembershipRequestStatus, UserRole } from 'src/types/constants';
 import type { MembershipRequest, User } from 'src/types/models';
 
 export interface MembershipRequestList {
-  (): Promise<MembershipRequest[]>;
+  (status?: MembershipRequestStatus): Promise<MembershipRequest[]>;
 }
 
 interface MembershipRequestAcceptPayload {

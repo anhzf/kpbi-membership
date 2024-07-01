@@ -9,8 +9,8 @@ import type {
 const ENDPOINT = '/admin';
 const ENDPOINT_MEMBERSHIP = `${ENDPOINT}/membership`;
 
-const membershipRequestList: MembershipRequestList = async () => {
-  const { data } = await api.get(ENDPOINT_MEMBERSHIP);
+const membershipRequestList: MembershipRequestList = async (status = 'pending') => {
+  const { data } = await api.get(ENDPOINT_MEMBERSHIP, { params: { status } });
   return data.map(fromMembershipRequestRaw);
 };
 

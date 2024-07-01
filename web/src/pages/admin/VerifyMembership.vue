@@ -8,6 +8,7 @@ import { getMemberDisplayName } from 'src/services/member';
 import { MembershipRequestStatus } from 'src/types/constants';
 import { MembershipRequest } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
+import { ref, watch } from 'vue';
 import VerifyMembershipDialog from './VerifyMembershipDialog.vue';
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
@@ -22,6 +23,11 @@ const REQUEST_STATUS_COLORS: Record<MembershipRequestStatus, string> = {
   rejected: 'negative',
 };
 
+const REQUEST_STATUS_OPTIONS = Object.entries(REQUEST_STATUS_LABELS).map(([value, label]) => ({
+  value,
+  label,
+}));
+
 /* TODO: Fix typings */
 const getItemName = (item: MembershipRequest) => getMemberDisplayName({
   college: (item.membership.education_program as any).college,
@@ -30,7 +36,14 @@ const getItemName = (item: MembershipRequest) => getMemberDisplayName({
 
 const [isOverlayLoading, overlayLoading] = useLoading();
 
-const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(adminService.membershipRequestList, []);
+const filter = ref({
+  status: 'pending' as MembershipRequestStatus,
+});
+
+const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
+  () => adminService.membershipRequestList(filter.value.status),
+  [],
+);
 
 const onRejectClick = async (item: MembershipRequest) => {
   Dialog.create({
@@ -60,7 +73,14 @@ const onAcceptClick = async (item: MembershipRequest) => {
   Dialog.create({
     component: VerifyMembershipDialog,
     componentProps: {
+      mode: item.valid_until ? 'edit' : 'accept',
       name: getItemName(item),
+      value: {
+        validStart: item.valid_start,
+        validUntil: item.valid_until,
+        /* TODO: Fix typings */
+        registrationId: (item.membership as any).registration_id,
+      },
     },
   })
     .onOk(async ({ validStart, validUntil, registrationId }) => {
@@ -83,14 +103,31 @@ const onAcceptClick = async (item: MembershipRequest) => {
       }
     });
 };
+
+const onEditClick = onAcceptClick;
+
+watch(() => filter.value.status, () => refresh());
 </script>
 
 <template>
   <q-card>
     <q-card-section>
-      <h6 class="my-0">
-        Verifikasi Pembayaran
-      </h6>
+      <div class="flex justify-between items-center">
+        <h6 class="my-0">
+          Verifikasi Pembayaran
+        </h6>
+
+        <q-select
+          v-model="filter.status"
+          label="Status"
+          :options="REQUEST_STATUS_OPTIONS"
+          rounded
+          standout
+          dense
+          map-options
+          emit-value
+        />
+      </div>
 
       <q-markup-table
         flat
@@ -105,9 +142,7 @@ const onAcceptClick = async (item: MembershipRequest) => {
               Keanggotaan
             </th>
             <th>Status</th>
-            <th class="text-right">
-              Aksi
-            </th>
+            <th class="text-right" />
           </tr>
         </thead>
         <tbody>
@@ -136,25 +171,32 @@ const onAcceptClick = async (item: MembershipRequest) => {
               </td>
               <td>
                 <div class="flex justify-end items-center gap-2">
-                  <q-btn-group
-                    v-if="item.status === 'pending'"
-                    unelevated
-                  >
+                  <q-btn-group unelevated>
                     <q-btn
                       icon="attachment"
                       :href="item.attachment_url"
                       target="_blank"
                     />
-                    <q-btn
-                      icon="close"
-                      color="negative"
-                      @click="onRejectClick(item)"
-                    />
-                    <q-btn
-                      icon="check"
-                      color="positive"
-                      @click="onAcceptClick(item)"
-                    />
+
+                    <template v-if="item.status === 'pending'">
+                      <q-btn
+                        icon="close"
+                        color="negative"
+                        @click="onRejectClick(item)"
+                      />
+                      <q-btn
+                        icon="check"
+                        color="positive"
+                        @click="onAcceptClick(item)"
+                      />
+                    </template>
+
+                    <template v-else-if="item.status === 'approved'">
+                      <q-btn
+                        icon="edit"
+                        @click="onEditClick(item)"
+                      />
+                    </template>
                   </q-btn-group>
                 </div>
               </td>
