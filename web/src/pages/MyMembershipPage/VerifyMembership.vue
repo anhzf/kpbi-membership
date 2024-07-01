@@ -103,7 +103,7 @@ const onAcceptClick = async (item: MembershipRequest) => {
               <td class="text-grey text-left w-8ch">
                 {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
               </td>
-              <td>
+              <td class="max-w-35ch truncate">
                 <router-link
                   :to="{name: 'Member', params: {memberId: item.membership.id}}"
                   target="_blank"
@@ -124,14 +124,15 @@ const onAcceptClick = async (item: MembershipRequest) => {
               </td>
               <td>
                 <div class="flex justify-end items-center gap-2">
-                  <q-btn
-                    icon="visibility"
-                    :href="item.attachment_url"
-                    target="_blank"
-                    flat
-                    round
-                  />
-                  <q-btn-group v-if="item.status === 'pending'">
+                  <q-btn-group
+                    v-if="item.status === 'pending'"
+                    unelevated
+                  >
+                    <q-btn
+                      icon="attachment"
+                      :href="item.attachment_url"
+                      target="_blank"
+                    />
                     <q-btn
                       icon="close"
                       color="negative"
