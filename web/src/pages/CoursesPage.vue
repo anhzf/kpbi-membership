@@ -135,7 +135,7 @@ whenever(() => profile.value?.id, () => {
     padding
     class="column gap-6"
   >
-    <div class="row justify-between">
+    <div class="row justify-between items-center">
       <div class="row items-center gap-4">
         <q-btn
           icon="arrow_back"
