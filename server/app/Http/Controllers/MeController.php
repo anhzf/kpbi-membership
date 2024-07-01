@@ -26,10 +26,11 @@ class MeController extends Controller
         $payload = Validator::make($request->all(), [
             'name' => 'sometimes|string',
             'email' => 'sometimes|email',
+            'phone_number' => 'sometimes|string',
             'img' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ])->safe();
 
-        $ATTRS = ['name', 'email'];
+        $ATTRS = ['name', 'email', 'phone_number'];
 
         if (isset($payload->img)) {
             $user->addMedia($payload->img)
@@ -40,6 +41,13 @@ class MeController extends Controller
             if (isset($payload->$attr)) {
                 $user->$attr = $payload->$attr;
             }
+        }
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+            $user->sendEmailVerificationNotification();
+        } else if ($user->isClean()) {
+            return response(status: 204);
         }
 
         $user->save();

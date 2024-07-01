@@ -17,6 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property ?string $phone_number
  * @property string $password hidden
  * @property UserRole $role
  * @property string $remember_token hidden

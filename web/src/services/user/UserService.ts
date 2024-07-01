@@ -34,6 +34,7 @@ export interface ChangePassword {
 export interface UpdateProfilePayload {
   name?: string;
   email?: string;
+  phone_number?: string;
   img?: File;
 }
 

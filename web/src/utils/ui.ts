@@ -22,3 +22,14 @@ export const toastErrorIfAny = async <T>(promise: Promise<T>): Promise<T> => pro
     });
     return Promise.reject(err);
   });
+
+export const toastResponse = async <T>(promise: Promise<T>, successMsg: string | ((res: T) => string)): Promise<T> => (
+  toastErrorIfAny(promise)
+    .then((res) => {
+      Notify.create({
+        type: 'positive',
+        message: typeof successMsg === 'function' ? successMsg(res) : successMsg,
+      });
+      return res;
+    })
+);

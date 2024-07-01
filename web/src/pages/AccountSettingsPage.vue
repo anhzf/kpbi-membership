@@ -4,10 +4,16 @@ import DefineState from 'components/DefineState.vue';
 import userService from 'src/services/user';
 import { useAuthStore } from 'src/stores/auth';
 import { requiredRule, shouldEq } from 'src/utils/input-rules';
-import { pageLoading, toastErrorIfAny } from 'src/utils/ui';
+import { pageLoading, toastErrorIfAny, toastResponse } from 'src/utils/ui';
 import {
   computed, onMounted, reactive, ref,
 } from 'vue';
+
+const DEFAULT_CHANGED_FIELDS = {
+  name: '',
+  email: '',
+  phoneNumber: '',
+};
 
 const _ui = reactive({
   showChangePasswordDialog: false,
@@ -20,9 +26,10 @@ const changePasswordField = reactive({
   newPasswordConfirmation: '',
 });
 
-const changedField = ref({
-  name: '',
-});
+const changedFields = ref(DEFAULT_CHANGED_FIELDS);
+const resetChangedField = () => {
+  changedFields.value = DEFAULT_CHANGED_FIELDS;
+};
 
 const onSendEmailVerificationClick = async () => {
   try {
@@ -81,13 +88,40 @@ const onPhotoChange = async (ev: Event) => {
 };
 
 const onSaveNameClick = async () => {
-  if (!(changedField.value.name !== auth.user?.name)) return;
+  if (!(changedFields.value.name !== auth.user?.name)) return;
 
-  await toastErrorIfAny(
-    pageLoading(userService.updateProfile({ name: changedField.value.name })),
+  await toastResponse(
+    pageLoading(userService.updateProfile({ name: changedFields.value.name })),
+    'Berhasil memperbarui nama.',
   );
 
   auth.refresh();
+  resetChangedField();
+};
+
+const onSaveEmailClick = async (value: string, initial: string) => {
+  if (window.confirm('Apakah Anda yakin ingin mengubah email?') === false) return;
+  if (!(value !== initial)) return;
+
+  await toastResponse(
+    pageLoading(userService.updateProfile({ email: value })),
+    'Berhasil memperbarui email, harap verifikasi email ulang.',
+  );
+
+  auth.refresh();
+  resetChangedField();
+};
+
+const onSavePhoneNumberClick = async (value: string, initial: string) => {
+  if (!(value !== initial)) return;
+
+  await toastResponse(
+    pageLoading(userService.updateProfile({ phone_number: value })),
+    'Berhasil memperbarui nomor hp.',
+  );
+
+  auth.refresh();
+  resetChangedField();
 };
 
 onMounted(() => {
@@ -152,17 +186,17 @@ onMounted(() => {
         </q-avatar>
 
         <!-- TODO: Use QPopupEdit -->
-        <define-state
+        <DefineState
           :value="false"
           #="{states: [isEditMode, setEditMode]}"
         >
           <h6 class="relative self-center text-center flex items-center">
             <q-input
               v-if="isEditMode"
-              :model-value="changedField.name || auth.user?.name"
+              :model-value="changedFields.name || auth.user?.name"
               label="Nama"
               dense
-              @update:model-value="changedField.name = ($event as string)"
+              @update:model-value="changedFields.name = ($event as string)"
             />
             <template v-else>
               {{ auth.user?.name }}
@@ -182,7 +216,7 @@ onMounted(() => {
                   flat
                   round
                   color="positive"
-                  :disabled="!(changedField.name && (changedField.name !== auth.user?.name))"
+                  :disabled="!(changedFields.name && (changedFields.name !== auth.user?.name))"
                   @click="onSaveNameClick().then(() => setEditMode(false))"
                 />
               </template>
@@ -197,16 +231,86 @@ onMounted(() => {
               />
             </div>
           </h6>
-        </define-state>
+        </DefineState>
       </q-card-section>
 
-      <q-list padding>
-        <q-item v-if="auth.user">
+      <q-list
+        v-if="auth.user"
+        padding
+      >
+        <q-item>
           <q-item-section>
             <q-item-label>Email</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-item-label>{{ auth.user.email }}</q-item-label>
+            <q-item-label>
+              <div class="flex items-center gap-2">
+                <q-btn
+                  icon="edit"
+                  flat
+                  round
+                >
+                  <q-popup-edit
+                    :model-value="changedFields.email || auth.user.email"
+                    title="Perbarui email"
+                    buttons
+                    label-set="Simpan"
+                    #="scope"
+                    class="w-40ch"
+                    @update:model-value="changedFields.email = $event"
+                    @save="onSaveEmailClick"
+                  >
+                    <q-input
+                      v-model="scope.value"
+                      type="email"
+                      dense
+                      autofocus
+                      @keyup.enter="scope.set"
+                    />
+                  </q-popup-edit>
+                </q-btn>
+                {{ auth.user.email }}
+              </div>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item>
+          <q-item-section>
+            <q-item-label>Nomor WhatsApp</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>
+              <div class="flex items-center gap-2">
+                <q-btn
+                  icon="edit"
+                  flat
+                  round
+                >
+                  <q-popup-edit
+                    :model-value="changedFields.phoneNumber || auth.user.phone_number"
+                    title="Perbarui nomor"
+                    buttons
+                    label-set="Simpan"
+                    #="scope"
+                    class="w-40ch"
+                    @update:model-value="changedFields.phoneNumber = $event"
+                    @save="onSavePhoneNumberClick"
+                  >
+                    <q-input
+                      v-model="scope.value"
+                      type="tel"
+                      dense
+                      autofocus
+                      placeholder="Contoh: 6281234567890"
+                      hint="Gunakan format internasional, contoh: 6281234567890"
+                      @keyup.enter="scope.set"
+                    />
+                  </q-popup-edit>
+                </q-btn>
+                {{ auth.user.phone_number || 'Belum ada' }}
+              </div>
+            </q-item-label>
           </q-item-section>
         </q-item>
 

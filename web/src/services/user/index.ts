@@ -132,14 +132,8 @@ const updateProfile: UpdateProfile = async (payload) => {
     // Workaround for the PUT method
     // https://laracasts.com/discuss/channels/laravel/axios-returns-empty-array-on-put-request-with-formdata-to-laravel-api
     fd.append('_method', 'PUT');
-    const { data } = await api.post<APIResponse>(ENDPOINT_ME, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
 
-    if (data.message) {
-      Notify.create({
-        type: 'positive',
-        message: data.message,
-      });
-    }
+    await api.post<APIResponse>(ENDPOINT_ME, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
   } catch (err) {
     if (axios.isAxiosError(err)) {
       const resp = err.response?.data as APIResponse;
