@@ -24,7 +24,7 @@ const tab = ref('verifyPayment');
     padding
     class="column items-center"
   >
-    <q-card class="w-full max-w-screen-md">
+    <q-card class="w-full max-w-screen-lg">
       <q-tabs
         v-model="tab"
         active-color="primary"
