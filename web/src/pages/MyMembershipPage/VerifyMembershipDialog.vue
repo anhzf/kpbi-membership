@@ -2,7 +2,17 @@
 import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 
-const DEFAULT_EXPIRY_MS = 3600_000 * 24 * 365;
+const DEFAULT_FIELDS = {
+  validStart: new Date(new Date().getFullYear(), 0, 1).toISOString().slice(0, 10) /* Beginning of the year */,
+  validUntil: new Date(new Date().getFullYear(), 12, 0).toISOString().slice(0, 10) /* End of the year */,
+  registrationId: '',
+};
+
+interface Props {
+  name: string;
+}
+
+defineProps<Props>();
 
 defineEmits([
   ...useDialogPluginComponent.emits,
@@ -12,10 +22,7 @@ const {
   dialogRef, onDialogHide, onDialogOK, onDialogCancel,
 } = useDialogPluginComponent();
 
-const fields = ref({
-  validUntil: new Date(Date.now() + DEFAULT_EXPIRY_MS).toISOString().slice(0, 10),
-  registrationId: '',
-});
+const fields = ref(DEFAULT_FIELDS);
 
 function onOKClick() {
   onDialogOK(fields.value);
@@ -33,13 +40,20 @@ function onOKClick() {
       </q-card-section>
       <q-card-section class="q-dialog__message">
         Mohon masukkan masa berlaku keanggotaan
+        <div><b>{{ name }}</b>.</div>
       </q-card-section>
 
       <q-card-section>
         <q-input
+          v-model="fields.validStart"
+          type="date"
+          label="Mulai masa berlaku*"
+          hint=""
+        />
+        <q-input
           v-model="fields.validUntil"
           type="date"
-          label="Masa berlaku*"
+          label="Akhir masa berlaku*"
           hint=""
         />
         <q-input

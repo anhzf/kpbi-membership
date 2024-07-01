@@ -26,11 +26,14 @@ export interface MemberRaw
 }
 
 export interface MembershipRequestRaw
-  extends Omit<MembershipRequest, 'created_at' | 'updated_at' | 'requested_date' | 'transfer_at'> {
+  extends Omit<MembershipRequest, 'created_at' | 'updated_at' | 'requested_date' | 'transfer_at' | 'valid_start' | 'valid_until'> {
   created_at: string;
   updated_at: string;
   requested_date: string;
   transfer_at: string | null;
+  valid_start: string | null;
+  valid_until: string | null;
+}
 }
 
 export interface InvoiceRaw

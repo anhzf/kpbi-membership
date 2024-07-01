@@ -14,10 +14,11 @@ const membershipRequestList: MembershipRequestList = async () => {
   return data.map(fromMembershipRequestRaw);
 };
 
-const membershipRequestApprove: MembershipRequestApprove = async (id, validUntil, registrationId) => {
+const membershipRequestApprove: MembershipRequestApprove = async (id, payload) => {
   await api.put(`${ENDPOINT_MEMBERSHIP}/${id}`, {
-    valid_until: validUntil || null,
-    registration_id: registrationId,
+    valid_start: payload?.validStart || null,
+    valid_until: payload?.validUntil || null,
+    registration_id: payload?.registrationId,
   });
 };
 

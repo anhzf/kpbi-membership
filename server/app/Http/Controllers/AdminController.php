@@ -25,61 +25,6 @@ class AdminController extends Controller
         );
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function membershipRequestList()
     {
         /** @var \Illuminate\Database\Eloquent\Builder */
@@ -91,6 +36,7 @@ class AdminController extends Controller
     public function membershipRequestApprove(MembershipRequest $membershipRequest, Request $request)
     {
         $payload = Validator::make($request->all(), [
+            'valid_start' => 'nullable|date|before_or_equal:today',
             'valid_until' => 'nullable|date|after:today',
             'registration_id' => 'nullable|string',
         ])->safe();
@@ -99,6 +45,7 @@ class AdminController extends Controller
             $membershipRequest->authorizedBy()->associate($request->user());
             $membershipRequest->status = $payload->valid_until ? MembershipRequestStatus::APPROVED : MembershipRequestStatus::REJECTED;
             $membershipRequest->authorized_at = now();
+            $membershipRequest->valid_start = $payload->valid_start;
             $membershipRequest->valid_until = $payload->valid_until;
 
             // TODO: Uses event instead of direct update

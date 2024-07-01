@@ -5,13 +5,14 @@ export interface MembershipRequestList {
   (): Promise<MembershipRequest[]>;
 }
 
+interface MembershipRequestAcceptPayload {
+  validStart: Date;
+  validUntil: Date;
+  registrationId?: string;
+}
+
 export interface MembershipRequestApprove {
-  /**
-   * @param id - Membership request ID
-   * @param validUntil - When not provided, the request is rejected
-   * @param registrationId - Custom ID (Old ID)
-   */
-  (id: string, validUntil?: Date, registrationId?: string): Promise<void>;
+  (id: string, payload?: MembershipRequestAcceptPayload): Promise<void>;
 }
 
 export interface ListUsers {

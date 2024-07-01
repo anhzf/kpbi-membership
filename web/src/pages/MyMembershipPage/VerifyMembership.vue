@@ -22,6 +22,12 @@ const REQUEST_STATUS_COLORS: Record<MembershipRequestStatus, string> = {
   rejected: 'negative',
 };
 
+/* TODO: Fix typings */
+const getItemName = (item: MembershipRequest) => getMemberDisplayName({
+  college: (item.membership.education_program as any).college,
+  education_program: item.membership.education_program as any,
+}, true);
+
 const [isOverlayLoading, overlayLoading] = useLoading();
 
 const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(adminService.membershipRequestList, []);
@@ -31,6 +37,9 @@ const onRejectClick = async (item: MembershipRequest) => {
     message: 'Apakah Anda yakin ingin menolak ajuan ini?',
     ok: true,
     cancel: true,
+    componentProps: {
+      name: getItemName(item),
+    },
   })
     .onOk(async () => {
       try {
@@ -50,14 +59,21 @@ const onRejectClick = async (item: MembershipRequest) => {
 const onAcceptClick = async (item: MembershipRequest) => {
   Dialog.create({
     component: VerifyMembershipDialog,
+    componentProps: {
+      name: getItemName(item),
+    },
   })
-    .onOk(async ({ validUntil, registrationId }) => {
+    .onOk(async ({ validStart, validUntil, registrationId }) => {
       try {
         await overlayLoading(
-          adminService.membershipRequestApprove(item.id, new Date(validUntil), registrationId),
+          adminService.membershipRequestApprove(item.id, {
+            validStart: new Date(validStart),
+            validUntil: new Date(validUntil),
+            registrationId,
+          }),
         );
         refresh();
-        Notify.create('Ajuan berhasil disetujui');
+        Notify.create({ message: 'Ajuan berhasil disetujui', type: 'positive' });
       } catch (err) {
         Notify.create({ type: 'negative', message: getErrMsg(err) });
         if (!(axios.isAxiosError(err) && err.response?.status
@@ -108,11 +124,7 @@ const onAcceptClick = async (item: MembershipRequest) => {
                   :to="{name: 'Member', params: {memberId: item.membership.id}}"
                   target="_blank"
                 >
-                  <!-- TODO: Fix typings -->
-                  {{ getMemberDisplayName({
-                    college: (item.membership.education_program as any).college,
-                    education_program: item.membership.education_program as any,
-                  }, true) }}
+                  {{ getItemName(item) }}
                   <q-icon name="open_in_new" />
                 </router-link>
               </td>

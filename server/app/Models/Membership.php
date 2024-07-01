@@ -74,6 +74,11 @@ class Membership extends Model
         ])));
     }
 
+    public function request()
+    {
+        return $this->requests();
+    }
+
     public function isActive(): Attribute
     {
         return Attribute::get(fn () => $this->period_end?->isFuture() ?? false);

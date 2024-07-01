@@ -143,7 +143,7 @@ const onFileChange = (ev: Event) => {
 
               <td>
                 <div
-                  class="flex items-center gap-1"
+                  class="flex flex-col items-center gap-1"
                   :class="{'justify-center': item.status === 'pending'}"
                 >
                   <q-chip
@@ -178,6 +178,7 @@ const onFileChange = (ev: Event) => {
                     target="_blank"
                     flat
                     dense
+                    size="small"
                   />
                 </div>
               </td>
