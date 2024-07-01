@@ -162,6 +162,9 @@ watch(() => filter.value.status, () => refresh());
                   {{ getItemName(item) }}
                   <q-icon name="open_in_new" />
                 </router-link>
+                <div class="text-sm text-blue-grey">
+                  Tanggal transfer: {{ item.transfer_at?.toLocaleString('id') || '-' }}
+                </div>
               </td>
               <td class="text-center w-6ch">
                 <q-chip
