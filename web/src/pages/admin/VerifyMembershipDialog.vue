@@ -10,8 +10,8 @@ const DEFAULT_FIELDS = {
 
 const toFields = (value: typeof DEFAULT_FIELDS) => ({
   ...value,
-  validStart: value.validStart.toISOString().slice(0, 10),
-  validUntil: value.validUntil.toISOString().slice(0, 10),
+  validStart: (value.validStart || DEFAULT_FIELDS.validStart).toISOString().slice(0, 10),
+  validUntil: (value.validUntil || DEFAULT_FIELDS.validUntil).toISOString().slice(0, 10),
 });
 
 interface Props {
