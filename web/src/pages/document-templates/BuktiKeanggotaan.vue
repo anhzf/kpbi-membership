@@ -83,7 +83,7 @@ const qrUrl = await toDataURL(
       </div>
 
       <div class="font-serif">
-        Periode {{ member!.created_at.toLocaleString('id', {dateStyle:'long'}) }}
+        Periode {{ (request!.valid_start ?? member!.created_at).toLocaleString('id', {dateStyle:'long'}) }}
         s.d. {{ request!.valid_until?.toLocaleString('id', {dateStyle:'long'}) }}
       </div>
     </div>
