@@ -17,7 +17,7 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware(
-            fn (Request $request, $next) => (
+            fn(Request $request, $next) => (
                 array_search($request->user()->role, UserRole::cases()) !== false
             )
                 ? $next($request)
@@ -66,7 +66,7 @@ class AdminController extends Controller
 
     public function setUserRole(User $user, Request $request)
     {
-        if ($user->role !== UserRole::ADMIN) {
+        if ($request->user()->role !== UserRole::ADMIN) {
             abort(403, 'Cannot change role of admin');
         }
 
