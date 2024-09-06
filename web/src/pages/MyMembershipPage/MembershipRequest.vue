@@ -8,7 +8,7 @@ import type { MembershipRequestStatus } from 'src/types/constants';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed } from 'vue';
 
-const CONFIRMATION_NUMBER = '6281353506135';
+const CONFIRMATION_NUMBER = '6287838692859';
 const CONFIRMATION_WORD = (program: string, college: string) => `Mohon diverifikasi keanggotaan Prodi ${program} Perguruan Tinggi ${college} pada Sistem Keanggotaan KPBI.`;
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
