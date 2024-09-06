@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -69,7 +70,7 @@ class Membership extends Model
 
     public function name(): Attribute
     {
-        return Attribute::get(fn () => join(' ', array_filter([
+        return Attribute::get(fn() => join(' ', array_filter([
             $this->educationProgram->fullname,
         ])));
     }
@@ -81,7 +82,7 @@ class Membership extends Model
 
     public function isActive(): Attribute
     {
-        return Attribute::get(fn () => $this->period_end?->isFuture() ?? false);
+        return Attribute::get(fn() => $this->period_end?->isFuture() ?? false);
     }
 
     public function loadFullProfile()
@@ -106,7 +107,7 @@ class Membership extends Model
         return $this;
     }
 
-    private function createBill()
+    private function createBill($isNew = false)
     {
         return $this->invoices()->create([
             'receipt_to_details' => [
@@ -115,7 +116,10 @@ class Membership extends Model
                 'addresses' => $this->educationProgram->college->addresses,
             ],
             'items' => self::BILL_INVOICE_ITEMS,
-            'due_at' => now()->addYear(),
+            'due_at' => $isNew
+                // @BUSINESS
+                ? Carbon::create($this->created_at)->addWeeks(2)
+                : now()->addYear(),
         ]);
     }
 
@@ -133,7 +137,8 @@ class Membership extends Model
             $activeBills->isEmpty()
             && ($isDue = $this->period_end?->isPast() ?? true)
         ) {
-            $activeBills->push($this->createBill());
+            $isFirstTime = $this->invoices()->first() === null;
+            $activeBills->push($this->createBill($isFirstTime));
         }
 
         return $activeBills;
