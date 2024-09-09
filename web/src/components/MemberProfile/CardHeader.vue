@@ -63,6 +63,10 @@ const onViewCertificateClick = () => {
       color="grey-5"
       class="group"
     >
+      <div class="absolute-center text-center text-h6 -rotate-45 -translate-1/2 opacity-50">
+        Logo Perguruan Tinggi
+      </div>
+
       <q-img :src="modified.collegeImg" />
 
       <q-btn

@@ -164,7 +164,12 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
         <q-item class="q-pt-lg q-pb-md">
           <template v-if="auth.user">
             <q-item-section avatar>
-              <q-avatar>
+              <q-avatar
+                color="grey-5"
+              >
+                <div class="absolute-center text-caption leading-tight text-center">
+                  Logo PT
+                </div>
                 <q-img :src="auth.user.img" />
               </q-avatar>
             </q-item-section>
