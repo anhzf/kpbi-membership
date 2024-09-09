@@ -94,6 +94,8 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
     try {
       Loading.show();
       const url = callbackUrl.startsWith('/') && api.defaults.baseURL
+        // Assume callbackUrl is an absolute path if it starts with a slash,
+        // so we need to remove the base URL path from it.
         ? callbackUrl.replace(new URL(api.defaults.baseURL!).pathname, '')
         : callbackUrl;
 
