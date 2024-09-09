@@ -8,7 +8,7 @@ import { getMemberDisplayName } from 'src/services/member';
 import { MembershipRequestStatus } from 'src/types/constants';
 import { MembershipRequest } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import VerifyMembershipDialog from './VerifyMembershipDialog.vue';
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
@@ -28,6 +28,11 @@ const REQUEST_STATUS_OPTIONS = Object.entries(REQUEST_STATUS_LABELS).map(([value
   label,
 }));
 
+const REQUEST_SORT_OPTIONS = [
+  { value: 'requested_date', label: 'Tanggal Permintaan' },
+  { value: 'transfer_at', label: 'Tanggal Transfer' },
+];
+
 /* TODO: Fix typings */
 const getItemName = (item: MembershipRequest) => getMemberDisplayName({
   college: (item.membership.education_program as any).college,
@@ -36,6 +41,10 @@ const getItemName = (item: MembershipRequest) => getMemberDisplayName({
 
 const [isOverlayLoading, overlayLoading] = useLoading();
 
+const sortBy = ref({
+  field: 'requested_date' as typeof REQUEST_SORT_OPTIONS[number]['value'],
+  desc: true,
+});
 const filter = ref({
   status: 'pending' as MembershipRequestStatus,
 });
@@ -44,6 +53,14 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
   () => adminService.membershipRequestList(filter.value.status),
   [],
 );
+
+const sortedList = computed(() => list.value.toSorted((a, b) => {
+  if (sortBy.value.field === 'requested_date') {
+    return (a.requested_date.getTime() - b.requested_date.getTime()) * (sortBy.value.desc ? -1 : 1);
+  }
+
+  return ((a.transfer_at?.getTime() ?? 0) - (b.transfer_at?.getTime() ?? 0)) * (sortBy.value.desc ? -1 : 1);
+}));
 
 const onRejectClick = async (item: MembershipRequest) => {
   Dialog.create({
@@ -117,16 +134,36 @@ watch(() => filter.value.status, () => refresh());
           Verifikasi Pembayaran
         </h6>
 
-        <q-select
-          v-model="filter.status"
-          label="Status"
-          :options="REQUEST_STATUS_OPTIONS"
-          rounded
-          standout
-          dense
-          map-options
-          emit-value
-        />
+        <div class="flex gap-2">
+          <q-btn
+            :icon="sortBy.desc ? 'arrow_downward' : 'arrow_upward'"
+            flat
+            round
+            @click="sortBy.desc = !sortBy.desc"
+          />
+
+          <q-select
+            v-model="sortBy.field"
+            label="Urutkan"
+            :options="REQUEST_SORT_OPTIONS"
+            rounded
+            standout
+            dense
+            map-options
+            emit-value
+          />
+
+          <q-select
+            v-model="filter.status"
+            label="Status"
+            :options="REQUEST_STATUS_OPTIONS"
+            rounded
+            standout
+            dense
+            map-options
+            emit-value
+          />
+        </div>
       </div>
 
       <q-markup-table
@@ -148,7 +185,7 @@ watch(() => filter.value.status, () => refresh());
         <tbody>
           <template v-if="list.length">
             <tr
-              v-for="item in list"
+              v-for="item in sortedList"
               :key="item.id"
             >
               <td class="text-grey text-left w-8ch">
