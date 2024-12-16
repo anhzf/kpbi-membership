@@ -48,8 +48,7 @@ class NotifyMembershipExpiry extends Command
         // collect(static::REMIND_INTERVAL)->each(function ($hours) {
         $remindDate = now()->addDays(static::START_REMIND_BEFORE);
 
-        // Membership::all()->each(function (Membership $membership) use ($remindDate) {
-        Membership::where('id', 97)->get()->each(function (Membership $membership) use ($remindDate) {
+        Membership::all()->each(function (Membership $membership) use ($remindDate) {
             $lastReminderSent = $membership->extra?->lastReminderSent
                 ? Date::parse($membership->extra?->lastReminderSent)
                 : null;
