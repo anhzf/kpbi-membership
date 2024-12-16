@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Concerns\HasExtra;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +19,9 @@ use Illuminate\Support\Carbon;
  * @property \Illuminate\Support\Carbon $updated_at
  * Accessors
  * @property-read string $name
+ * @property-read string $email
  * @property-read bool $is_active
+ * @property-read {lastReminderSent: string} $extra
  * Relationships
  * @property EducationProgram $educationProgram
  * @property \Illuminate\Database\Eloquent\Collection<MembershipRequest> $requests
@@ -25,7 +29,7 @@ use Illuminate\Support\Carbon;
  */
 class Membership extends Model
 {
-    use HasFactory;
+    use HasFactory, HasExtra, Notifiable;
 
     const BILL_INVOICE_ITEM_NAME = 'membership';
 
@@ -73,6 +77,11 @@ class Membership extends Model
         return Attribute::get(fn() => join(' ', array_filter([
             $this->educationProgram->fullname,
         ])));
+    }
+
+    public function email() : Attribute
+    {
+        return Attribute::get(fn () => $this->educationProgram->email);
     }
 
     public function request()
@@ -147,7 +156,7 @@ class Membership extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public  static function active($active = true)
+    public static function active($active = true)
     {
         return self::where('period_end', $active ? '>' : '<', now());
     }
