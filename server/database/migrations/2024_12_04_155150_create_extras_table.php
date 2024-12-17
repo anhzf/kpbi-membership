@@ -14,9 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('extras', function (Blueprint $table) {
+            $table->id();
             $table->morphs('model');
             $table->jsonb('data')->default('{}');
             $table->timestamps();
+            $table->unique(['model_id', 'model_type']);
         });
     }
 

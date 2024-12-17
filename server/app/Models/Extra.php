@@ -24,7 +24,9 @@ class Extra extends Model
 
     protected $guarded = [];
 
-    public function model() : MorphTo
+    protected $hidden = ['model_id', 'model_type', 'id', 'created_at', 'updated_at'];
+
+    public function model(): MorphTo
     {
         return $this->morphTo();
     }

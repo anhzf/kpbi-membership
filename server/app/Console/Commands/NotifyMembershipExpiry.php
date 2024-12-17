@@ -6,6 +6,7 @@ use App\Models\Membership;
 use App\Notifications\MembershipExpiryReminder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Log;
 
 class NotifyMembershipExpiry extends Command
 {
@@ -22,7 +23,7 @@ class NotifyMembershipExpiry extends Command
         -1,
     ];
 
-    const START_REMIND_BEFORE = 14;
+    const START_REMIND_BEFORE = -14;
 
     /**
      * The name and signature of the console command.
@@ -48,17 +49,18 @@ class NotifyMembershipExpiry extends Command
         // collect(static::REMIND_INTERVAL)->each(function ($hours) {
         $remindDate = now()->addDays(static::START_REMIND_BEFORE);
 
+        // Membership::with(['extra'])->where('id', 97)->get()->each(function (Membership $membership) use ($remindDate) {
         Membership::all()->each(function (Membership $membership) use ($remindDate) {
-            $lastReminderSent = $membership->extra?->lastReminderSent
-                ? Date::parse($membership->extra?->lastReminderSent)
+            $lastReminderSent = $membership->extra?->data?->lastReminderSent
+                ? Date::parse($membership->extra?->data?->lastReminderSent)
                 : null;
             $isExpireOrWillExpire = $membership->period_end->isPast() || $membership->period_end->betweenIncluded(now(), $remindDate);
             $isReminderSent = $lastReminderSent && $lastReminderSent->isAfter($remindDate);
-            $shouldRemind = $isExpireOrWillExpire && !$isReminderSent;
+            $shouldRemind = !$isReminderSent && $isExpireOrWillExpire;
 
             if ($shouldRemind) {
                 $membership->notify(new MembershipExpiryReminder);
-                $membership->extra()->updateOrCreate([
+                $membership->extra?->update([
                     'data->lastReminderSent' => now(),
                 ]);
             }
