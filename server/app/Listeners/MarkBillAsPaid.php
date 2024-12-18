@@ -31,9 +31,10 @@ class MarkBillAsPaid
             if ($bill = collect($event->membershipRequest->membership->bill())->last()) {
                 $bill->paid_at = now();
 
-                $bill->items = $bill->items->map(function ($item, $key) {
+                $bill->items = $bill->items->map(function ($item, $key) use ($event) {
                     if ($key === Membership::BILL_INVOICE_ITEM_NAME) {
                         $item['ref'] = 1;
+                        $item['price'] = $event->membershipRequest->amount;
                     }
                     return $item;
                 });

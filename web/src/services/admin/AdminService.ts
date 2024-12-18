@@ -9,6 +9,7 @@ interface MembershipRequestAcceptPayload {
   validStart: Date;
   validUntil: Date;
   registrationId?: string;
+  amount?: number;
 }
 
 export interface MembershipRequestApprove {

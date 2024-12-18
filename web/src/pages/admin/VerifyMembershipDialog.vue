@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
+import { PAST_MEMBERSHIP_FEE } from 'src/constants';
 import { ref } from 'vue';
 
 const DEFAULT_FIELDS = {
   validStart: new Date(new Date().getFullYear(), 0, 1) /* Beginning of the year */,
   validUntil: new Date(new Date().getFullYear(), 12, 0) /* End of the year */,
   registrationId: '',
+  amount: PAST_MEMBERSHIP_FEE,
 };
 
 const toFields = (value: typeof DEFAULT_FIELDS) => ({
@@ -66,6 +68,12 @@ function onOKClick() {
           type="date"
           label="Akhir masa berlaku*"
           hint=""
+        />
+        <q-input
+          v-model="fields.amount"
+          label="Nominal Pembayaran*"
+          hint=""
+          prefix="Rp "
         />
         <q-input
           v-model="fields.registrationId"

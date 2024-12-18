@@ -30,8 +30,14 @@ export interface RegisterMember {
   (payload: RegisterMemberPayload): Promise<void>;
 }
 
+export interface RequestMembershipPaylod {
+  file: File;
+  transferAt: Date;
+  amount: number;
+}
+
 export interface RequestMembership {
-  (file: File, transferAt: Date): Promise<void>;
+  (payload: RequestMembershipPaylod): Promise<void>;
 }
 
 export interface ListRequestMembership {

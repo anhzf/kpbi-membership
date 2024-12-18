@@ -18,6 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\FileAdder;
  * @property \Illuminate\Support\Carbon $requested_date
  * @property ?\Illuminate\Support\Carbon $transfer_at
  * @property \App\Models\Enums\MembershipRequestStatus $status
+ * @property ?int $amount
  * @property ?int $authorized_by_id
  * @property ?\Illuminate\Support\Carbon $authorized_at
  * @property ?\Illuminate\Support\Carbon $valid_start
@@ -38,6 +39,8 @@ class MembershipRequest extends Model implements HasMedia
     use HasFactory, InteractsWithMedia, Notifiable;
 
     const STATUS_DEFAULT = MembershipRequestStatus::PENDING;
+
+    const OLD_YEARLY_MEMBERSHIP_FEE = 300_000;
 
     /**
      * The attributes that should be cast.

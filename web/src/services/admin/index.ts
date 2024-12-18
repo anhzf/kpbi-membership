@@ -19,6 +19,7 @@ const membershipRequestApprove: MembershipRequestApprove = async (id, payload) =
     valid_start: payload?.validStart || null,
     valid_until: payload?.validUntil || null,
     registration_id: payload?.registrationId,
+    amount: payload?.amount,
   });
 };
 

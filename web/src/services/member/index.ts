@@ -63,8 +63,8 @@ const register: RegisterMember = async (payload) => {
   await api.post(ENDPOINT, payload);
 };
 
-const request: RequestMembership = async (file, transferAt) => {
-  const fd = toFormData({ transfer_at: transferAt });
+const request: RequestMembership = async ({ file, transferAt, amount }) => {
+  const fd = toFormData({ transfer_at: transferAt, amount });
   fd.append('file', file);
 
   await api.post(MEMBERSHIP_ENDPOINT, fd, {

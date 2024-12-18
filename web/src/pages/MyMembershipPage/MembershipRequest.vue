@@ -7,6 +7,7 @@ import memberService, { isMemberVerified } from 'src/services/member';
 import type { MembershipRequestStatus } from 'src/types/constants';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed } from 'vue';
+import MembershipRequestConfirmationDialog from './MembershipRequestConfirmationDialog.vue';
 
 const CONFIRMATION_NUMBER = '6287838692859';
 const CONFIRMATION_WORD = (program: string, college: string) => `Mohon diverifikasi keanggotaan Prodi ${program} Perguruan Tinggi ${college} pada Sistem Keanggotaan KPBI.`;
@@ -34,7 +35,7 @@ const [isLoading, loading] = useLoading();
 const { state: membership, isLoading: isMembershipLoading } = useAsyncState(() => memberService.get('me'), null);
 const { state: listRequest, execute: refresh, isLoading: listRequestLoading } = useAsyncState(memberService.listRequest, []);
 
-const isVerified = computed(() => !!membership.value && isMemberVerified(membership.value));
+const hasPendingRequest = computed(() => listRequest.value.some(({ status }) => status === 'pending'));
 
 const onFileChange = (ev: Event) => {
   const target = ev.target as HTMLInputElement;
@@ -42,24 +43,23 @@ const onFileChange = (ev: Event) => {
   if (!file) return;
 
   Dialog.create({
-    title: 'Konfirmasi Unggah Bukti Pembayaran',
-    message: `Anda akan mengunggah "${file.name}" sebagai bukti pembayaran.`,
-    ok: {
-      label: 'Kirim',
-    },
+    component: MembershipRequestConfirmationDialog,
     cancel: true,
-    prompt: {
-      model: '',
-      type: 'datetime-local',
-      label: 'Tanggal transfer',
-      hint: 'Masukkan tanggal transfer',
-      required: true,
-    },
+    componentProps: { file },
   })
-    .onOk(async (transferAt) => {
+    .onDismiss(() => {
+      target.value = '';
+    })
+    .onOk(async ({ transferAt, amount }: {transferAt: Date; amount: number}) => {
       try {
-        await loading(memberService.request(file, new Date(transferAt)));
+        await loading(memberService.request({
+          file,
+          transferAt,
+          amount,
+        }));
+
         refresh();
+
         Dialog.create({
           message: 'Untuk pelayanan lebih cepat, Mohon konfirmasi pembayaran ke Admin melalui WhatsApp. Terima kasih.',
           ok: {
@@ -75,8 +75,6 @@ const onFileChange = (ev: Event) => {
           && (err.response.status >= 400 || err.response.status < 500))) {
           console.error(err);
         }
-      } finally {
-        target.value = '';
       }
     });
 };
@@ -88,7 +86,7 @@ const onFileChange = (ev: Event) => {
       <q-btn
         label="Unggah bukti pembayaran"
         icon="upload"
-        :disable="isVerified"
+        :disable="hasPendingRequest"
       >
         <label class="absolute inset-0 cursor-pointer">
           <input
@@ -101,7 +99,7 @@ const onFileChange = (ev: Event) => {
       </q-btn>
 
       <div
-        v-if="isVerified"
+        v-if="hasPendingRequest"
         class="absolute inset-0 bg-slate/20"
       />
     </q-card-section>

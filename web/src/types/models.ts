@@ -133,6 +133,7 @@ export interface MembershipRequest extends Timestamps {
   valid_start?: Date;
   valid_until?: Date;
   attachment_url: string;
+  amount?: number;
 }
 
 export interface Course extends Timestamps {

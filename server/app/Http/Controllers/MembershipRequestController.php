@@ -50,6 +50,7 @@ class MembershipRequestController extends Controller
             'transfer_at' => $payload->transfer_at,
             'user_id' => $user->id,
             'status' => MembershipRequest::STATUS_DEFAULT,
+            'amount' => $payload->amount,
         ]);
 
         $membershipRequest->addMedia($file)->toMediaCollection('membership_requests');

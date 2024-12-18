@@ -95,18 +95,22 @@ const onAcceptClick = async (item: MembershipRequest) => {
       value: {
         validStart: item.valid_start,
         validUntil: item.valid_until,
+        amount: item.amount,
         /* TODO: Fix typings */
         registrationId: (item.membership as any).registration_id,
       },
     },
   })
-    .onOk(async ({ validStart, validUntil, registrationId }) => {
+    .onOk(async ({
+      validStart, validUntil, registrationId, amount,
+    }) => {
       try {
         await overlayLoading(
           adminService.membershipRequestApprove(item.id, {
             validStart: new Date(validStart),
             validUntil: new Date(validUntil),
             registrationId,
+            amount,
           }),
         );
         refresh();
@@ -201,6 +205,9 @@ watch(() => filter.value.status, () => refresh());
                 </router-link>
                 <div class="text-sm text-blue-grey">
                   Tanggal transfer: {{ item.transfer_at?.toLocaleString('id') || '-' }}
+                </div>
+                <div class="text-sm text-blue-grey">
+                  Nominal bayar: {{ item.amount ? item.amount.toLocaleString('id', {style: 'currency', currency: 'IDR'}) : '-' }}
                 </div>
               </td>
               <td class="text-center w-6ch">

@@ -39,6 +39,7 @@ class AdminController extends Controller
             'valid_start' => 'nullable|date|before_or_equal:today',
             'valid_until' => 'nullable|date|after:today',
             'registration_id' => 'nullable|string',
+            'amount' => 'nullable|numeric',
         ])->safe();
 
         DB::transaction(function () use ($membershipRequest, $request, $payload) {
@@ -48,6 +49,7 @@ class AdminController extends Controller
             $membershipRequest->authorized_at = now();
             $membershipRequest->valid_start = $payload->valid_start;
             $membershipRequest->valid_until = $payload->valid_until;
+            $membershipRequest->amount = $payload->amount;
 
             // TODO: Uses event instead of direct update
             $membershipRequest->membership->period_end = $payload->valid_until;
