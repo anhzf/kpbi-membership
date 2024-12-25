@@ -36,8 +36,8 @@ class AdminController extends Controller
     public function membershipRequestApprove(MembershipRequest $membershipRequest, Request $request)
     {
         $payload = Validator::make($request->all(), [
-            'valid_start' => 'nullable|date|before_or_equal:today',
-            'valid_until' => 'nullable|date|after:today',
+            'valid_start' => 'nullable|date',
+            'valid_until' => 'nullable|date|after:valid_start',
             'registration_id' => 'nullable|string',
             'amount' => 'nullable|numeric',
         ])->safe();
