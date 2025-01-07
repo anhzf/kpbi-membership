@@ -32,7 +32,7 @@ const { state: data, isLoading, refresh } = useMemberProfile();
     >
       <DefineState
         :value="data.period_end > new Date()"
-        #="{states: [isVerified]}"
+        #="{state: [isVerified]}"
       >
         <div :class="['text-center py-.5 mb-1 text-white', isVerified ? 'bg-positive' : 'bg-negative']">
           {{ isVerified

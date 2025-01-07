@@ -34,7 +34,6 @@ export interface MembershipRequestRaw
   valid_start: string | null;
   valid_until: string | null;
 }
-}
 
 export interface InvoiceRaw
   extends Omit<Invoice, keyof Timestamps | 'due_at' | 'paid_at'>, TimestampsRaw {

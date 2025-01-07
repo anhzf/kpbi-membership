@@ -2,9 +2,12 @@
 import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import { Dialog, Notify } from 'quasar';
+import AsyncState from 'src/components/AsyncState.vue';
+import DefineState from 'src/components/DefineState.vue';
 import { useLoading } from 'src/composables/use-loading';
 import adminService from 'src/services/admin';
 import { getMemberDisplayName } from 'src/services/member';
+import { pdfGetUrl } from 'src/services/pdf';
 import { MembershipRequestStatus } from 'src/types/constants';
 import { MembershipRequest } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
@@ -61,6 +64,10 @@ const sortedList = computed(() => list.value.toSorted((a, b) => {
 
   return ((a.transfer_at?.getTime() ?? 0) - (b.transfer_at?.getTime() ?? 0)) * (sortBy.value.desc ? -1 : 1);
 }));
+
+const getInvoiceUrl = (id: string): Promise<string> => (
+  pdfGetUrl(`pembayaran/${id}`, { format: 'A4', margin: 0, printBackground: true })
+);
 
 const onRejectClick = async (item: MembershipRequest) => {
   Dialog.create({
@@ -239,6 +246,45 @@ watch(() => filter.value.status, () => refresh());
                     </template>
 
                     <template v-else-if="item.status === 'approved'">
+                      <DefineState
+                        value
+                        #="{state: [isClicked, setIsClicked]}"
+                      >
+                        <AsyncState
+                          v-if="isClicked"
+                          :value="getInvoiceUrl(item.id)"
+                          init="#"
+                          @error="$q.notify({
+                            type: 'negative',
+                            message: `Terjadi kesalahan dalam mendapatkan invoice #${item.id}: ${getErrMsg($event)}`,
+                          })"
+                          #="{state, isLoading, error}"
+                        >
+                          <q-btn
+                            icon="receipt"
+                            :href="state"
+                            target="_blank"
+                            :loading="isLoading"
+                          >
+                            <q-badge
+                              v-if="error"
+                              color="red"
+                              rounded
+                              floating
+                              title="Terjadi kesalahan dalam mendapatkan invoice"
+                            >
+                              !
+                            </q-badge>
+                          </q-btn>
+                        </AsyncState>
+
+                        <q-btn
+                          v-else
+                          icon="receipt"
+                          @click.once="setIsClicked(true)"
+                        />
+                      </DefineState>
+
                       <q-btn
                         icon="edit"
                         @click="onEditClick(item)"

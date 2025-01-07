@@ -252,7 +252,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
             :value="adminNavItems.filter((item) => (item.featureName
               ? isFeatureAllowed(auth.user!.role!, item.featureName)
               : true))"
-            #="{states: [navItems]}"
+            #="{state: [navItems]}"
           >
             <template v-if="navItems.length">
               <q-separator spaced />

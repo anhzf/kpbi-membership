@@ -3,6 +3,7 @@ import { useAsyncState } from '@vueuse/core';
 import AsyncState from 'src/components/AsyncState.vue';
 import { invoiceList } from 'src/services/invoice';
 import { pdfGetUrl } from 'src/services/pdf';
+import { getErrMsg } from 'src/utils/simpler';
 
 const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(invoiceList, []);
 </script>
@@ -47,6 +48,7 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
                   :value="pdfGetUrl(`pembayaran/${invoice?.id}`, {format: 'A4', margin: 0, printBackground: true})"
                   init="#"
                   #="{state}"
+                  @error="$q.notify({ type: 'negative', message: `Gagal mendapatkan invoice: ${getErrMsg($event)}` })"
                 >
                   <q-btn
                     label="Lihat"

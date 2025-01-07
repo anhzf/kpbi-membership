@@ -25,7 +25,7 @@ if (props.watchChanges) {
 
 <template>
   <slot
-    :states="([state, setState] as const)"
+    :state="([state, setState] as const)"
     :bind-v-model="{modelValue: state, 'onUpdate:modelValue': setState}"
   />
 </template>

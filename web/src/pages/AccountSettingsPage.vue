@@ -188,7 +188,7 @@ onMounted(() => {
         <!-- TODO: Use QPopupEdit -->
         <DefineState
           :value="false"
-          #="{states: [isEditMode, setEditMode]}"
+          #="{state: [isEditMode, setEditMode]}"
         >
           <h6 class="relative self-center text-center flex items-center">
             <q-input

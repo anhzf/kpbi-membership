@@ -7,10 +7,15 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const emit = defineEmits<{
+  error: [error: unknown];
+}>();
 
 const {
   state, isLoading, execute, error,
-} = useAsyncState<T>(() => props.value, props.init);
+} = useAsyncState<T>(() => props.value, props.init, {
+  onError: emit.bind(null, 'error'),
+});
 
 whenever(() => props.value, () => execute());
 </script>
