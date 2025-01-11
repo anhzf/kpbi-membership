@@ -49,22 +49,30 @@ class NotifyMembershipExpiry extends Command
         // collect(static::REMIND_INTERVAL)->each(function ($hours) {
         $remindDate = now()->addDays(static::START_REMIND_BEFORE);
 
-        // Membership::with(['extra'])->where('id', 97)->get()->each(function (Membership $membership) use ($remindDate) {
-        Membership::all()->each(function (Membership $membership) use ($remindDate) {
-            $lastReminderSent = $membership->extra?->data?->lastReminderSent
-                ? Date::parse($membership->extra?->data?->lastReminderSent)
-                : null;
-            $isExpireOrWillExpire = $membership->period_end->isPast() || $membership->period_end->betweenIncluded(now(), $remindDate);
-            $isReminderSent = $lastReminderSent && $lastReminderSent->isAfter($remindDate);
-            $shouldRemind = !$isReminderSent && $isExpireOrWillExpire;
+        $reminded = 0;
+        $this->withProgressBar(
+            Membership::with('extra')->whereRelation('educationProgram.heads.user', 'role', '!=', null)->get(),
+            function (Membership $membership) use ($remindDate, $reminded) {
+                $lastReminderSent = $membership->extra?->data?->lastReminderSent
+                    ? Date::parse($membership->extra?->data?->lastReminderSent)
+                    : null;
+                $isExpireOrWillExpire = $membership->period_end->isPast() || $membership->period_end->betweenIncluded(now(), $remindDate);
+                $isReminderSent = $lastReminderSent && $lastReminderSent->isAfter($remindDate);
+                $shouldRemind = !$isReminderSent && $isExpireOrWillExpire;
 
-            if ($shouldRemind) {
-                $membership->notify(new MembershipExpiryReminder);
-                $membership->extra?->update([
-                    'data->lastReminderSent' => now(),
-                ]);
+                if ($shouldRemind) {
+                    $membership->notify(new MembershipExpiryReminder);
+
+                    $membership->extra()
+                        ->{$membership->extra ? 'update' : 'create'}([
+                            'data->lastReminderSent' => now(),
+                        ]);
+
+                    $reminded++;
+                }
             }
-        });
-        // });
+        );
+
+        $this->info("\nSent {$reminded} reminders");
     }
 }
