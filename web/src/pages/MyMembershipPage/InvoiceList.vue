@@ -1,11 +1,18 @@
 <script lang="ts" setup>
 import { useAsyncState } from '@vueuse/core';
 import AsyncState from 'src/components/AsyncState.vue';
+import DefineState from 'src/components/DefineState.vue';
 import { invoiceList } from 'src/services/invoice';
 import { pdfGetUrl } from 'src/services/pdf';
 import { getErrMsg } from 'src/utils/simpler';
 
 const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(invoiceList, []);
+
+const getInvoiceUrl = async (id: string): Promise<string> => {
+  const url = await pdfGetUrl(`pembayaran/${id}`, { format: 'A4', margin: 0, printBackground: true });
+  window.open(url, '_blank');
+  return url;
+};
 </script>
 
 <template>
@@ -44,21 +51,51 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
                 {{ invoice.paid_at ? 'Lunas' : 'Belum Lunas' }}
               </td>
               <td class="text-right">
-                <AsyncState
-                  :value="pdfGetUrl(`pembayaran/${invoice?.id}`, {format: 'A4', margin: 0, printBackground: true})"
-                  init="#"
-                  #="{state}"
-                  @error="$q.notify({ type: 'negative', message: `Gagal mendapatkan invoice: ${getErrMsg($event)}` })"
+                <DefineState
+                  value
+                  #="{state: [isClicked, setIsClicked]}"
                 >
+                  <AsyncState
+                    v-if="isClicked"
+                    :value="getInvoiceUrl(invoice?.id)"
+                    init="#"
+                    #="{state,isLoading,error}"
+                    @error="$q.notify({
+                      type: 'negative',
+                      message: `Gagal mendapatkan invoice: ${getErrMsg($event)}`
+                    })"
+                  >
+                    <q-btn
+                      label="Lihat"
+                      icon="open_in_new"
+                      :href="state"
+                      target="_blank"
+                      flat
+                      dense
+                      :loading="isLoading"
+                      :disabled="error"
+                    >
+                      <q-badge
+                        v-if="error"
+                        color="red"
+                        rounded
+                        floating
+                        title="Terjadi kesalahan dalam mendapatkan invoice"
+                      >
+                        !
+                      </q-badge>
+                    </q-btn>
+                  </AsyncState>
+
                   <q-btn
+                    v-else
                     label="Lihat"
                     icon="open_in_new"
-                    :href="state"
-                    target="_blank"
                     flat
                     dense
+                    @click.once="setIsClicked(true)"
                   />
-                </AsyncState>
+                </DefineState>
               </td>
             </tr>
           </template>

@@ -65,9 +65,11 @@ const sortedList = computed(() => list.value.toSorted((a, b) => {
   return ((a.transfer_at?.getTime() ?? 0) - (b.transfer_at?.getTime() ?? 0)) * (sortBy.value.desc ? -1 : 1);
 }));
 
-const getInvoiceUrl = (id: string): Promise<string> => (
-  pdfGetUrl(`pembayaran/${id}`, { format: 'A4', margin: 0, printBackground: true })
-);
+const getInvoiceUrl = async (id: string): Promise<string> => {
+  const url = await pdfGetUrl(`pembayaran/${id}`, { format: 'A4', margin: 0, printBackground: true });
+  window.open(url, '_blank');
+  return url;
+};
 
 const onRejectClick = async (item: MembershipRequest) => {
   Dialog.create({

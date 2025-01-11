@@ -6,6 +6,7 @@ interface PdfGetUrlOptions extends Record<string, unknown> {
 
 const DEFAULT_PDF_GET_URL_OPTIONS = <PdfGetUrlOptions>{
   waitEvent: true,
+  waitEventTimeout: 60_000,
 };
 
 export const pdfGetUrl = async (documentPath: string, options?: PdfGetUrlOptions) => {
