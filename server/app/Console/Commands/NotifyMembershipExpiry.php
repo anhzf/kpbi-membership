@@ -51,7 +51,7 @@ class NotifyMembershipExpiry extends Command
 
         $reminded = 0;
         $this->withProgressBar(
-            Membership::with('extra')->whereRelation('educationProgram.heads.user', 'role', '!=', null)->get(),
+            Membership::with('extra')->get(),
             function (Membership $membership) use ($remindDate, $reminded) {
                 $lastReminderSent = $membership->extra?->data?->lastReminderSent
                     ? Date::parse($membership->extra?->data?->lastReminderSent)
