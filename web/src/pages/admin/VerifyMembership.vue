@@ -199,8 +199,20 @@ watch(() => filter.value.status, () => refresh());
               v-for="item in sortedList"
               :key="item.id"
             >
-              <td class="text-grey text-left w-8ch">
-                {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
+              <td class="text-left w-8ch">
+                <div class="text-grey">
+                  {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
+                </div>
+
+                <q-chip
+                  v-if="item.valid_until ? item.valid_until < new Date() : false"
+                  label="expired"
+                  color="warning"
+                  text-color="white"
+                  size="sm"
+                  outline
+                  dense
+                />
               </td>
               <td class="max-w-35ch truncate">
                 <router-link
@@ -221,6 +233,7 @@ watch(() => filter.value.status, () => refresh());
                 <q-chip
                   :label="REQUEST_STATUS_LABELS[item.status]"
                   :color="REQUEST_STATUS_COLORS[item.status]"
+                  text-color="white"
                 />
               </td>
               <td>
