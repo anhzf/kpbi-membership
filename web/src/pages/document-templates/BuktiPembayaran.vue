@@ -3,6 +3,7 @@ import { toDataURL } from 'qrcode';
 import { toDateTimeUnit, toIndonesianWords, toRoman } from 'src/utils/number';
 import { useRouter } from 'vue-router';
 import { invoiceGet } from 'src/services/invoice';
+import { onMounted } from 'vue';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
 
 const DATE_TIME_UNITS = {
@@ -50,7 +51,9 @@ const invoiceLink = `${window.location.origin}${router.resolve({ name: 'Document
 
 const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
 
-window.readyToPrint?.();
+onMounted(() => {
+  window.readyToPrint?.();
+});
 </script>
 
 <template>

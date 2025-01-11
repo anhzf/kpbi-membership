@@ -2,6 +2,7 @@
 import { toDataURL } from 'qrcode';
 import memberService from 'src/services/member';
 import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
+import { onMounted } from 'vue';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
 
 interface Props {
@@ -36,7 +37,7 @@ const qrUrl = await toDataURL(
 );
 
 // Ensure image are loaded
-(new Promise<void>((resolve, reject) => {
+await (new Promise<void>((resolve, reject) => {
   const img = new Image();
   const onLoad = () => {
     resolve();
@@ -49,12 +50,18 @@ const qrUrl = await toDataURL(
   img.addEventListener('load', onLoad);
   img.addEventListener('error', onError);
   img.src = '/images/membership-certificate-frame.webp';
-}))
-  .then(() => window.readyToPrint?.());
+}));
+
+onMounted(() => {
+  window.readyToPrint?.();
+});
 </script>
 
 <template>
-  <div class="w-full h-full bg-[url(/images/membership-certificate-frame.webp)] bg-no-repeat bg-contain [background-position-x:center] [background-position-y:center] flex flex-col flex-nowrap justify-center items-center gap-4 p-8 text-lg text-zinc-900 text-center">
+  <div
+    class="w-full h-full flex flex-col flex-nowrap justify-center items-center gap-4 p-8 text-lg text-zinc-900 text-center
+      bg-[url(/images/membership-certificate-frame.webp)] bg-no-repeat bg-contain [background-position-x:center] [background-position-y:center]"
+  >
     <img
       src="/images/Optimized-ICON_KPBI.png"
       alt="Logo KPBI"
