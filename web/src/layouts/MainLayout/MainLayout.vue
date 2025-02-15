@@ -69,16 +69,16 @@ const authNavItems: INavItem[] = [
 
 const adminNavItems: INavItem[] = [
   {
-    featureName: 'ManageUsers',
-    title: 'Kelola Pengguna',
-    icon: 'people',
-    to: { name: 'admin:ManageUsers' },
-  },
-  {
     featureName: 'VerifyPayment',
     title: 'Permintaan Verifikasi',
     icon: 'verified_user',
     to: { name: 'admin:VerifyRequests' },
+  },
+  {
+    featureName: 'ManageUsers',
+    title: 'Kelola Pengguna',
+    icon: 'people',
+    to: { name: 'admin:ManageUsers' },
   },
 ];
 

@@ -1,7 +1,7 @@
 /* TODO: Uses modular instead of in object services */
 import type { AcademicDegree } from 'src/types/constants';
 import type {
-  College, EducationProgram, MemberInList, MemberProfile, MembershipRequest,
+  College, EducationProgram, Invoice, MemberInList, MemberProfile, MembershipRequest,
 } from 'src/types/models';
 
 export interface GetMember {
@@ -44,6 +44,10 @@ export interface ListRequestMembership {
   (): Promise<MembershipRequest[]>;
 }
 
+export interface GetMembershipRequestInvoice {
+  (id: string): Promise<Invoice | undefined>;
+}
+
 export interface UpdateCollegePayload extends Partial<Omit<College, 'img' | 'img_url' | 'accreditations'>> {
   img?: File;
 }
@@ -74,6 +78,7 @@ export interface MemberService {
   register: RegisterMember;
   request: RequestMembership;
   listRequest: ListRequestMembership;
+  requestInvoice: GetMembershipRequestInvoice;
   updateCollege: UpdateCollege;
   updateProgram: UpdateProgram;
   listRequestOf: ListMembershipRequestOfMember;

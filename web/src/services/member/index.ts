@@ -1,20 +1,22 @@
 import { toFormData } from 'axios';
-import { fromMembershipRaw, fromMembershipRequestRaw } from 'src/services/converter';
+import { fromInvoiceRaw, fromMembershipRaw, fromMembershipRequestRaw } from 'src/services/converter';
 import type {
   GetMember, GetMemberList,
+  GetMembershipRequestInvoice,
   ListMembershipRequestOfMember,
   ListRequestMembership,
   MemberService, MemberServiceBill, RegisterMember,
   RequestMembership, UpdateCollege,
   UpdateProgram,
 } from 'src/services/member/MemberService';
-import type { MemberRaw, MembershipRequestRaw } from 'src/services/types';
+import type { InvoiceRaw, MemberRaw, MembershipRequestRaw } from 'src/services/types';
 import { api } from 'src/services/utils';
 import { omitByFilterValue } from 'src/utils/object';
 import { shouldWait } from 'src/utils/promise';
 
 const ENDPOINT = '/member';
 const MEMBERSHIP_ENDPOINT = '/membership';
+const MEMBERSHIP_REQUEST_ENDPOINT = '/membership-request';
 
 const states = {
   _meid: null as (string | null),
@@ -77,6 +79,11 @@ const listRequest: ListRequestMembership = async () => {
   return data.map(fromMembershipRequestRaw);
 };
 
+const requestInvoice: GetMembershipRequestInvoice = async (id: string) => {
+  const { data: { data } } = await api.get<{ data: InvoiceRaw }>(`${MEMBERSHIP_REQUEST_ENDPOINT}/${id}/invoice`);
+  return fromInvoiceRaw(data);
+};
+
 const listRequestOf: ListMembershipRequestOfMember = async (id) => {
   const { data } = await api.get<MembershipRequestRaw[]>(`${MEMBERSHIP_ENDPOINT}/${id}/request`);
   return data.map((el) => fromMembershipRequestRaw(el));
@@ -112,6 +119,7 @@ const memberService: MemberService = {
   register,
   request,
   listRequest,
+  requestInvoice,
   updateCollege,
   updateProgram,
   listRequestOf,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Api;
 use App\Http\Controllers\AccreditationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\MeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipRequestController;
 use App\Http\Controllers\VerificationController;
+use App\Models\Membership;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -24,7 +28,22 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-Route::any('/', fn () => response()->json('ready!'));
+// Route::any('/', fn() => Api::message('ready!'));
+Route::any('/', fn() => Api::data(Membership::find(97)->bill()));
+// Route::any('/', fn() => Api::data(Membership::find(97)->bill()->last()));
+
+Route::group([
+    'middleware' => [
+        'auth.basic',
+        fn(Request $request, \Closure $next) => auth()->user()?->role
+            ? $next($request) : abort(403),
+    ],
+], function () {
+    Route::get('/$dir', fn() => Api::data(scandir(base_path(request('path')))));
+    Route::get('/$env', fn() => Api::data(request('key') ? env(request('key')) : getenv()));
+    Route::get('/$cfg', fn() => Api::data(config(request('key'))));
+    Route::get('/$db', fn() => Api::data(DB::connection()->getConfig()));
+});
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
@@ -68,7 +87,9 @@ Route::post('/member/{member}/bill', [MembershipController::class, 'bill']);
 Route::apiResource('/course', CourseController::class);
 Route::apiResource('/membership', MembershipRequestController::class);
 Route::get('/membership/{membership}/request', [MembershipController::class, 'listRequest']);
+Route::get('/membership-request/{membershipRequest}/invoice', [MembershipRequestController::class, 'showInvoice']);
 Route::apiResource('/invoice', InvoiceController::class);
+Route::get('/invoice/{invoice}/document/payload', [InvoiceController::class, 'showDocumentPayload']);
 Route::apiResource('/accreditation', AccreditationController::class);
 
 Route::group([
@@ -79,6 +100,6 @@ Route::group([
     Route::get('/user', [AdminController::class, 'listUsers']);
     Route::put('/user/{user}/role', [AdminController::class, 'setUserRole']);
 
-    Route::get('/membership', [AdminController::class, 'membershipRequestList']);
-    Route::put('/membership/{membershipRequest}', [AdminController::class, 'membershipRequestApprove']);
+    Route::get('/membership-request', [AdminController::class, 'membershipRequestList']);
+    Route::put('/membership-request/{membershipRequest}', [AdminController::class, 'membershipRequestApprove']);
 });

@@ -1,4 +1,5 @@
 import type {
+  InvoiceDocumentPayloadRaw,
   InvoiceRaw,
   MemberRaw,
   MembershipRequestRaw,
@@ -7,8 +8,8 @@ import type {
 } from 'src/services/types';
 import { getUserFallbackImg } from 'src/services/user/logics';
 import type {
-  Document,
   Invoice,
+  InvoiceDocumentPayload,
   MemberProfile, MembershipRequest,
   Timestamps,
   User,
@@ -64,6 +65,13 @@ export const fromMembershipRequestRaw = (raw: MembershipRequestRaw): MembershipR
 export const fromInvoiceRaw = (raw: InvoiceRaw): Invoice => ({
   ...raw,
   ...fromTimestampsRaw(raw),
+  due_at: new Date(raw.due_at),
+  paid_at: raw.paid_at ? new Date(raw.paid_at) : undefined,
+});
+
+export const fromInvoiceDocumentPayloadRaw = (raw: InvoiceDocumentPayloadRaw): InvoiceDocumentPayload => ({
+  ...raw,
+  created_at: new Date(raw.created_at),
   due_at: new Date(raw.due_at),
   paid_at: raw.paid_at ? new Date(raw.paid_at) : undefined,
 });

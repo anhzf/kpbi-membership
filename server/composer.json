@@ -12,6 +12,7 @@
         "laravel/telescope": "^5.2",
         "laravel/tinker": "^2.7",
         "spatie/laravel-medialibrary": "^10.4",
+        "spatie/laravel-query-builder": "^5.7",
         "symfony/polyfill-iconv": "^1.29"
     },
     "require-dev": {

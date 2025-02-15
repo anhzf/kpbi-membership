@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Membership;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,10 +28,11 @@ class StoreMembershipRequestRequest extends FormRequest
      */
     public function rules()
     {
+        $membershipFee = Membership::BILL_INVOICE_ITEMS[Membership::BILL_INVOICE_ITEM_NAME]['price'];
         return [
             'file' => [Rule::file()->types(['application/pdf', 'image/*'])->max(2048)],
             'transfer_at' => ['required', 'date'],
-            'amount' => ['numeric', 'nullable'],
+            'amount' => ['numeric', 'nullable', "multiple_of:{$membershipFee}"],
         ];
     }
 }

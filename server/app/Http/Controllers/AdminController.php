@@ -27,8 +27,9 @@ class AdminController extends Controller
 
     public function membershipRequestList(Request $request)
     {
+        $status = MembershipRequestStatus::from($request->input('status', MembershipRequestStatus::PENDING));
         /** @var \Illuminate\Database\Eloquent\Builder */
-        $query =  MembershipRequest::where('status', MembershipRequestStatus::from($request->input('status', MembershipRequestStatus::PENDING)))
+        $query =  MembershipRequest::where('status', $status)
             ->orderBy('requested_date', 'desc');
         return $query->with('membership.educationProgram.college')->get()->append(['attachment', 'attachment_url']);
     }

@@ -1,15 +1,22 @@
 <script lang="ts" setup>
 import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
+import { addYears, endOfYear } from 'date-fns';
 import { Dialog, Notify } from 'quasar';
+import AsyncState from 'src/components/AsyncState.vue';
+import DefineState from 'src/components/DefineState.vue';
 import { useLoading } from 'src/composables/use-loading';
+import { MEMBERSHIP_FEE } from 'src/constants';
 import adminService from 'src/services/admin';
-import { getMemberDisplayName } from 'src/services/member';
+import memberService, { getMemberDisplayName } from 'src/services/member';
 import { MembershipRequestStatus } from 'src/types/constants';
 import { MembershipRequest } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import VerifyMembershipDialog from './VerifyMembershipDialog.vue';
+
+const EMPTY_STRING_PROMISE: Promise<string> = Promise.resolve('');
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
   pending: 'Menunggu',
@@ -33,11 +40,23 @@ const REQUEST_SORT_OPTIONS = [
   { value: 'transfer_at', label: 'Tanggal Transfer' },
 ];
 
+const openNewTab = (url: string) => {
+  window.open(url, '_blank');
+};
+
 /* TODO: Fix typings */
 const getItemName = (item: MembershipRequest) => getMemberDisplayName({
   college: (item.membership.education_program as any).college,
   education_program: item.membership.education_program as any,
 }, true);
+
+const getInvoiceIdOfRequest = async (requestId: string) => {
+  const invoice = await memberService.requestInvoice(requestId);
+  return invoice?.id ?? '';
+};
+
+const route = useRoute();
+const router = useRouter();
 
 const [isOverlayLoading, overlayLoading] = useLoading();
 
@@ -46,7 +65,12 @@ const sortBy = ref({
   desc: true,
 });
 const filter = ref({
-  status: 'pending' as MembershipRequestStatus,
+  get status() {
+    return (route.query.status ?? 'pending') as MembershipRequestStatus;
+  },
+  set status(value) {
+    router.replace({ query: { status: value } });
+  },
 });
 
 const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
@@ -94,7 +118,7 @@ const onAcceptClick = async (item: MembershipRequest) => {
       name: getItemName(item),
       value: {
         validStart: item.valid_start,
-        validUntil: item.valid_until,
+        validUntil: item.valid_until ?? endOfYear(item.amount ? addYears(new Date(), item.amount / MEMBERSHIP_FEE) : new Date()),
         amount: item.amount,
         /* TODO: Fix typings */
         registrationId: (item.membership as any).registration_id,
@@ -114,6 +138,7 @@ const onAcceptClick = async (item: MembershipRequest) => {
           }),
         );
         refresh();
+        filter.value.status = 'approved';
         Notify.create({ message: 'Ajuan berhasil disetujui', type: 'positive' });
       } catch (err) {
         Notify.create({ type: 'negative', message: getErrMsg(err) });
@@ -194,7 +219,7 @@ watch(() => filter.value.status, () => refresh());
             >
               <td class="text-left w-8ch">
                 <div class="text-grey">
-                  {{ item.requested_date.toLocaleString('id', {dateStyle:'short',timeStyle: 'short'}) }}
+                  {{ item.requested_date.toLocaleString('id', { dateStyle: 'short', timeStyle: 'short' }) }}
                 </div>
 
                 <q-chip
@@ -209,7 +234,7 @@ watch(() => filter.value.status, () => refresh());
               </td>
               <td class="max-w-35ch truncate">
                 <router-link
-                  :to="{name: 'Member', params: {memberId: item.membership.id}}"
+                  :to="{ name: 'Member', params: { memberId: item.membership.id } }"
                   target="_blank"
                 >
                   {{ getItemName(item) }}
@@ -219,7 +244,8 @@ watch(() => filter.value.status, () => refresh());
                   Tanggal transfer: {{ item.transfer_at?.toLocaleString('id') || '-' }}
                 </div>
                 <div class="text-sm text-blue-grey">
-                  Nominal bayar: {{ item.amount ? item.amount.toLocaleString('id', {style: 'currency', currency: 'IDR'}) : '-' }}
+                  Nominal bayar:
+                  {{ item.amount ? item.amount.toLocaleString('id', { style: 'currency', currency: 'IDR' }) : '-' }}
                 </div>
               </td>
               <td class="text-center w-6ch">
@@ -252,11 +278,32 @@ watch(() => filter.value.status, () => refresh());
                     </template>
 
                     <template v-else-if="item.status === 'approved'">
-                      <q-btn
-                        icon="receipt"
-                        :to="{name: 'DocumentInvoice', params: {invoiceId: item.id}}"
-                        target="_blank"
-                      />
+                      <DefineState
+                        :value="EMPTY_STRING_PROMISE"
+                        #="{ state: [invoiceIdP, setInvoiceIdP] }"
+                      >
+                        <AsyncState
+                          :init="undefined"
+                          :value="invoiceIdP"
+                          #="{ state: invoiceId, isLoading }"
+                        >
+                          <q-btn
+                            icon="receipt"
+                            :to="invoiceId && { name: 'DocumentInvoice', params: { invoiceId } }"
+                            target="_blank"
+                            :loading="isLoading"
+                            @click.once="setInvoiceIdP(getInvoiceIdOfRequest(item.id)
+                              .then((id) => {
+                                if (id) {
+                                  const { href } = router.resolve({ name: 'DocumentInvoice', params: { invoiceId: id } })
+                                  openNewTab(href);
+                                }
+
+                                return id;
+                              }))"
+                          />
+                        </AsyncState>
+                      </DefineState>
 
                       <q-btn
                         icon="edit"

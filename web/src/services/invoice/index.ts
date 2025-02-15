@@ -1,8 +1,8 @@
 import { api } from 'src/boot/axios';
-import { fromInvoiceRaw } from 'src/services/converter';
-import type { InvoiceGet, InvoiceList } from 'src/services/invoice/InvoiceService';
+import { fromInvoiceDocumentPayloadRaw, fromInvoiceRaw } from 'src/services/converter';
+import type { InvoiceGet, InvoiceGetDocumentPayload, InvoiceList } from 'src/services/invoice/InvoiceService';
 import memberService from 'src/services/member';
-import type { InvoiceRaw } from 'src/services/types';
+import type { InvoiceDocumentPayloadRaw, InvoiceRaw } from 'src/services/types';
 
 const ENDPOINT = '/invoice';
 
@@ -12,10 +12,15 @@ export const invoiceGet: InvoiceGet = async (id) => {
 };
 
 export const invoiceList: InvoiceList = async () => {
-  const { data } = await api.get<InvoiceRaw[]>(ENDPOINT, {
+  const { data: { data } } = await api.get<{ data: InvoiceRaw[] }>(ENDPOINT, {
     params: {
       membership: (await memberService.get('me'))?.id,
     },
   });
   return data.map(fromInvoiceRaw);
+};
+
+export const invoiceGetDocumentPayload: InvoiceGetDocumentPayload = async (id) => {
+  const { data: { data } } = await api.get<{ data: InvoiceDocumentPayloadRaw }>(`${ENDPOINT}/${id}/document/payload`);
+  return fromInvoiceDocumentPayloadRaw(data);
 };

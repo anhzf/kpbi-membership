@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Api;
 use App\Models\MembershipRequest;
 use App\Http\Requests\StoreMembershipRequestRequest;
 use App\Http\Requests\UpdateMembershipRequestRequest;
 use App\Models\EducationProgramHead;
+use App\Models\Invoice;
+use App\Models\Membership;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\UploadedFile;
@@ -62,9 +65,9 @@ class MembershipRequestController extends Controller
      * @param  \App\Models\MembershipRequest  $membershipRequest
      * @return \Illuminate\Http\Response
      */
-    public function show(MembershipRequest $membershipRequest)
+    public function show(MembershipRequest $membership)
     {
-        //
+        return $membership;
     }
 
     /**
@@ -88,5 +91,14 @@ class MembershipRequestController extends Controller
     public function destroy(MembershipRequest $membershipRequest)
     {
         //
+    }
+
+    public function showInvoice(MembershipRequest $membershipRequest)
+    {
+        $itemName = Membership::BILL_INVOICE_ITEM_NAME;;
+        return Api::data(
+            Invoice::where("items->{$itemName}->ref", $membershipRequest->id)
+                ->first()
+        );
     }
 }

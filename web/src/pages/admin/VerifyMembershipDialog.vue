@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import { endOfYear, startOfYear, format } from 'date-fns';
 import { useDialogPluginComponent } from 'quasar';
 import { PAST_MEMBERSHIP_FEE } from 'src/constants';
 import { ref } from 'vue';
 
 const DEFAULT_FIELDS = {
-  validStart: new Date(new Date().getFullYear(), 0, 1) /* Beginning of the year */,
-  validUntil: new Date(new Date().getFullYear(), 12, 0) /* End of the year */,
+  validStart: startOfYear(new Date()),
+  validUntil: endOfYear(new Date()),
   registrationId: '',
   amount: PAST_MEMBERSHIP_FEE,
 };
 
 const toFields = (value: typeof DEFAULT_FIELDS) => ({
   ...value,
-  validStart: (value.validStart || DEFAULT_FIELDS.validStart).toISOString().slice(0, 10),
-  validUntil: (value.validUntil || DEFAULT_FIELDS.validUntil).toISOString().slice(0, 10),
+  validStart: format(value.validStart || DEFAULT_FIELDS.validStart, 'yyyy-MM-dd'),
+  validUntil: format(value.validUntil || DEFAULT_FIELDS.validUntil, 'yyyy-MM-dd'),
 });
 
 interface Props {

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { dateTimeRule, requiredRule } from 'src/utils/input-rules';
+import { toIndonesianWords } from 'src/utils/number';
 import { ref } from 'vue';
+import { capitalCase } from 'change-case';
 
 const DEFAULT_FIELDS = {
   transferAt: new Date(),
@@ -47,7 +49,7 @@ function onOKClick() {
         Konfirmasi Unggah Bukti Pembayaran
       </q-card-section>
       <q-card-section class="q-dialog__message">
-        Anda akan mengunggah <b>{{ file.name }}</b> sebagai bukti pembayaran.
+        Anda akan mengunggah <b class="underline underline-dashed">{{ file.name }}</b> sebagai bukti pembayaran.
       </q-card-section>
 
       <q-card-section>
@@ -63,7 +65,7 @@ function onOKClick() {
           type="number"
           label="Jumlah Transfer*"
           prefix="Rp "
-          hint=""
+          :hint="capitalCase(`${toIndonesianWords(fields.amount)} rupiah`)"
           :rules="[requiredRule]"
         />
       </q-card-section>

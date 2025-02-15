@@ -171,3 +171,33 @@ export interface Invoice extends Timestamps {
   due_at: Date;
   paid_at?: Date;
 }
+
+export interface InvoiceDocumentPayload {
+  invoice_number: string;
+  receipt_to: {
+    addresses: string;
+    membership_id: number;
+    name: string;
+  };
+  item: {
+    desc: string;
+    name: string;
+    price: number;
+    qty: number;
+  };
+  created_at: Date;
+  due_at: Date;
+  paid_at?: Date;
+  contact_person: {
+    email: string;
+    name: string;
+    phone_number: string;
+    employee_id: string;
+  };
+  treasurer: {
+    email: string;
+    name: string;
+    phone_number: string;
+    employee_id: string;
+  };
+}

@@ -69,6 +69,8 @@ class Invoice extends Model
      */
     protected $hidden = [/* 'receipt_to_id', 'receipt_to_type' */];
 
+    protected $appends = ['total', 'is_active'];
+
     public function receiptTo()
     {
         return $this->morphTo();
@@ -79,5 +81,11 @@ class Invoice extends Model
         return Attribute::get(fn () => $this->items->sum(function ($item) {
             return $item['price'] * $item['qty'];
         }));
+    }
+
+    public function isActive() : Attribute
+    {
+        return Attribute::get(fn () => $this->paid_at === null
+            && $this->due_at->isFuture());
     }
 }

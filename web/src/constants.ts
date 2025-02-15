@@ -9,3 +9,5 @@ export const GUARD_TYPES = ['auth', 'guest', 'default'] as const;
  * Old membership fee for 1 year.
  */
 export const PAST_MEMBERSHIP_FEE = 300_000;
+
+export const MEMBERSHIP_FEE = 500_000;

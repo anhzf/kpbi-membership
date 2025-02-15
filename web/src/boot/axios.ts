@@ -1,5 +1,5 @@
-import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
+import { boot } from 'quasar/wrappers';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -19,11 +19,12 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: true,
+  withXSRFToken: true,
 });
 
-void api.get('/sanctum/csrf-cookie');
+await api.get('/sanctum/csrf-cookie');
 
-export default boot(({ app }) => {
+export default boot(async ({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios;

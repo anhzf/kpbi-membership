@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { toDataURL } from 'qrcode';
-import { toDateTimeUnit, toIndonesianWords, toRoman } from 'src/utils/number';
-import { useRouter } from 'vue-router';
-import { invoiceGet } from 'src/services/invoice';
+import { invoiceGetDocumentPayload } from 'src/services/invoice';
+import { toDateTimeUnit, toIndonesianWords } from 'src/utils/number';
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
 
 const DATE_TIME_UNITS = {
@@ -14,13 +14,6 @@ const DATE_TIME_UNITS = {
   jam: 3600_000,
   menit: 60_000,
   detik: 1000,
-};
-
-const ITEM_NAME = 'membership';
-
-const ITEM = {
-  period: 365, // in days
-  amount: 300_000,
 };
 
 interface Props {
@@ -35,15 +28,8 @@ const props = defineProps<Props>();
 
 const router = useRouter();
 
-const data = await invoiceGet(props.invoiceId);
+const data = await invoiceGetDocumentPayload(props.invoiceId);
 if (!data) throw new Error('Data not found');
-
-const invoiceNumber = [
-  data.id.toString().padStart(4, '0'),
-  toRoman(data.created_at.getMonth()),
-  'KPBI',
-  data.created_at.getFullYear(),
-].join('/');
 
 const invoiceDate = data.created_at.toLocaleString('id-ID', { dateStyle: 'long' });
 
@@ -79,7 +65,7 @@ onMounted(() => {
       <h2 class="text-h5 q-my-none">
         INVOICE
       </h2>
-      <div>No: INV-{{ invoiceNumber }}, Tanggal: {{ invoiceDate }}</div>
+      <div>No: INV-{{ data.invoice_number }}, Tanggal: {{ invoiceDate }}</div>
 
       <div class="absolute-top-right">
         <div
@@ -97,10 +83,10 @@ onMounted(() => {
           Kepada Yth. Kaprodi
         </p>
         <p class="q-my-sm">
-          <strong>{{ data.receipt_to_details.name }}</strong>
+          <strong>{{ data.receipt_to.name }}</strong>
         </p>
         <p class="q-my-sm">
-          <strong>{{ data.receipt_to_details.address }}</strong>
+          <strong>{{ data.receipt_to.addresses }}</strong>
         </p>
       </div>
 
@@ -135,7 +121,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ toDateTimeUnit(ITEM.period * 24 * 3600_000, DATE_TIME_UNITS) }}</td>
+              <td>{{ toDateTimeUnit(data.item.qty * 365 * 24 * 3600_000, DATE_TIME_UNITS) }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -144,7 +130,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ formatCurrency(ITEM.amount) }}</td>
+              <td>{{ formatCurrency(data.item.price) }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -153,7 +139,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ formatCurrency(data.items[ITEM_NAME].price * data.items[ITEM_NAME].qty) }}</td>
+              <td>{{ formatCurrency(data.item.price * data.item.qty) }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -163,7 +149,7 @@ onMounted(() => {
                 :
               </td>
               <td class="font-[Lucida_Handwriting] font-bold">
-                {{ toIndonesianWords(data.items[ITEM_NAME].price * data.items[ITEM_NAME].qty) }} rupiah
+                {{ toIndonesianWords(data.item.price * data.item.qty) }} rupiah
               </td>
             </tr>
             <tr>
@@ -203,8 +189,8 @@ onMounted(() => {
                 <div>Surakarta, {{ data.paid_at?.toLocaleString('id', {dateStyle: 'long'}) }}</div>
                 <div>Ketua</div>
                 <div class="h-4.5em" />
-                <div>Dr. Bowo Sugiharto, M.Pd.</div>
-                <div>197601252005011001</div>
+                <div>{{ data.contact_person.name }}</div>
+                <div>NIP {{ data.contact_person.employee_id ?? '<NIP>' }}</div>
 
                 <img
                   :src="IMG_CAP_KPBI"
@@ -228,13 +214,13 @@ onMounted(() => {
       <div>Catatan:</div>
       <ol class="q-my-none">
         <li>
-          Apabila terdapat kesalahan data harap hubungi Ketua KPBI (Bowo Sugiharto)
+          Apabila terdapat kesalahan data harap hubungi Ketua KPBI ({{ data.contact_person.name }})
         </li>
         <li>
-          Bukti Transfer harap dikirimkan ke Bendahara KPBI (Ibu Dr. Novi Febrianti, M.Si. <a
-            href="https://wa.me/6281353506135"
+          Bukti Transfer harap dikirimkan ke Bendahara KPBI ({{ data.treasurer.name }} <a
+            :href="data.treasurer.phone_number"
             target="_blank"
-          >081353506135</a>)
+          >{{ data.treasurer.phone_number }}</a>)
         </li>
       </ol>
     </footer>

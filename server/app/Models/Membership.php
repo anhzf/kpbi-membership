@@ -35,7 +35,7 @@ class Membership extends Model
 
     const BILL_INVOICE_ITEMS = [
         self::BILL_INVOICE_ITEM_NAME => [
-            'price' => 300_000,
+            'price' => 500_000,
             'qty' => 1,
             'desc' => 'Membership fee'
         ],
@@ -69,7 +69,9 @@ class Membership extends Model
 
     public function invoices()
     {
-        return $this->morphMany(Invoice::class, 'receipt_to');
+        return $this->morphMany(Invoice::class, 'receipt_to')
+            // Provide default order
+            ->orderBy('created_at');
     }
 
     public function name(): Attribute
@@ -118,13 +120,21 @@ class Membership extends Model
 
     private function createBill($isNew = false)
     {
+        $items = [
+            ...self::BILL_INVOICE_ITEMS,
+            self::BILL_INVOICE_ITEM_NAME => [
+                ...self::BILL_INVOICE_ITEMS[self::BILL_INVOICE_ITEM_NAME],
+                'price' => Setting::find('membership_fee')->value->number_value
+            ]
+        ];
+
         return $this->invoices()->create([
             'receipt_to_details' => [
                 'name' => $this->educationProgram->fullname,
                 'membership_id' => $this->id,
                 'addresses' => $this->educationProgram->college->addresses,
             ],
-            'items' => self::BILL_INVOICE_ITEMS,
+            'items' => $items,
             'due_at' => $isNew
                 // @BUSINESS
                 ? Carbon::create($this->created_at)->addWeeks(2)
@@ -140,7 +150,9 @@ class Membership extends Model
     public function bill()
     {
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Invoice> */
-        $activeBills = $this->invoices()->where('paid_at', null)->get();
+        $activeBills = $this->invoices()
+            ->where('paid_at', null)
+            ->get();
 
         if (
             $activeBills->isEmpty()

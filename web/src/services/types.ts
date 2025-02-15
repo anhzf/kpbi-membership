@@ -2,6 +2,7 @@ import type {
   MemberProfile, EducationProgram, RelationExpanded, Accreditation, College, EducationProgramHead, User, MembershipRequest,
   Timestamps,
   Invoice,
+  InvoiceDocumentPayload,
 } from 'src/types/models';
 
 export interface TimestampsRaw {
@@ -37,6 +38,13 @@ export interface MembershipRequestRaw
 
 export interface InvoiceRaw
   extends Omit<Invoice, keyof Timestamps | 'due_at' | 'paid_at'>, TimestampsRaw {
+  due_at: string;
+  paid_at?: string;
+}
+
+export interface InvoiceDocumentPayloadRaw
+  extends Omit<InvoiceDocumentPayload, 'created_at' | 'due_at' | 'paid_at'> {
+  created_at: string;
   due_at: string;
   paid_at?: string;
 }

@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { useVueToPrint } from 'vue-to-print';
-import { computed, onBeforeMount, ref } from 'vue';
+import {
+  computed, onBeforeMount, ref, onErrorCaptured,
+} from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -12,7 +14,11 @@ const { handlePrint } = useVueToPrint({
 });
 
 onBeforeMount(() => {
-  window.readyToPrint ??= handlePrint;
+  window.readyToPrint ??= import.meta.env.DEV ? () => { /*  */ } : handlePrint;
+});
+
+onErrorCaptured((error) => {
+  window.alert(error);
 });
 </script>
 

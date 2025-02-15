@@ -29,17 +29,24 @@ class MarkBillAsPaid
     {
         if ($event->membershipRequest->status === MembershipRequestStatus::APPROVED) {
             if ($bill = collect($event->membershipRequest->membership->bill())->last()) {
+                dump($bill);
+
                 $bill->paid_at = now();
 
                 $bill->items = $bill->items->map(function ($item, $key) use ($event) {
                     if ($key === Membership::BILL_INVOICE_ITEM_NAME) {
-                        $item['ref'] = 1;
-                        $item['price'] = $event->membershipRequest->amount;
+                        $product = (object) Membership::BILL_INVOICE_ITEMS[Membership::BILL_INVOICE_ITEM_NAME];
+
+                        $item['ref'] = $event->membershipRequest->id;
+                        $item['price'] = $product->price;
+                        $item['qty'] = $event->membershipRequest->amount / $product->price;
                     }
                     return $item;
                 });
 
                 $bill->save();
+
+                dump($bill);
             }
         }
     }
