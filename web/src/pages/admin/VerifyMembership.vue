@@ -51,8 +51,17 @@ const getItemName = (item: MembershipRequest) => getMemberDisplayName({
 }, true);
 
 const getInvoiceIdOfRequest = async (requestId: string) => {
-  const invoice = await memberService.requestInvoice(requestId);
-  return invoice?.id ?? '';
+  try {
+    const invoice = await memberService.requestInvoice(requestId);
+    if (!invoice) throw new Error('Invoice not found');
+    return invoice.id;
+  } catch (err) {
+    Notify.create({
+      type: 'negative',
+      message: getErrMsg(err),
+    });
+    return '';
+  }
 };
 
 const route = useRoute();
@@ -294,10 +303,8 @@ watch(() => filter.value.status, () => refresh());
                             :loading="isLoading"
                             @click.once="setInvoiceIdP(getInvoiceIdOfRequest(item.id)
                               .then((id) => {
-                                if (id) {
-                                  const { href } = router.resolve({ name: 'DocumentInvoice', params: { invoiceId: id } })
-                                  openNewTab(href);
-                                }
+                                const { href } = router.resolve({ name: 'DocumentInvoice', params: { invoiceId: id } })
+                                openNewTab(href);
 
                                 return id;
                               }))"
