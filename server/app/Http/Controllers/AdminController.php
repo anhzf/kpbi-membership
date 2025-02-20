@@ -50,11 +50,13 @@ class AdminController extends Controller
             $membershipRequest->authorized_at = now();
             $membershipRequest->valid_start = $payload->valid_start;
             $membershipRequest->valid_until = $payload->valid_until;
-            $membershipRequest->amount = $payload->amount;
+            $membershipRequest->amount = $payload->amount ?? $membershipRequest->amount;
 
             // TODO: Uses event instead of direct update
-            $membershipRequest->membership->period_end = $payload->valid_until;
-            $membershipRequest->membership->registration_id = $payload->registration_id;
+            if (isset($paylod->valid_until) && isset($payload->registration_id)) {
+                $membershipRequest->membership->period_end = $payload->valid_until;
+                $membershipRequest->membership->registration_id = $payload->registration_id;
+            }
 
             $membershipRequest->push();
         });
