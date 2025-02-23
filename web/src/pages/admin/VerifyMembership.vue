@@ -211,7 +211,12 @@ watch(() => filter.value.status, () => refresh());
         <thead>
           <tr>
             <th class="text-left">
-              Tanggal
+              <p class="my-0">
+                Tanggal
+              </p>
+              <p class="my-0">
+                Pengajuan
+              </p>
             </th>
             <th class="text-left">
               Keanggotaan
@@ -228,7 +233,7 @@ watch(() => filter.value.status, () => refresh());
             >
               <td class="text-left w-8ch">
                 <div class="text-grey">
-                  {{ item.requested_date.toLocaleString('id', { dateStyle: 'short', timeStyle: 'short' }) }}
+                  {{ item.requested_date.toLocaleString('id', { dateStyle: 'short' }) }}
                 </div>
 
                 <q-chip
@@ -254,7 +259,9 @@ watch(() => filter.value.status, () => refresh());
                 </div>
                 <div class="text-sm text-blue-grey">
                   Nominal bayar:
-                  {{ item.amount ? item.amount.toLocaleString('id', { style: 'currency', currency: 'IDR' }) : '-' }}
+                  <strong class="font-semibold">
+                    {{ item.amount ? item.amount.toLocaleString('id', { style: 'currency', currency: 'IDR' }) : '-' }}
+                  </strong>
                 </div>
               </td>
               <td class="text-center w-6ch">

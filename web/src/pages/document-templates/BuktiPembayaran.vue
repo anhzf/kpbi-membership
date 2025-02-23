@@ -69,8 +69,8 @@ onMounted(() => {
 
       <div class="absolute-top-right">
         <div
-          class="q-ma-sm q-px-md q-py-sm border-6 border-double border-inside font-semibold"
-          :class="data.paid_at ? 'border-emerald text-emerald-500' : 'border-red text-red-500'"
+          class="q-ma-sm q-px-md q-py-sm text-white font-semibold border-2 border-inside"
+          :class="data.paid_at ? 'bg-emerald-500/75 border-emerald-500' : 'bg-red-500/75 border-red-500'"
         >
           {{ data.paid_at ? 'PAID' : 'UNPAID' }}
         </div>
@@ -91,7 +91,9 @@ onMounted(() => {
       </div>
 
       <div class="flex flex-col">
-        <p>Berikut kami sampaikan informasi tagihan iuran keanggotaan Konsorsium Pendidikan Biologi Indonesia (KPBI).</p>
+        <p>
+          Berikut kami sampaikan informasi tagihan iuran keanggotaan Konsorsium Pendidikan Biologi Indonesia (KPBI).
+        </p>
 
         <table class="border border-2">
           <thead>
@@ -112,7 +114,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.created_at.getFullYear() }}</td>
+              <td>{{ data.due_at.getFullYear() }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -159,16 +161,20 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.due_at.toLocaleString('id', {dateStyle: 'long'}) }}</td>
+              <td>{{ data.due_at.toLocaleString('id', { dateStyle: 'long' }) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div>
-        <p>Mohon pembayaran dilakukan sebelum tanggal jatuh tempo. Silakan gunakan nomor invoice sebagai referensi pembayaran.</p>
         <p>
-          Metode Pembayaran: Transfer via Rek <strong>BNI</strong>, No Rek: <strong>1684558753</strong> a.n. <strong>KPBI</strong>
+          Mohon pembayaran dilakukan sebelum tanggal jatuh tempo. Silakan gunakan nomor invoice sebagai referensi
+          pembayaran.
+        </p>
+        <p>
+          Metode Pembayaran: Transfer via Rek <strong>BNI</strong>, No Rek: <strong>1684558753</strong> a.n.
+          <strong>KPBI</strong>
         </p>
       </div>
 
@@ -186,7 +192,9 @@ onMounted(() => {
           <tbody>
             <tr>
               <td class="relative leading-tight">
-                <div>Surakarta, {{ data.paid_at?.toLocaleString('id', {dateStyle: 'long'}) }}</div>
+                <div>
+                  Surakarta, {{ (data.paid_at || data.due_at)?.toLocaleString('id', { dateStyle: 'long' }) }}
+                </div>
                 <div>Ketua</div>
                 <div class="h-4.5em" />
                 <div>{{ data.contact_person.name }}</div>
