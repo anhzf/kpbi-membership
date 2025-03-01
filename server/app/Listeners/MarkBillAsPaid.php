@@ -29,8 +29,6 @@ class MarkBillAsPaid
     {
         if ($event->membershipRequest->status === MembershipRequestStatus::APPROVED) {
             if ($bill = collect($event->membershipRequest->membership->bill())->last()) {
-                dump($bill);
-
                 $bill->paid_at = now();
 
                 $bill->items = $bill->items->map(function ($item, $key) use ($event) {

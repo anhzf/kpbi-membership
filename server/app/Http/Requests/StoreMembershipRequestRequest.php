@@ -18,7 +18,7 @@ class StoreMembershipRequestRequest extends FormRequest
     {
         /** @var User */
         $user = $this->user();
-        return $user->headProgramOf->first()->exists;
+        return $user?->headProgramOf->first()->exists;
     }
 
     /**
