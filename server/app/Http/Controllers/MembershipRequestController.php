@@ -15,6 +15,11 @@ use Illuminate\Http\UploadedFile;
 
 class MembershipRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except('show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +31,7 @@ class MembershipRequestController extends Controller
         $headProgram = request()->user()->headOf();
         return $headProgram->program->membership
             ->load(['requests' => function (HasMany $query) {
-                $query->orderBy('requested_date', 'desc');
+                $query->orderBy('created_at', 'desc');
             }])
             ->requests
             ->append(['attachment', 'attachment_url']);
