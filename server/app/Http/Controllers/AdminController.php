@@ -53,7 +53,7 @@ class AdminController extends Controller
             $membershipRequest->amount = $payload->amount ?? $membershipRequest->amount;
 
             // TODO: Uses event instead of direct update
-            if (isset($paylod->valid_until) && isset($payload->registration_id)) {
+            if (isset($paylod->valid_until) || isset($payload->registration_id)) {
                 $membershipRequest->membership->period_end = $payload->valid_until;
                 $membershipRequest->membership->registration_id = $payload->registration_id;
             }

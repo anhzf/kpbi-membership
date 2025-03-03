@@ -43,8 +43,6 @@ class MarkBillAsPaid
                 });
 
                 $bill->save();
-
-                dump($bill);
             }
         }
     }
