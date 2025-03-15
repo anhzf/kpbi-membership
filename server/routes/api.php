@@ -10,8 +10,10 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipRequestController;
+use App\Http\Controllers\V2\AdminController as V2AdminController;
+use App\Http\Controllers\V2\MembershipController as V2MembershipController;
 use App\Http\Controllers\VerificationController;
-use App\Models\Membership;
+use App\Models\MembershipRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +30,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-// Route::any('/', fn() => Api::message('ready!'));
-Route::any('/', fn() => Api::data(Membership::find(97)->bill()));
-// Route::any('/', fn() => Api::data(Membership::find(97)->bill()->last()));
+Route::any('/', fn() => Api::message('ready!'));
 
 Route::group([
     'middleware' => [
@@ -102,4 +102,23 @@ Route::group([
 
     Route::get('/membership-request', [AdminController::class, 'membershipRequestList']);
     Route::put('/membership-request/{membershipRequest}', [AdminController::class, 'membershipRequestApprove']);
+});
+
+Route::group([
+    'prefix' => '/v2',
+    'as' => 'v2.',
+], function () {
+    Route::get('/', fn () => Api::message('ready!'));
+
+    Route::apiResource('/memberships', V2MembershipController::class);
+    Route::get('/memberships/{membership}/invoices', [MembershipController::class, 'listInvoice']);
+
+    Route::group([
+        'prefix' => '/admin',
+        'as' => 'admin.',
+        'middleware' => 'auth:sanctum',
+    ], function () {
+        Route::get('/membership-requests-states', [V2AdminController::class, 'getMembershipRequestStates']);
+        Route::patch('/invoices/{invoice}/membership-request', [V2AdminController::class, 'attachMembershipRequestToInvoice']);
+    });
 });

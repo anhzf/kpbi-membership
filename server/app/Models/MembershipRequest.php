@@ -73,14 +73,14 @@ class MembershipRequest extends Model implements HasMedia
     public function attachment(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->getFirstMedia('membership_requests'),
+            get: fn() => $this->getFirstMedia('membership_requests'),
             // set: fn (FileAdder $v) => $v->toMediaCollection('membership_requests')
         );
     }
 
     public function attachmentUrl(): Attribute
     {
-        return Attribute::get(fn () => $this->attachment->getUrl());
+        return Attribute::get(fn() => $this->attachment->getUrl());
     }
 
     public function user()
@@ -98,9 +98,18 @@ class MembershipRequest extends Model implements HasMedia
         return $this->belongsTo(Membership::class);
     }
 
+    public function invoices(): Attribute
+    {
+        $membershipItemName = Membership::BILL_INVOICE_ITEM_NAME;
+        return Attribute::get(
+            fn() => Invoice::where("items->{$membershipItemName}->ref", $this->id)
+                ->get()
+        );
+    }
+
     public function isAccepted(): Attribute
     {
-        return Attribute::get(fn () => $this->status === MembershipRequestStatus::APPROVED);
+        return Attribute::get(fn() => $this->status === MembershipRequestStatus::APPROVED);
     }
 
     public function registerMediaCollections(): void

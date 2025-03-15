@@ -3,20 +3,18 @@ import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import { addYears, endOfYear } from 'date-fns';
 import { Dialog, Notify } from 'quasar';
-import AsyncState from 'src/components/AsyncState.vue';
-import DefineState from 'src/components/DefineState.vue';
+import PatchInvoiceDialog from 'src/components/PatchInvoiceDialog.vue';
 import { useLoading } from 'src/composables/use-loading';
 import { MEMBERSHIP_FEE } from 'src/constants';
+import { useAdminMembershipRequestsStates } from 'src/queries/admin';
 import adminService from 'src/services/admin';
-import memberService, { getMemberDisplayName } from 'src/services/member';
+import { getMemberDisplayName } from 'src/services/member';
 import { MembershipRequestStatus } from 'src/types/constants';
 import { MembershipRequest } from 'src/types/models';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import VerifyMembershipDialog from './VerifyMembershipDialog.vue';
-
-const EMPTY_STRING_PROMISE: Promise<string> = Promise.resolve('');
 
 const REQUEST_STATUS_LABELS: Record<MembershipRequestStatus, string> = {
   pending: 'Menunggu',
@@ -40,29 +38,11 @@ const REQUEST_SORT_OPTIONS = [
   { value: 'transfer_at', label: 'Tanggal Transfer' },
 ];
 
-const openNewTab = (url: string) => {
-  window.open(url, '_blank');
-};
-
 /* TODO: Fix typings */
 const getItemName = (item: MembershipRequest) => getMemberDisplayName({
   college: (item.membership.education_program as any).college,
   education_program: item.membership.education_program as any,
 }, true);
-
-const getInvoiceIdOfRequest = async (requestId: string) => {
-  try {
-    const invoice = await memberService.requestInvoice(requestId);
-    if (!invoice) throw new Error('Invoice not found');
-    return invoice.id;
-  } catch (err) {
-    Notify.create({
-      type: 'negative',
-      message: getErrMsg(err),
-    });
-    return '';
-  }
-};
 
 const route = useRoute();
 const router = useRouter();
@@ -86,6 +66,7 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
   () => adminService.membershipRequestList(filter.value.status),
   [],
 );
+const { data: _membershipRequestsStates } = useAdminMembershipRequestsStates();
 
 const sortedList = computed(() => list.value.toSorted((a, b) => {
   if (sortBy.value.field === 'requested_date') {
@@ -94,6 +75,10 @@ const sortedList = computed(() => list.value.toSorted((a, b) => {
 
   return ((a.transfer_at?.getTime() ?? 0) - (b.transfer_at?.getTime() ?? 0)) * (sortBy.value.desc ? -1 : 1);
 }));
+
+const membershipRequestsStates = computed(() => Object.fromEntries(
+  (_membershipRequestsStates.value || [])?.map((state) => [state.id, state]),
+));
 
 const onRejectClick = async (item: MembershipRequest) => {
   Dialog.create({
@@ -160,6 +145,22 @@ const onAcceptClick = async (item: MembershipRequest) => {
 };
 
 const onEditClick = onAcceptClick;
+
+const onPatchInvoiceClick = async (item: MembershipRequest) => {
+  try {
+    Dialog.create({
+      component: PatchInvoiceDialog,
+      componentProps: {
+        memberId: item.membership.id,
+        requestId: item.id,
+      },
+    }).onOk(() => {
+      refresh();
+    });
+  } catch (err) {
+    Notify.create({ type: 'negative', message: getErrMsg(err) });
+  }
+};
 
 watch(() => filter.value.status, () => refresh());
 </script>
@@ -294,36 +295,52 @@ watch(() => filter.value.status, () => refresh());
                     </template>
 
                     <template v-else-if="item.status === 'approved'">
-                      <DefineState
-                        :value="EMPTY_STRING_PROMISE"
-                        #="{ state: [invoiceIdP, setInvoiceIdP] }"
-                      >
-                        <AsyncState
-                          :init="undefined"
-                          :value="invoiceIdP"
-                          #="{ state: invoiceId, isLoading }"
-                        >
-                          <q-btn
-                            icon="receipt"
-                            :to="invoiceId && { name: 'DocumentInvoice', params: { invoiceId } }"
-                            target="_blank"
-                            :loading="isLoading"
-                            @click.once="setInvoiceIdP(getInvoiceIdOfRequest(item.id)
-                              .then((id) => {
-                                const { href } = router.resolve({ name: 'DocumentInvoice', params: { invoiceId: id } })
-                                openNewTab(href);
-
-                                return id;
-                              }))"
-                          />
-                        </AsyncState>
-                      </DefineState>
-
                       <q-btn
-                        icon="edit"
-                        @click="onEditClick(item)"
-                      />
+                        icon="receipt"
+                        :to="{ name: 'DocumentInvoice', params: { invoiceId: membershipRequestsStates[item.id.toString()]?.invoice_id } }"
+                        target="_blank"
+                        :disable="!membershipRequestsStates[item.id.toString()]?.invoice_id"
+                      >
+                        <q-badge
+                          v-if="!membershipRequestsStates[item.id.toString()]?.invoice_id"
+                          label="!"
+                          floating
+                          color="red"
+                          rounded
+                        />
+                      </q-btn>
                     </template>
+
+                    <q-btn icon="more_vert">
+                      <q-menu>
+                        <q-list
+                          dense
+                          class="min-w-32"
+                        >
+                          <q-item
+                            v-close-popup
+                            v-ripple
+                            clickable
+                            :disable="item.status === 'pending'"
+                            @click="onEditClick(item)"
+                          >
+                            <q-item-section>Edit</q-item-section>
+                          </q-item>
+
+                          <q-separator />
+
+                          <q-item
+                            v-close-popup
+                            v-ripple
+                            clickable
+                            :disable="!!membershipRequestsStates[item.id.toString()]?.invoice_id"
+                            @click="onPatchInvoiceClick(item)"
+                          >
+                            <q-item-section>Perbaiki Invoice</q-item-section>
+                          </q-item>
+                        </q-list>
+                      </q-menu>
+                    </q-btn>
                   </q-btn-group>
                 </div>
               </td>

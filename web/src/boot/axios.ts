@@ -7,6 +7,12 @@ declare module '@vue/runtime-core' {
   }
 }
 
+declare global {
+  interface Window {
+    __api__: AxiosInstance;
+  }
+}
+
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
 // If any client changes this (global) instance, it might be a
@@ -21,6 +27,10 @@ const api = axios.create({
   withCredentials: true,
   withXSRFToken: true,
 });
+
+if (import.meta.env.DEV) {
+  window.__api__ = api;
+}
 
 await api.get('/sanctum/csrf-cookie');
 

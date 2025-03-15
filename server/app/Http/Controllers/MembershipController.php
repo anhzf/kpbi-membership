@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AcademicDegree;
+use App\Http\Api;
 use App\Http\Requests\StoreMembershipRequest;
 use App\Models\College;
 use App\Models\EducationProgram;
@@ -261,5 +262,9 @@ class MembershipController extends Controller
     public function bill(Membership $member)
     {
         return $member->bill();
+    }
+
+    public function listInvoice(Membership $membership) {
+        return Api::data($membership->invoices()->get());
     }
 }

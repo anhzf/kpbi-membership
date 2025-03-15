@@ -81,7 +81,7 @@ const listRequest: ListRequestMembership = async () => {
 
 const requestInvoice: GetMembershipRequestInvoice = async (id: string) => {
   const { data: { data } } = await api.get<{ data: InvoiceRaw }>(`${MEMBERSHIP_REQUEST_ENDPOINT}/${id}/invoice`);
-  return fromInvoiceRaw(data);
+  return data && fromInvoiceRaw(data);
 };
 
 const listRequestOf: ListMembershipRequestOfMember = async (id) => {

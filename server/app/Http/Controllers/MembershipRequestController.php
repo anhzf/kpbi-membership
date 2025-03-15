@@ -103,7 +103,7 @@ class MembershipRequestController extends Controller
         $itemName = Membership::BILL_INVOICE_ITEM_NAME;;
         return Api::data(
             Invoice::where("items->{$itemName}->ref", $membershipRequest->id)
-                ->first()
+                ->firstOrFail()
         );
     }
 }

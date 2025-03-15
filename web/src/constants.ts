@@ -11,3 +11,5 @@ export const GUARD_TYPES = ['auth', 'guest', 'default'] as const;
 export const PAST_MEMBERSHIP_FEE = 300_000;
 
 export const MEMBERSHIP_FEE = 500_000;
+
+export const MEMBERSHIP_INVOICE_ITEM_NAME = 'membership';

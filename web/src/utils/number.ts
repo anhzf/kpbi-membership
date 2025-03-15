@@ -1,3 +1,8 @@
+export const currencyFmt = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+});
+
 export const toRoman = (num: number) => {
   const romanNumerals = [
     { value: 1000, symbol: 'M' },
