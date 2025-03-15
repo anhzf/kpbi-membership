@@ -1,4 +1,4 @@
-import { boot } from 'quasar/wrappers';
+import { defineBoot } from '#q-app/wrappers';
 import { QueryClient, VueQueryPlugin, type VueQueryPluginOptions } from '@tanstack/vue-query';
 
 const queryClient = new QueryClient({
@@ -14,6 +14,6 @@ const vueQueryOptions: VueQueryPluginOptions = {
   queryClient,
 };
 
-export default boot(({ app }) => {
+export default defineBoot(({ app }) => {
   app.use(VueQueryPlugin, vueQueryOptions);
 });

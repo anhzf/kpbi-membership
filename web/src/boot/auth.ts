@@ -1,5 +1,5 @@
 import { Loading } from 'quasar';
-import { boot } from 'quasar/wrappers';
+import { defineBoot } from '#q-app/wrappers';
 import { useAuthStore } from 'src/stores/auth';
 import { GuardType } from 'src/types/common';
 import { watch } from 'vue';
@@ -24,7 +24,7 @@ const inferRoute = (guard: GuardType, store: ReturnType<typeof useAuthStore>) =>
   }
 };
 
-export default boot(({ router }) => {
+export default defineBoot(({ router }) => {
   const auth = useAuthStore();
 
   auth.refresh()

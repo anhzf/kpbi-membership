@@ -11,17 +11,11 @@
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
 
-const { configure } = require('quasar/wrappers');
+import { defineConfig } from '#q-app/wrappers';
 
-module.exports = configure((/* ctx */) => ({
-  eslint: ({
-    fix: true,
-    // include = [],
-    // exclude = [],
-    // rawOptions = {},
-    warnings: true,
-    errors: true,
-  }, undefined),
+export default defineConfig((ctx) => ({
+  // eslint has been removed from @quasar/app-vite v2
+  // use vite-plugin-checker or other linting tools instead
 
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
   // preFetch: true,
@@ -65,10 +59,8 @@ module.exports = configure((/* ctx */) => ({
 
     vueRouterMode: 'history', // available values: 'hash', 'history'
     // vueRouterBase,
-    // vueDevtools,
+    vueDevtools: true,
     // vueOptionsAPI: false,
-
-    // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
     // publicPath: '/',
     // analyze: true,
@@ -89,6 +81,11 @@ module.exports = configure((/* ctx */) => ({
     // extendViteConf(viteConf) {
     //   viteConf.plugins.push();
     // }
+
+    typescript: {
+      strict: true, // enables strict settings for TypeScript
+      vueShim: true, // required when using ESLint with type-checked rules, will generate a shim file for `*.vue` files
+    }
   },
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
@@ -123,6 +120,22 @@ module.exports = configure((/* ctx */) => ({
     plugins: [
       'Dialog', 'Loading', 'Notify',
     ],
+
+    // Auto import - how to detect components in your vue files
+    // "kebab": q-carousel q-page
+    // "pascal": QCarousel QPage
+    // "combined": q-carousel QPage
+    autoImportComponentCase: 'kebab',
+
+    // Auto import - which file extensions should be interpreted as referring to Vue SFC?
+    autoImportVueExtensions: ['vue'],
+
+    // Auto import - which file extensions should be interpreted as referring to script files?
+    autoImportScriptExtensions: ['js', 'jsx', 'ts', 'tsx'],
+
+    // Treeshake Quasar's UI on dev too?
+    // Recommended to leave this as false for performance reasons.
+    devTreeshaking: false,
   },
 
   // animations: 'all', // --- includes all animations
@@ -130,20 +143,21 @@ module.exports = configure((/* ctx */) => ({
   animations: [],
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
-  // sourceFiles: {
-  //   rootComponent: 'src/App.vue',
-  //   router: 'src/router/index',
-  //   store: 'src/store/index',
-  //   registerServiceWorker: 'src-pwa/register-service-worker',
-  //   serviceWorker: 'src-pwa/custom-service-worker',
-  //   pwaManifestFile: 'src-pwa/manifest.json',
-  //   electronMain: 'src-electron/electron-main',
-  //   electronPreload: 'src-electron/electron-preload'
-  // },
+  sourceFiles: {
+    // rootComponent: 'src/App.vue',
+    // router: 'src/router/index',
+    // store: 'src/store/index',
+    // pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
+    // pwaServiceWorker: 'src-pwa/custom-service-worker',
+    // pwaManifestFile: 'src-pwa/manifest.json',
+    // electronMain: 'src-electron/electron-main',
+    // electronPreload: 'src-electron/electron-preload',
+    // bexManifestFile: 'src-bex/manifest.json',
+  },
 
   // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
   ssr: {
-    // ssrPwaHtmlFilename: 'offline.html', // do NOT use index.html as name!
+    // pwaOfflineHtmlFilename: 'offline.html', // do NOT use index.html as name!
     // will mess up SSR
 
     // extendSSRWebserverConf (esbuildConf) {},
@@ -160,11 +174,14 @@ module.exports = configure((/* ctx */) => ({
     middlewares: [
       'render', // keep this as last one
     ],
+
+    // pwaExtendGenerateSWOptions: (config) => {},
+    // pwaExtendInjectManifestOptions: (config) => {},
   },
 
   // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
   pwa: {
-    workboxMode: 'generateSW', // or 'injectManifest'
+    workboxMode: 'GenerateSW', // or 'InjectManifest'
     injectPwaMetaTags: true,
     swFilename: 'sw.js',
     manifestFilename: 'manifest.json',
@@ -216,8 +233,8 @@ module.exports = configure((/* ctx */) => ({
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
   bex: {
-    contentScripts: [
-      'my-content-script',
+    extraScripts: [
+      // No longer need contentScripts as they are extracted from the manifest file
     ],
 
     // extendBexScriptsConf (esbuildConf) {}
