@@ -5,6 +5,7 @@ import { toDateTimeUnit, toIndonesianWords } from 'src/utils/number';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
+import { useRoute } from 'vue-router';
 
 const DATE_TIME_UNITS = {
   tahun: 365 * 24 * 3600_000,
@@ -26,12 +27,17 @@ const formatCurrency = (amount: number) => `${amount.toLocaleString('id', {
 
 const props = defineProps<Props>();
 
+const route = useRoute();
 const router = useRouter();
+
+// Forces view as invoice instead of receipt
+const isShowInvoice = route.query.receipt === 'false';
 
 const data = await invoiceGetDocumentPayload(props.invoiceId);
 if (!data) throw new Error('Data not found');
 
-const invoiceDate = data.created_at.toLocaleString('id-ID', { dateStyle: 'long' });
+const invoiceDate = (isShowInvoice ? data.due_at : data.created_at)
+  .toLocaleString('id-ID', { dateStyle: 'long' });
 
 const invoiceLink = `${window.location.origin}${router.resolve({ name: 'DocumentInvoice', params: { memberId: props.invoiceId } }).href}`;
 
@@ -70,9 +76,9 @@ onMounted(() => {
       <div class="absolute-top-right">
         <div
           class="q-ma-sm q-px-md q-py-sm text-white font-semibold border-2 border-inside"
-          :class="data.paid_at ? 'bg-emerald-500/75 border-emerald-500' : 'bg-red-500/75 border-red-500'"
+          :class="(!isShowInvoice && data.paid_at) ? 'bg-emerald-500/75 border-emerald-500' : 'bg-red-500/75 border-red-500'"
         >
-          {{ data.paid_at ? 'PAID' : 'UNPAID' }}
+          {{ (!isShowInvoice && data.paid_at) ? 'PAID' : 'UNPAID' }}
         </div>
       </div>
     </div>

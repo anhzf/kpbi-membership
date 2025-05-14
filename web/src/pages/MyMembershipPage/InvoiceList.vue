@@ -41,14 +41,24 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
                 {{ invoice.paid_at ? 'Lunas' : 'Belum Lunas' }}
               </td>
               <td class="text-right">
-                <q-btn
-                  label="Lihat"
-                  icon="open_in_new"
-                  :to="{name: 'DocumentInvoice', params: {invoiceId: invoice.id}}"
-                  target="_blank"
-                  flat
-                  dense
-                />
+                <div class="inline-flex gap-2">
+                  <q-btn
+                    label="Tagihan"
+                    icon="open_in_new"
+                    :to="{ name: 'DocumentInvoice', params: { invoiceId: invoice.id }, query: { receipt: false } }"
+                    target="_blank"
+                    flat
+                    dense
+                  />
+                  <q-btn
+                    label="Kwitansi"
+                    icon="open_in_new"
+                    :to="{ name: 'DocumentInvoice', params: { invoiceId: invoice.id } }"
+                    target="_blank"
+                    flat
+                    dense
+                  />
+                </div>
               </td>
             </tr>
           </template>
