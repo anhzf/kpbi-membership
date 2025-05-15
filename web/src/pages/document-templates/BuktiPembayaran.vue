@@ -199,7 +199,8 @@ onMounted(() => {
             <tr>
               <td class="relative leading-tight">
                 <div>
-                  Surakarta, {{ (data.paid_at || data.due_at)?.toLocaleString('id', { dateStyle: 'long' }) }}
+                  Surakarta,
+                  {{ (isShowInvoice ? data.due_at : (data.paid_at || data.due_at))?.toLocaleString('id', { dateStyle: 'long' }) }}
                 </div>
                 <div>Ketua</div>
                 <div class="h-4.5em" />
