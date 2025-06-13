@@ -120,7 +120,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.due_at.getFullYear() }}</td>
+              <td>{{ data.created_at.getFullYear() }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
