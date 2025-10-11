@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -97,5 +99,60 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Password Changed'
         ]);
+    }
+
+    /**
+     * Create a personal access token for API authentication
+     */
+    public function createToken(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'token_name' => 'string|max:255',
+        ]);
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Invalid credentials'
+            ], 401);
+        }
+
+        $tokenName = $request->token_name ?? 'API Token';
+        $token = Auth::user()->createToken($tokenName);
+
+        return Api::data([
+            'token' => $token->plainTextToken,
+            'token_name' => $tokenName,
+        ]);
+    }
+
+    /**
+     * Revoke a specific token
+     */
+    public function revokeToken(PersonalAccessToken $token)
+    {
+        $token->delete();
+        return Api::message('Token revoked successfully');
+    }
+
+    /**
+     * Revoke all user tokens
+     */
+    public function revokeAllTokens()
+    {
+        Auth::user()->tokens()->delete();
+
+        return Api::message('All tokens revoked successfully');
+    }
+
+    /**
+     * List all user tokens
+     */
+    public function listTokens()
+    {
+        $tokens = Auth::user()->tokens()->select('id', 'name', 'last_used_at', 'created_at')->get();
+
+        return Api::data($tokens);
     }
 }

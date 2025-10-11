@@ -53,6 +53,13 @@ Route::prefix('/auth')->group(function () {
     Route::delete('/', [AuthController::class, 'destroy']);
 });
 
+Route::prefix('/tokens')->group(function () {
+    Route::get('/', [AuthController::class, 'listTokens'])->middleware('auth:sanctum');
+    Route::post('/', [AuthController::class, 'createToken']);
+    Route::delete('/', [AuthController::class, 'revokeAllTokens'])->middleware('auth:sanctum');
+    Route::delete('/{token}', [AuthController::class, 'revokeToken'])->middleware('auth:sanctum');
+});
+
 Route::group([
     'prefix' => '/me',
     'middleware' => 'auth:sanctum',
@@ -108,7 +115,7 @@ Route::group([
     'prefix' => '/v2',
     'as' => 'v2.',
 ], function () {
-    Route::get('/', fn () => Api::message('ready!'));
+    Route::get('/', fn() => Api::message('ready!'));
 
     Route::apiResource('/memberships', V2MembershipController::class);
     Route::get('/memberships/{membership}/invoices', [MembershipController::class, 'listInvoice']);
