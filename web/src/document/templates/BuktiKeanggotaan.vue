@@ -1,40 +1,44 @@
 <script lang="ts" setup>
 import { toDataURL } from 'qrcode';
-import memberService from 'src/services/member';
-import { ACADEMIC_DEGREES_LABELS } from 'src/types/constants';
 import { onMounted } from 'vue';
-import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
+import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from '../constants';
 
 interface Props {
-  memberId: string;
+  payload: Record<string, unknown>;
 }
 
 const props = defineProps<Props>();
 
-const member = await memberService.get(props.memberId);
-if (!member) throw new Error('Data not found');
+// Extract data from unified document payload
+const data = props.payload as {
+  membership_id: string;
+  certificate_number: string;
+  member_name: string;
+  education_program: {
+    name: string;
+    faculty: string;
+    degree: string;
+    formatted_fullname: string;
+  };
+  college: {
+    name: string | null;
+  };
+  validity: {
+    start: string;
+    end: string | null;
+    start_formatted: string;
+    end_formatted: string;
+  };
+  qr_text: string;
+  registration_id: string | null;
+  created_at: string;
+  period_end: string;
+};
 
-const requests = await memberService.listRequestOf(member.id);
-const request = requests.findLast((r) => r.status === 'approved');
-if (!request) throw new Error('Data not found');
-
-const number = [
-  (member.registration_id || member.id).toString().padStart(3, '0'),
-  Number(member.created_at.getMonth().toString().padStart(2, '0')) + 1,
-  'KPBI',
-  member.created_at.getFullYear(),
-].join('/');
-
-const fullname = [
-  `${ACADEMIC_DEGREES_LABELS[member.education_program.degree]} ${member.education_program.name}`,
-  member.education_program.faculty,
-  member.college.name,
-].filter(Boolean).join(', ');
-
-const qrUrl = await toDataURL(
-  `Prodi ${fullname} keanggotaan berlaku mulai ${member.created_at.toLocaleString('id', { dateStyle: 'long' })} s.d. ${request!.valid_until?.toLocaleString('id', { dateStyle: 'long' })} dengan nomor keanggotaan ${number}`,
-  { margin: 0 },
-);
+// Use pre-computed values
+const number = data.certificate_number;
+const fullname = data.education_program.formatted_fullname;
+const qrUrl = await toDataURL(data.qr_text, { margin: 0 });
 
 // Ensure image are loaded
 await (new Promise<void>((resolve, reject) => {
@@ -90,8 +94,8 @@ onMounted(() => {
       </div>
 
       <div class="font-serif">
-        Periode {{ (request!.valid_start ?? member!.created_at).toLocaleString('id', {dateStyle:'long'}) }}
-        s.d. {{ request!.valid_until?.toLocaleString('id', {dateStyle:'long'}) }}
+        Periode {{ data.validity.start_formatted }}
+        s.d. {{ data.validity.end_formatted }}
       </div>
     </div>
 
@@ -106,7 +110,7 @@ onMounted(() => {
         <tbody>
           <tr>
             <td class="relative leading-tight">
-              <div>Surakarta, {{ request!.authorized_at?.toLocaleString('id', {dateStyle: 'long'}) }}</div>
+              <div>Surakarta, {{ data.validity.end_formatted }}</div>
               <div>Ketua</div>
               <div class="h-4.5em" />
               <div>Dr. Bowo Sugiharto, M.Pd.</div>

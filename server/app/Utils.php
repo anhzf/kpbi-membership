@@ -16,8 +16,15 @@ class Utils
         return preg_replace('/^https?:\/\/[^\/]+/', '', $url);
     }
 
-    public static function intToRomanNumeral(int $num) {
+    public static function intToRomanNumeral(int $num)
+    {
         static $nf = new \NumberFormatter('@numbers=roman', \NumberFormatter::DECIMAL);
+        return $nf->format($num);
+    }
+
+    public static function toIndonesianWords(int $num)
+    {
+        static $nf = new \NumberFormatter('id_ID', \NumberFormatter::SPELLOUT);
         return $nf->format($num);
     }
 }

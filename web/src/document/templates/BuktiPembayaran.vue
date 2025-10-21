@@ -1,29 +1,12 @@
 <script lang="ts" setup>
 import { toDataURL } from 'qrcode';
-import { invoiceGetDocumentPayload } from 'src/services/invoice';
-import { toDateTimeUnit, toIndonesianWords } from 'src/utils/number';
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from './constants';
-import { useRoute } from 'vue-router';
-
-const DATE_TIME_UNITS = {
-  tahun: 365 * 24 * 3600_000,
-  bulan: 30 * 24 * 3600_000,
-  pekan: 7 * 24 * 3600_000,
-  hari: 24 * 3600_000,
-  jam: 3600_000,
-  menit: 60_000,
-  detik: 1000,
-};
+import { useRoute, useRouter } from 'vue-router';
+import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from '../constants';
 
 interface Props {
-  invoiceId: string;
+  payload: Record<string, unknown>;
 }
-
-const formatCurrency = (amount: number) => `${amount.toLocaleString('id', {
-  style: 'currency', currency: 'IDR', minimumFractionDigits: 0,
-}).replace(/\u00A0/g, ' ')},-`;
 
 const props = defineProps<Props>();
 
@@ -33,13 +16,54 @@ const router = useRouter();
 // Forces view as invoice instead of receipt
 const isShowInvoice = route.query.receipt === 'false';
 
-const data = await invoiceGetDocumentPayload(props.invoiceId);
-if (!data) throw new Error('Data not found');
+// Extract data from unified document payload
+const data = props.payload as {
+  invoice_number: string;
+  receipt_to: {
+    addresses: string;
+    membership_id: number;
+    name: string;
+  };
+  item: {
+    desc: string;
+    name: string;
+    price: number;
+    qty: number;
+  };
+  created_at: string;
+  due_at: string;
+  paid_at?: string;
+  contact_person: {
+    email: string;
+    name: string;
+    phone_number: string;
+    employee_id: string;
+  };
+  treasurer: {
+    email: string;
+    name: string;
+    phone_number: string;
+    employee_id: string;
+  };
+  formatted_dates: {
+    invoice_date: string;
+    due_date: string;
+    created_year: number;
+    due_date_formatted: string;
+  };
+  formatted_amounts: {
+    price_per_unit: string;
+    total_amount: string;
+    total_in_words: string;
+  };
+  time_units: {
+    years_text: string;
+  };
+};
 
-const invoiceDate = (isShowInvoice ? data.due_at : data.created_at)
-  .toLocaleString('id-ID', { dateStyle: 'long' });
+const invoiceDate = isShowInvoice ? data.formatted_dates.due_date : data.formatted_dates.invoice_date;
 
-const invoiceLink = `${window.location.origin}${router.resolve({ name: 'DocumentInvoice', params: { memberId: props.invoiceId } }).href}`;
+const invoiceLink = `${window.location.origin}${router.resolve({ name: 'Document', params: { invoiceId: route.params.documentId } }).href}`;
 
 const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
 
@@ -120,7 +144,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.created_at.getFullYear() }}</td>
+              <td>{{ data.formatted_dates.created_year }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -129,7 +153,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ toDateTimeUnit(data.item.qty * 365 * 24 * 3600_000, DATE_TIME_UNITS) }}</td>
+              <td>{{ data.time_units.years_text }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -138,7 +162,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ formatCurrency(data.item.price) }}</td>
+              <td>{{ data.formatted_amounts.price_per_unit }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -147,7 +171,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ formatCurrency(data.item.price * data.item.qty) }}</td>
+              <td>{{ data.formatted_amounts.total_amount }}</td>
             </tr>
             <tr>
               <td class="w-18ch">
@@ -157,7 +181,7 @@ onMounted(() => {
                 :
               </td>
               <td class="font-[Lucida_Handwriting] font-bold">
-                {{ toIndonesianWords(data.item.price * data.item.qty) }} rupiah
+                {{ data.formatted_amounts.total_in_words }} rupiah
               </td>
             </tr>
             <tr>
@@ -167,7 +191,7 @@ onMounted(() => {
               <td class="w-2ch">
                 :
               </td>
-              <td>{{ data.due_at.toLocaleString('id', { dateStyle: 'long' }) }}</td>
+              <td>{{ data.formatted_dates.due_date_formatted }}</td>
             </tr>
           </tbody>
         </table>
@@ -200,7 +224,7 @@ onMounted(() => {
               <td class="relative leading-tight">
                 <div>
                   Surakarta,
-                  {{ (isShowInvoice ? data.due_at : (data.paid_at || data.due_at))?.toLocaleString('id', { dateStyle: 'long' }) }}
+                  {{ isShowInvoice ? data.formatted_dates.due_date_formatted : data.formatted_dates.invoice_date }}
                 </div>
                 <div>Ketua</div>
                 <div class="h-4.5em" />

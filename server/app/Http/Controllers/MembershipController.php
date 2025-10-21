@@ -264,7 +264,8 @@ class MembershipController extends Controller
         return $member->bill();
     }
 
-    public function listInvoice(Membership $membership) {
+    public function listInvoice(Membership $membership)
+    {
         return Api::data($membership->invoices()->get());
     }
 }

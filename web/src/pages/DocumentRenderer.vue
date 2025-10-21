@@ -1,12 +1,20 @@
 <script lang="ts" setup>
-import { useVueToPrint } from 'vue-to-print';
+import { documentTemplates } from 'src/document/templates';
+import { documentGet } from 'src/services/document';
 import {
-  computed, onBeforeMount, ref, onErrorCaptured,
+  onBeforeMount,
+  onErrorCaptured,
+  ref
 } from 'vue';
 import { useRoute } from 'vue-router';
+import { useVueToPrint } from 'vue-to-print';
 
 const route = useRoute();
-const landscape = computed(() => route.meta.landscape);
+const document = await documentGet(route.params.documentId as string);
+if (!document) throw new Error('Document not found');
+
+const template = documentTemplates[document.template_name];
+if (!template) throw new Error('Document template not found');
 
 const componentRef = ref();
 const { handlePrint } = useVueToPrint({
@@ -18,6 +26,7 @@ onBeforeMount(() => {
 });
 
 onErrorCaptured((error) => {
+  console.error(error);
   window.alert(error);
 });
 </script>
@@ -25,18 +34,21 @@ onErrorCaptured((error) => {
 <template>
   <div
     ref="componentRef"
-    :class="['root p-1', landscape ? 'w-297mm h-210mm' : 'w-210mm h-297mm']"
+    :class="['root p-1', template.landscape ? 'w-297mm h-210mm' : 'w-210mm h-297mm']"
   >
     <component
       :is="'style'"
       type="text/css"
       media="print"
     >
-      @page { size: {{ landscape ? 'landscape' : 'portrait' }}; }
+      @page { size: {{ template.landscape ? 'landscape' : 'portrait' }}; }
     </component>
 
     <Suspense>
-      <RouterView />
+      <component
+        :is="template.component"
+        :payload="document.payload"
+      />
 
       <template #fallback>
         <div class="grow w-full min-h-30vh flex justify-center items-center">

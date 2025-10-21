@@ -135,7 +135,7 @@ class MembershipRequest extends Model implements HasMedia
                 ],
             ])->heads
                 ->pluck('user.email')
-                ->mapWithKeys(fn ($email) => [$email => $this->membership->name])
-        ])->filter(fn ($v, $k) => $k)->all();
+                ->mapWithKeys(fn($email) => [$email => $this->membership->name])
+        ])->filter(fn($v, $k) => $k)->all();
     }
 }

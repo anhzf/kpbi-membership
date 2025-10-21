@@ -45,7 +45,7 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
                   <q-btn
                     label="Tagihan"
                     icon="open_in_new"
-                    :to="{ name: 'DocumentInvoice', params: { invoiceId: invoice.id }, query: { receipt: false } }"
+                    :to="{ name: 'Document', params: { documentId: invoice.document_id }, query: { receipt: false } }"
                     target="_blank"
                     flat
                     dense
@@ -53,7 +53,7 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
                   <q-btn
                     label="Kwitansi"
                     icon="open_in_new"
-                    :to="{ name: 'DocumentInvoice', params: { invoiceId: invoice.id } }"
+                    :to="{ name: 'Document', params: { documentId: invoice.document_id } }"
                     target="_blank"
                     flat
                     dense

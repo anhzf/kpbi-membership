@@ -19,6 +19,10 @@ export interface Timestamps {
   updated_at: Date;
 }
 
+export interface HasDocument {
+  document_id: string;
+}
+
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface User extends Timestamps {
   id: string;
@@ -88,7 +92,7 @@ export interface EducationProgramHead extends Timestamps {
   period_end: Date;
 }
 
-export interface Membership extends Timestamps {
+export interface Membership extends Timestamps, HasDocument {
   id: string;
   registration_id?: string;
   period_end: Date;
@@ -114,7 +118,7 @@ export type MemberProfile = Membership & {
   };
   college: College;
   responsible: Omit<EducationProgramHead, 'program' | 'user'> & { user: RelationExpanded<User>; };
-}
+};
 
 export interface MemberInList {
   id: string;
@@ -155,7 +159,7 @@ export interface InvoiceItem {
   desc: string;
 }
 
-export interface Invoice extends Timestamps {
+export interface Invoice extends Timestamps, HasDocument {
   id: string;
   // receipt_to: {
   //   id: string;
@@ -200,4 +204,10 @@ export interface InvoiceDocumentPayload {
     phone_number: string;
     employee_id: string;
   };
+}
+
+export interface Document extends Timestamps {
+  id: string;
+  template_name: string;
+  payload: Record<string, unknown>;
 }

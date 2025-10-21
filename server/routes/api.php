@@ -1,21 +1,19 @@
 <?php
 
-use App\Http\Api;
 use App\Http\Controllers\AccreditationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipRequestController;
+use App\Http\Controllers\UtilityController;
 use App\Http\Controllers\V2\AdminController as V2AdminController;
 use App\Http\Controllers\V2\MembershipController as V2MembershipController;
 use App\Http\Controllers\VerificationController;
-use App\Models\MembershipRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -30,19 +28,18 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-Route::any('/', fn() => Api::message('ready!'));
+Route::any('/', [UtilityController::class, 'index']);
 
 Route::group([
     'middleware' => [
         'auth.basic',
-        fn(Request $request, \Closure $next) => auth()->user()?->role
-            ? $next($request) : abort(403),
+        'require.user.role',
     ],
 ], function () {
-    Route::get('/$dir', fn() => Api::data(scandir(base_path(request('path')))));
-    Route::get('/$env', fn() => Api::data(request('key') ? env(request('key')) : getenv()));
-    Route::get('/$cfg', fn() => Api::data(config(request('key'))));
-    Route::get('/$db', fn() => Api::data(DB::connection()->getConfig()));
+    Route::get('/$dir', [UtilityController::class, 'listDirectory']);
+    Route::get('/$env', [UtilityController::class, 'getEnvironment']);
+    Route::get('/$cfg', [UtilityController::class, 'getConfig']);
+    Route::get('/$db', [UtilityController::class, 'getDatabaseConfig']);
 });
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
@@ -97,6 +94,8 @@ Route::get('/membership/{membership}/request', [MembershipController::class, 'li
 Route::get('/membership-request/{membershipRequest}/invoice', [MembershipRequestController::class, 'showInvoice']);
 Route::apiResource('/invoice', InvoiceController::class);
 Route::get('/invoice/{invoice}/document/payload', [InvoiceController::class, 'showDocumentPayload']);
+Route::get('/documents/{document}', [DocumentController::class, 'show']);
+Route::put('/documents/{document}', [DocumentController::class, 'update'])->middleware('auth:sanctum');
 Route::apiResource('/accreditation', AccreditationController::class);
 
 Route::group([
@@ -115,7 +114,7 @@ Route::group([
     'prefix' => '/v2',
     'as' => 'v2.',
 ], function () {
-    Route::get('/', fn() => Api::message('ready!'));
+    Route::get('/', [UtilityController::class, 'index']);
 
     Route::apiResource('/memberships', V2MembershipController::class);
     Route::get('/memberships/{membership}/invoices', [MembershipController::class, 'listInvoice']);

@@ -32,7 +32,7 @@ const {
   mutateAsync: attachMembershipRequestToInvoice, isPending: isSaving,
 } = useAttachMembershipRequestToInvoice();
 
-const detailsDialogActiveData = computed<{ label: string, value: any, badge?: boolean | string }[]>(() => {
+const detailsDialogActiveData = computed<{ label: string, value: any, badge?: boolean | string; }[]>(() => {
   const data = invoices.value.find((invoice) => invoice.id === detailsDialogActiveId.value);
   if (!data) return [];
   return [
@@ -41,8 +41,8 @@ const detailsDialogActiveData = computed<{ label: string, value: any, badge?: bo
     { label: 'Nominal Tagihan/Terbayar', value: currencyFmt.format(data.total) },
     { label: 'Subjek', value: data.receipt_to_details.name },
     { label: 'Alamat', value: data.receipt_to_details.addresses || '-' },
-    { label: 'Biaya Tahunan', value: currencyFmt.format(data.items[MEMBERSHIP_INVOICE_ITEM_NAME].price) },
-    { label: 'Jumlah Tahun Terbayar', value: `${data.items[MEMBERSHIP_INVOICE_ITEM_NAME].qty} tahun` },
+    { label: 'Biaya Tahunan', value: currencyFmt.format(data.items[MEMBERSHIP_INVOICE_ITEM_NAME]!.price) },
+    { label: 'Jumlah Tahun Terbayar', value: `${data.items[MEMBERSHIP_INVOICE_ITEM_NAME]?.qty} tahun` },
     { label: 'Dibayar Pada', value: data.paid_at || '-' },
     { label: 'Jatuh Tempo', value: data.due_at },
     { label: 'Status', value: data.paid_at ? 'Terbayar' : 'Belum Bayar', badge: data.paid_at ? 'positive' : 'warning' },

@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -85,23 +85,9 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/document',
-    component: () => import('layouts/DocumentLayout.vue'),
-    children: [
-      {
-        path: 'keanggotaan/:memberId',
-        name: 'DocumentMembership',
-        props: true,
-        component: () => import('pages/document-templates/BuktiKeanggotaan.vue'),
-        meta: { landscape: true },
-      },
-      {
-        path: 'pembayaran/:invoiceId',
-        name: 'DocumentInvoice',
-        props: true,
-        component: () => import('pages/document-templates/BuktiPembayaran.vue'),
-      },
-    ],
+    path: '/documents/:documentId',
+    name: 'Document',
+    component: () => import('pages/DocumentRenderer.vue'),
   },
 
   // Always leave this as last one,

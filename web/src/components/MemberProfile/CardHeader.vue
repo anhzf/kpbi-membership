@@ -17,14 +17,14 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const modified = ref<Props>(toRaw(props));
+const modified = ref<Props>(toRaw(props) as Props);
 
 const { state: data } = useMemberProfile();
 
 const onPhotoChange = async (ev: Event) => {
   const target = ev.target as HTMLInputElement;
   if (target.files?.length) {
-    const file = target.files[0];
+    const file = target.files[0]!;
 
     await toastErrorIfAny(
       pageLoading(memberService.updateCollege({ img: file })),
@@ -84,12 +84,12 @@ const onPhotoChange = async (ev: Event) => {
       <div class="row q-gutter-md">
         <q-btn
           label="Lihat Matkul MBKM"
-          :to="{name: 'Courses'}"
+          :to="{ name: 'Courses' }"
           outline
         />
         <q-btn
           label="Lihat Sertifikat"
-          :to="{name: 'DocumentMembership', params: {memberId: data?.id}}"
+          :to="{ name: 'Document', params: { documentId: data?.document_id } }"
           target="_blank"
           outline
           title="Lihat sertifikat keanggotaan"
