@@ -80,6 +80,12 @@ const adminNavItems: INavItem[] = [
     icon: 'people',
     to: { name: 'admin:ManageUsers' },
   },
+  {
+    featureName: 'ManageInvoices',
+    title: 'Kelola Invoices',
+    icon: 'receipt_long',
+    to: { name: 'admin:ManageInvoices' },
+  },
 ];
 
 const leftDrawerOpen = ref(false);
@@ -109,7 +115,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
       });
     } catch (err) {
       if ((err instanceof AxiosError)
-      && (err.response?.status === 401)) {
+        && (err.response?.status === 401)) {
         router.push({ name: 'Login', query: { callback_url: callbackUrl } });
         Notify.create({
           type: 'negative',
@@ -164,9 +170,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
         <q-item class="q-pt-lg q-pb-md">
           <template v-if="auth.user">
             <q-item-section avatar>
-              <q-avatar
-                color="grey-5"
-              >
+              <q-avatar color="grey-5">
                 <div class="absolute-center text-caption leading-tight text-center">
                   Logo PT
                 </div>
@@ -181,7 +185,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
               <AsyncState
                 :value="memberService.get('me')"
                 :init="null"
-                #="{state}"
+                #="{ state }"
               >
                 <q-item-label
                   v-if="state"
@@ -252,7 +256,7 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
             :value="adminNavItems.filter((item) => (item.featureName
               ? isFeatureAllowed(auth.user!.role!, item.featureName)
               : true))"
-            #="{state: [navItems]}"
+            #="{ state: [navItems] }"
           >
             <template v-if="navItems.length">
               <q-separator spaced />

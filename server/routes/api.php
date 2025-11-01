@@ -94,6 +94,7 @@ Route::get('/membership/{membership}/request', [MembershipController::class, 'li
 Route::get('/membership-request/{membershipRequest}/invoice', [MembershipRequestController::class, 'showInvoice']);
 Route::apiResource('/invoice', InvoiceController::class);
 Route::get('/invoice/{invoice}/document/payload', [InvoiceController::class, 'showDocumentPayload']);
+Route::get('/documents', [DocumentController::class, 'index']);
 Route::get('/documents/{document}', [DocumentController::class, 'show']);
 Route::put('/documents/{document}', [DocumentController::class, 'update'])->middleware('auth:sanctum');
 Route::apiResource('/accreditation', AccreditationController::class);

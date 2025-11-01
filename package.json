@@ -13,7 +13,11 @@
     "url": "git+https://github.com/anhzf/kpbi-membership.git"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "email": "work@anhzf.dev",
+    "name": "Anhzf",
+    "url": "https://anhzf.dev"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/anhzf/kpbi-membership/issues"

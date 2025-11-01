@@ -1,10 +1,14 @@
 import { api } from 'src/boot/axios';
-import type { Document } from 'src/types/models';
+import type { Document, DocumentListItem } from 'src/types/models';
 
 const ENDPOINT = '/documents';
 
 export interface DocumentGet {
   (id: string): Promise<Document>;
+}
+
+export interface DocumentList {
+  (templateName: string): Promise<DocumentListItem[]>;
 }
 
 export interface DocumentUpdate {
@@ -20,8 +24,15 @@ export const documentGet: DocumentGet = async (id) => {
   return data;
 };
 
+export const documentList: DocumentList = async (templateName) => {
+  const { data: { data } } = await api.get<{ data: DocumentListItem[]; }>(ENDPOINT, {
+    params: { template_name: templateName },
+  });
+  return data;
+};
+
 export const documentUpdate: DocumentUpdate = async (id, payload) => {
-  const { data: { data } } = await api.put<{ data: Document; }>(`${ENDPOINT}/${id}`, { payload });
+  const { data: { data } } = await api.put<{ data: Document; }>(`${ENDPOINT}/${id}`, payload);
   return data;
 };
 

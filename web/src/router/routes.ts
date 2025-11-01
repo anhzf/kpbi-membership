@@ -80,6 +80,11 @@ const routes: RouteRecordRaw[] = [
             name: 'admin:VerifyRequests',
             component: () => import('pages/admin/VerifyMembershipRequestPage.vue'),
           },
+          {
+            path: 'invoices',
+            name: 'admin:ManageInvoices',
+            component: () => import('pages/admin/ManageInvoicesPage.vue'),
+          }
         ],
       },
     ],

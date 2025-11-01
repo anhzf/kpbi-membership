@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Api;
 use App\Models\Document;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,23 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $templateName = $request->query('template_name');
+
+        if ($templateName) {
+            $sortBy = $request->query('sort_by', 'created_at');
+            $sortOrder = $request->query('sort_order', 'desc');
+
+            $documents = Document::where('template_name', $templateName)
+                ->select(['id', 'template_name', 'created_at', 'updated_at', 'payload->invoice_number as invoice_number', 'payload->receipt_to->name as member_name'])
+                ->orderBy($sortBy, $sortOrder)
+                ->paginate($perPage = $request->query('per_page', 15));
+
+            return response()->json($documents);
+        }
+
+        return Api::message('`template_name` query parameter is required', 400);
     }
 
     /**
@@ -25,7 +40,7 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -36,15 +51,7 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        return response()->json([
-            'data' => [
-                'id' => $document->id,
-                'template_name' => $document->template_name,
-                'payload' => $document->payload,
-                'created_at' => $document->created_at,
-                'updated_at' => $document->updated_at,
-            ]
-        ]);
+        return Api::data($document);
     }
 
     /**
@@ -56,23 +63,9 @@ class DocumentController extends Controller
      */
     public function update(Request $request, Document $document)
     {
-        $request->validate([
-            'payload' => 'required|array',
-        ]);
-
         $document->update([
-            'payload' => $request->payload,
+            'payload' => $request->all(),
             'updated_by' => auth()->id(),
-        ]);
-
-        return response()->json([
-            'data' => [
-                'id' => $document->id,
-                'template_name' => $document->template_name,
-                'payload' => $document->payload,
-                'created_at' => $document->created_at,
-                'updated_at' => $document->updated_at,
-            ]
         ]);
     }
 
@@ -84,6 +77,6 @@ class DocumentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return abort(404);
     }
 }

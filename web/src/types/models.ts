@@ -147,6 +147,7 @@ export interface Course extends Timestamps {
   code: string;
   credits: number;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   info: Record<string, any>;
   lecturer: string;
   capacity?: number;
@@ -211,3 +212,5 @@ export interface Document extends Timestamps {
   template_name: string;
   payload: Record<string, unknown>;
 }
+
+export type DocumentListItem = Pick<Document, 'id' | 'template_name' | 'created_at' | 'updated_at'>;
