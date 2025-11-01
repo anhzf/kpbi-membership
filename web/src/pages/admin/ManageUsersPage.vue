@@ -65,6 +65,7 @@ const { data, isFetching: isLoading, refetch } = useQuery({
   queryKey: ['admin', 'users'],
   queryFn: listUsers,
   initialData: [],
+  refetchOnMount: true,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
 });
@@ -84,7 +85,7 @@ const onRoleSelect = async (row: User, role: string) => {
   } catch (err) {
     Notify.create({ type: 'negative', message: getErrMsg(err) });
     if (!(axios.isAxiosError(err) && err.response?.status
-          && (err.response.status >= 400 || err.response.status < 500))) {
+      && (err.response.status >= 400 || err.response.status < 500))) {
       console.error(err);
     }
   }
@@ -133,9 +134,7 @@ const onRoleSelect = async (row: User, role: string) => {
                 @click="onRoleSelect(scopedProps.row, role)"
               >
                 <q-item-section avatar>
-                  <q-icon
-                    :name="(scopedProps.value || 'default') === role ? 'check' : ''"
-                  />
+                  <q-icon :name="(scopedProps.value || 'default') === role ? 'check' : ''" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>

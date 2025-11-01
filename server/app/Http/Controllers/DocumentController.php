@@ -20,11 +20,20 @@ class DocumentController extends Controller
         if ($templateName) {
             $sortBy = $request->query('sort_by', 'created_at');
             $sortOrder = $request->query('sort_order', 'desc');
+            $perPage = $request->query('per_page', 15);
 
             $documents = Document::where('template_name', $templateName)
-                ->select(['id', 'template_name', 'created_at', 'updated_at', 'payload->invoice_number as invoice_number', 'payload->receipt_to->name as member_name'])
+                ->select([
+                    'id',
+                    'template_name',
+                    'created_at',
+                    'updated_at',
+                    'payload->invoice_number as invoice_number',
+                    'payload->receipt_to->name as member_name',
+                ])
                 ->orderBy($sortBy, $sortOrder)
-                ->paginate($perPage = $request->query('per_page', 15));
+                ->paginate($perPage)
+                ->appends($request->query());
 
             return response()->json($documents);
         }

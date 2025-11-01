@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { useQuery } from '@tanstack/vue-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { formatDistanceToNow } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
-import { title } from 'node:process';
 import { type QTableProps, useQuasar } from 'quasar';
 import { documentGet, documentList, documentUpdate } from 'src/services/document';
-import type { DocumentListItem } from 'src/types/models';
+import type { DocumentListItem, PaginatedList } from 'src/types/models';
 import type { q } from 'src/types/q';
 import { computed, ref } from 'vue';
 
@@ -91,29 +90,54 @@ const COLUMNS = <q.Table.ColumnDefinition<InvoiceDocumentListItem>[]>[
   },
 ];
 
-const PAGINATION = ref<NonNullable<QTableProps['pagination']>>({
+const $q = useQuasar();
+const queryClient = useQueryClient();
+
+const pagination = ref<QTableProps['pagination']>({
   sortBy: 'created_at',
   descending: true,
+  page: 1,
   rowsPerPage: 15,
 });
 
-const $q = useQuasar();
+const paginationKey = [
+  'admin',
+  'documents',
+  DOCUMENT_TYPE,
+  computed(() => [
+    pagination.value?.page,
+    pagination.value?.rowsPerPage,
+    pagination.value?.sortBy,
+    pagination.value?.descending ? 'desc' : 'asc',
+  ].join('-'))
+] as const;
 
-const { data, isFetching: isLoading, refetch: refresh } = useQuery({
-  queryKey: [
-    'admin',
-    'documents',
-    DOCUMENT_TYPE,
-    computed(() => [PAGINATION.value.page, PAGINATION.value.rowsPerPage, PAGINATION.value.sortBy, PAGINATION.value.descending ? 'desc' : 'asc'].join('-')),
-  ],
-  queryFn: () => documentList(DOCUMENT_TYPE) as Promise<InvoiceDocumentListItem[]>,
-  initialData: [],
+const { data: pageable, isFetching: isLoading } = useQuery({
+  queryKey: paginationKey,
+  queryFn: async () => {
+    const result = await documentList(DOCUMENT_TYPE, {
+      per_page: pagination.value?.rowsPerPage,
+      page: pagination.value?.page,
+    }) as PaginatedList<InvoiceDocumentListItem>;
+
+    pagination.value = {
+      ...pagination.value,
+      page: result.current_page,
+      rowsPerPage: result.per_page,
+      rowsNumber: result.total,
+    };
+
+    return result;
+  },
+  initialData: null,
+  placeholderData: keepPreviousData,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
   refetchOnMount: true,
 });
+const refresh = () => queryClient.invalidateQueries({ queryKey: paginationKey });
 
-const rows = computed(() => data.value || []);
+const rows = computed(() => pageable.value?.data || []);
 
 const onEditClick = async (id: string) => {
   const dialog = $q.dialog({
@@ -169,6 +193,10 @@ const onEditClick = async (id: string) => {
     }
   });
 };
+
+const onTableRequest: QTableProps['onRequest'] = (props) => {
+  pagination.value = props.pagination;
+};
 </script>
 
 <template>
@@ -177,12 +205,14 @@ const onEditClick = async (id: string) => {
     class="column q-gutter-md"
   >
     <q-table
-      v-model:pagination="PAGINATION"
+      v-model:pagination="pagination"
       title="Kelola Invoice"
       :columns="COLUMNS"
       :rows
       :loading="isLoading"
       row-key="id"
+      :rows-per-page-options="[5, 7, 10, 15, 20, 25, 50]"
+      @request="onTableRequest"
     >
       <template #body-cell-numb="scopedProps">
         <q-td :props="scopedProps">

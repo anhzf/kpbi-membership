@@ -23,6 +23,33 @@ export interface HasDocument {
   document_id: string;
 }
 
+export interface PaginationLink {
+  url?: string;
+  label: string;
+  active: boolean;
+}
+
+export interface PaginatedList<D> {
+  current_page: number;
+  data: D[];
+  from: number;
+  to: number;
+  total: number;
+  path: string;
+  per_page: number;
+  last_page: number;
+  first_page_url: string;
+  last_page_url: string;
+  next_page_url?: string;
+  prev_page_url?: string;
+  links: PaginationLink[];
+}
+
+export interface PaginationQuery {
+  page?: number;
+  per_page?: number;
+}
+
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface User extends Timestamps {
   id: string;

@@ -1,5 +1,5 @@
 import { api } from 'src/boot/axios';
-import type { Document, DocumentListItem } from 'src/types/models';
+import type { Document, DocumentListItem, PaginatedList, PaginationQuery } from 'src/types/models';
 
 const ENDPOINT = '/documents';
 
@@ -8,7 +8,7 @@ export interface DocumentGet {
 }
 
 export interface DocumentList {
-  (templateName: string): Promise<DocumentListItem[]>;
+  (templateName: string, pagination?: PaginationQuery): Promise<PaginatedList<DocumentListItem>>;
 }
 
 export interface DocumentUpdate {
@@ -24,9 +24,9 @@ export const documentGet: DocumentGet = async (id) => {
   return data;
 };
 
-export const documentList: DocumentList = async (templateName) => {
-  const { data: { data } } = await api.get<{ data: DocumentListItem[]; }>(ENDPOINT, {
-    params: { template_name: templateName },
+export const documentList: DocumentList = async (templateName, pagination) => {
+  const { data } = await api.get<PaginatedList<DocumentListItem>>(ENDPOINT, {
+    params: { ...pagination, template_name: templateName },
   });
   return data;
 };
