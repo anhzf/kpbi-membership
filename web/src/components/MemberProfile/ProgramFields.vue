@@ -13,6 +13,7 @@ const fields = ref({
   email: props.data?.email || '',
   phone_number: props.data?.phone_number || '',
   external_link: props.data?.external_link || '',
+  faculty: props.data?.faculty || '',
 });
 
 defineExpose({
@@ -43,5 +44,10 @@ defineExpose({
     label="Website"
     outlined
     type="url"
+  />
+  <q-input
+    v-model="fields.faculty"
+    label="Fakultas"
+    outlined
   />
 </template>
