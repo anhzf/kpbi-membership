@@ -32,6 +32,15 @@ class EducationProgramHead extends Model
      */
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::updated(function (EducationProgramHead $head) {
+            if ($head->program && $head->program->membership && $head->program->membership->document) {
+                $head->program->membership->syncDocument();
+            }
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

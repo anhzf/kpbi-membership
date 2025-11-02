@@ -54,11 +54,20 @@ class EducationProgram extends Model implements HasMedia
         'degree' => \App\Enums\AcademicDegree::class,
     ];
 
+    protected static function booted()
+    {
+        static::updated(function (EducationProgram $program) {
+            if ($program->membership && $program->membership->document) {
+                $program->membership->syncDocument();
+            }
+        });
+    }
+
     public function img(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->getFirstMedia('logo'),
-            set: fn (FileAdder $v) => $v->toMediaCollection('logo')
+            get: fn() => $this->getFirstMedia('logo'),
+            set: fn(FileAdder $v) => $v->toMediaCollection('logo')
         );
     }
 
@@ -89,7 +98,7 @@ class EducationProgram extends Model implements HasMedia
 
     public function fullname(): Attribute
     {
-        return Attribute::get(fn () => join(' ', array_filter([
+        return Attribute::get(fn() => join(' ', array_filter([
             $this->degree ? self::DEGREE_DISPLAY_NAME[$this->degree->name] : null,
             $this->name,
             $this->college->short_name,

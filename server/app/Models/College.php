@@ -44,19 +44,27 @@ class College extends Model implements HasMedia
      */
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::updated(function (College $college) {
+            $college->educationPrograms
+                ->each(fn($program) => $program->membership?->syncDocument());
+        });
+    }
+
     public function img(): Attribute
     {
-        return Attribute::get(fn () => $this->getFirstMedia('logo'));
+        return Attribute::get(fn() => $this->getFirstMedia('logo'));
     }
 
     public function imgUrl(): Attribute
     {
-        return Attribute::get(fn () => $this->img?->getUrl());
+        return Attribute::get(fn() => $this->img?->getUrl());
     }
 
     public function addresses(): Attribute
     {
-        return Attribute::get(fn () => join(', ', array_filter([
+        return Attribute::get(fn() => join(', ', array_filter([
             $this->street_address,
             $this->city,
             $this->province
