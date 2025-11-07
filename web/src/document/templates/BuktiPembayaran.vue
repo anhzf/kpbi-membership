@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { toDataURL } from 'qrcode';
+import { toCanvas } from 'qrcode';
+import { insertAmount, set62SubTag, setTopLevelTag } from 'src/utils/qris';
 import { onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO } from '../constants';
+import { useRoute } from 'vue-router';
+import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO, KPBI_QRIS } from '../constants';
 
 interface Props {
   payload: Record<string, unknown>;
@@ -11,7 +12,6 @@ interface Props {
 const props = defineProps<Props>();
 
 const route = useRoute();
-const router = useRouter();
 
 // Forces view as invoice instead of receipt
 const isShowInvoice = route.query.receipt === 'false';
@@ -63,9 +63,41 @@ const data = props.payload as {
 
 const invoiceDate = isShowInvoice ? data.formatted_dates.due_date : data.formatted_dates.invoice_date;
 
-const invoiceLink = `${window.location.origin}${router.resolve({ name: 'Document', params: { invoiceId: route.params.documentId } }).href}`;
+const qrisText =
+  set62SubTag(
+    insertAmount(
+      setTopLevelTag(KPBI_QRIS, '59', `INV-${data.invoice_number}`),
+      data.item.price * data.item.qty,
+    ),
+    '09',
+    data.receipt_to.name,
+  )
+  ;
+const [qrisImgUrl] = await Promise.all([
+  toCanvas(qrisText, { margin: 0, errorCorrectionLevel: 'H' })
+    .then((canvas) => {
+      const ctx = canvas.getContext('2d');
+      const txt = 'KPBI QRIS';
+      const padding = 6;
 
-const qrUrl = await toDataURL(invoiceLink, { margin: 0 });
+      if (ctx) {
+        ctx.font = '500 24px Roboto';
+        const textWidth = ctx.measureText(txt).width;
+        const textHeight = 24; // Approximate height
+        const x = (canvas.width - textWidth) / 2;
+        const y = (canvas.height + textHeight / 2) / 2;
+
+        ctx.fillStyle = 'white';
+        ctx.roundRect(x - padding, y - textHeight, textWidth + padding * 2, textHeight + padding, 8);
+        ctx.fill();
+
+        ctx.fillStyle = '#264122';
+        ctx.fillText(txt, x, y);
+      }
+
+      return canvas.toDataURL();
+    }),
+]);
 
 onMounted(() => {
   window.readyToPrint?.();
@@ -104,6 +136,15 @@ onMounted(() => {
         >
           {{ (!isShowInvoice && data.paid_at) ? 'PAID' : 'UNPAID' }}
         </div>
+
+        <!-- <div class="flex flex-col items-center">
+          <span class="text-xs">Scan QRIS:</span>
+          <img
+            :src="qrisImgUrl"
+            alt="KPBI QRIS"
+            class="size-24"
+          >
+        </div> -->
       </div>
     </div>
 
@@ -214,9 +255,9 @@ onMounted(() => {
 
       <div class="self-stretch mt-2 flex justify-around">
         <img
-          :src="qrUrl"
-          alt="QR Keanggotaan"
-          class="w-32 h-32"
+          :src="qrisImgUrl"
+          alt="QRIS KPBI"
+          class="size-36"
         >
         <table class="font-serif">
           <tbody>
