@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { toCanvas } from 'qrcode';
-import { insertAmount, set62SubTag, setTopLevelTag } from 'src/utils/qris';
+import { insertAmount, set62SubTag } from 'src/utils/qris';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { IMG_CAP_KPBI, IMG_TTD_BOWO_SUGIHARTO, KPBI_QRIS } from '../constants';
@@ -63,16 +63,19 @@ const data = props.payload as {
 
 const invoiceDate = isShowInvoice ? data.formatted_dates.due_date : data.formatted_dates.invoice_date;
 
-const qrisText =
-  set62SubTag(
-    insertAmount(
-      setTopLevelTag(KPBI_QRIS, '59', `INV-${data.invoice_number}`),
-      data.item.price * data.item.qty,
-    ),
-    '09',
-    data.receipt_to.name,
-  )
-  ;
+const qrisText = set62SubTag(
+  insertAmount(
+    KPBI_QRIS,
+    data.item.price * data.item.qty,
+  ),
+  '09',
+  // no usecase for now, but just in case we need to add more info in the future
+  JSON.stringify({
+    invoice_number: data.invoice_number,
+    membership_id: data.receipt_to.membership_id,
+    receipt_to: data.receipt_to.name,
+  }),
+);
 const [qrisImgUrl] = await Promise.all([
   toCanvas(qrisText, { margin: 0, errorCorrectionLevel: 'H' })
     .then((canvas) => {
@@ -136,15 +139,6 @@ onMounted(() => {
         >
           {{ (!isShowInvoice && data.paid_at) ? 'PAID' : 'UNPAID' }}
         </div>
-
-        <!-- <div class="flex flex-col items-center">
-          <span class="text-xs">Scan QRIS:</span>
-          <img
-            :src="qrisImgUrl"
-            alt="KPBI QRIS"
-            class="size-24"
-          >
-        </div> -->
       </div>
     </div>
 
