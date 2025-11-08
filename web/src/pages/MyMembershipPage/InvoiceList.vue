@@ -51,6 +51,7 @@ const { state: list, execute: refresh, isLoading: listLoading } = useAsyncState(
                     dense
                   />
                   <q-btn
+                    v-if="invoice.paid_at"
                     label="Kwitansi"
                     icon="open_in_new"
                     :to="{ name: 'Document', params: { documentId: invoice.document_id } }"
