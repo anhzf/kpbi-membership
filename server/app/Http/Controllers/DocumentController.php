@@ -23,6 +23,7 @@ class DocumentController extends Controller
             $perPage = $request->query('per_page', 15);
 
             $documents = Document::where('template_name', $templateName)
+                ->where('payload', 'like', '%' . $request->query('search', '') . '%')
                 ->select([
                     'id',
                     'template_name',

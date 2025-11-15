@@ -93,6 +93,7 @@ const COLUMNS = <q.Table.ColumnDefinition<InvoiceDocumentListItem>[]>[
 const $q = useQuasar();
 const queryClient = useQueryClient();
 
+const filter = ref('');
 const pagination = ref<QTableProps['pagination']>({
   sortBy: 'created_at',
   descending: true,
@@ -109,6 +110,7 @@ const paginationKey = [
     pagination.value?.rowsPerPage,
     pagination.value?.sortBy,
     pagination.value?.descending ? 'desc' : 'asc',
+    filter.value,
   ].join('-'))
 ] as const;
 
@@ -116,6 +118,7 @@ const { data: pageable, isFetching: isLoading } = useQuery({
   queryKey: paginationKey,
   queryFn: async () => {
     const result = await documentList(DOCUMENT_TYPE, {
+      search: filter.value,
       per_page: pagination.value?.rowsPerPage,
       page: pagination.value?.page,
     }) as PaginatedList<InvoiceDocumentListItem>;
@@ -214,6 +217,19 @@ const onTableRequest: QTableProps['onRequest'] = (props) => {
       :rows-per-page-options="[5, 7, 10, 15, 20, 25, 50]"
       @request="onTableRequest"
     >
+      <template #top-right>
+        <q-input
+          v-model.lazy="filter"
+          outlined
+          placeholder="Cari invoice..."
+          dense
+        >
+          <template #append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
+
       <template #body-cell-numb="scopedProps">
         <q-td :props="scopedProps">
           {{ scopedProps.rowIndex + 1 }}
