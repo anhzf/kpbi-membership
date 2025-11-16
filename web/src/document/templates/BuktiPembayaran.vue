@@ -227,7 +227,7 @@ onMounted(() => {
         </p>
         <p>
           Metode Pembayaran: Transfer via Rek <strong>BNI</strong>, No Rek: <strong>1684558753</strong> a.n.
-          <strong>KPBI</strong>
+          <strong>KPBI</strong> atau melalui <strong>QRIS KPBI</strong> di bawah ini.
         </p>
       </div>
 
