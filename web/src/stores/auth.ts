@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
-import authService, { LoginPayload } from 'src/services/auth';
-import { User } from 'src/types/models';
+import { isCookieReady } from 'src/boot/axios';
+import type { LoginPayload } from 'src/services/auth';
+import authService from 'src/services/auth';
+import type { User } from 'src/types/models';
 
 const service = authService;
 
@@ -13,7 +15,9 @@ export const useAuthStore = defineStore('auth', {
     async refresh() {
       try {
         this.isReady = false;
-        this.user = await service.user();
+        if (await isCookieReady) {
+          this.user = await service.user();
+        }
       } finally {
         this.isReady = true;
       }

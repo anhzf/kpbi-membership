@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { defineBoot } from '#q-app/wrappers';
 
 declare module '@vue/runtime-core' {
@@ -32,7 +33,15 @@ if (import.meta.env.DEV) {
   window.__api__ = api;
 }
 
-await api.get('/sanctum/csrf-cookie');
+export const isCookieReady = (async () => {
+  try {
+    await api.get('/sanctum/csrf-cookie');
+    return true;
+  } catch (err) {
+    console.error('Error while getting CSRF cookie:', err);
+    return false;
+  }
+})();
 
 export default defineBoot(async ({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
