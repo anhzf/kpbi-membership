@@ -1,14 +1,13 @@
 import axios, { toFormData } from 'axios';
 import { Notify } from 'quasar';
 import { api } from 'src/services/utils';
-import { APIResponse, isAPIValidationError } from 'src/types/common';
-import { getErrMsg } from 'src/utils/simpler';
+import type { APIResponse } from 'src/types/common';
+import { isAPIValidationError } from 'src/types/common';
 import { omitByFilterValue } from 'src/utils/object';
+import { getErrMsg } from 'src/utils/simpler';
 import { handleValidationError } from '../utils';
-import {
-  ChangePassword,
-  ResetPassword, SendEmailVerificationRequest, SendResetPasswordRequest, UserService,
-  type UpdateProfile,
+import type {
+  ChangePassword, ResetPassword, SendEmailVerificationRequest, SendResetPasswordRequest, UpdateProfile, UserService,
 } from './UserService';
 
 const ENDPOINT = '/user';

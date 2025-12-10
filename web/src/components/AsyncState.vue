@@ -23,6 +23,7 @@ whenever(() => props.value, () => execute());
 <template>
   <slot
     :state="state"
+    :value="state"
     :is-loading="isLoading"
     :execute="execute"
     :error="error"

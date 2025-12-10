@@ -134,9 +134,9 @@ class Invoice extends Model
         ]);
 
         $receipt_to = $this->receipt_to_details;
-        $_item = (object) $this->items[\App\Models\Membership::BILL_INVOICE_ITEM_NAME];
+        $_item = (object) $this->items[Membership::BILL_INVOICE_ITEM_NAME];
         $item = [
-            'name' => \App\Models\Membership::BILL_INVOICE_ITEM_NAME,
+            'name' => Membership::BILL_INVOICE_ITEM_NAME,
             'price' => $_item->price,
             'qty' => $_item->qty,
             'desc' => $_item->desc,
@@ -152,8 +152,8 @@ class Invoice extends Model
             'due_at' => $this->due_at,
             'paid_at' => $this->paid_at,
             'created_at' => $this->created_at,
-            'contact_person' => \App\Models\User::find(\App\Models\Setting::find('doc_invoice_contact_person_user')->value, ['name', 'email', 'phone_number', 'employee_id']),
-            'treasurer' => \App\Models\User::find(\App\Models\Setting::find('doc_invoice_treasurer_user')->value, ['name', 'email', 'phone_number', 'employee_id']),
+            'contact_person' => User::find(Setting::find('doc_invoice_contact_person_user')->value, ['name', 'email', 'phone_number', 'employee_id']),
+            'treasurer' => User::find(Setting::find('doc_invoice_treasurer_user')->value, ['name', 'email', 'phone_number', 'employee_id']),
 
             // Pre-computed values for template
             'formatted_dates' => [
@@ -180,59 +180,6 @@ class Invoice extends Model
     private function formatCurrency($amount)
     {
         return 'Rp ' . number_format($amount, 0, ',', '.') . ',-';
-    }
-
-    /**
-     * Convert number to Indonesian words
-     */
-    private function toIndonesianWords($number)
-    {
-        $units = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan'];
-        $teens = ['sepuluh', 'sebelas', 'dua belas', 'tiga belas', 'empat belas', 'lima belas', 'enam belas', 'tujuh belas', 'delapan belas', 'sembilan belas'];
-        $tens = ['', '', 'dua puluh', 'tiga puluh', 'empat puluh', 'lima puluh', 'enam puluh', 'tujuh puluh', 'delapan puluh', 'sembilan puluh'];
-        $thousands = ['', 'ribu', 'juta', 'miliar', 'triliun'];
-
-        $convertHundreds = function ($num) use ($units, $teens, $tens) {
-            $words = '';
-            if ($num > 99) {
-                if ($num == 100) {
-                    $words .= 'seratus ';
-                } else {
-                    $words .= $units[floor($num / 100)] . ' ratus ';
-                }
-                $num %= 100;
-            }
-            if ($num > 19) {
-                $words .= $tens[floor($num / 10)] . ' ';
-                $num %= 10;
-            }
-            if ($num > 0 && $num < 10) {
-                $words .= $units[$num] . ' ';
-            } elseif ($num >= 10 && $num < 20) {
-                $words .= $teens[$num - 10] . ' ';
-            }
-            return trim($words);
-        };
-
-        if ($number == 0) return 'nol';
-
-        $word = '';
-        $level = 0;
-
-        while ($number > 0) {
-            $remainder = $number % 1000;
-            if ($remainder > 0) {
-                if ($remainder == 1 && $level == 1) {
-                    $word = "seribu $word";
-                } else {
-                    $word = $convertHundreds($remainder) . ' ' . $thousands[$level] . ' ' . $word;
-                }
-            }
-            $number = floor($number / 1000);
-            $level++;
-        }
-
-        return trim($word);
     }
 
     /**

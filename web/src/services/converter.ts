@@ -22,6 +22,7 @@ export const fromTimestampsRaw = ({ created_at, updated_at }: TimestampsRaw): Ti
 
 export const fromUserRaw = (raw: UserRaw): User => ({
   ...raw,
+  id: String(raw.id),
   img: raw.img ?? getUserFallbackImg(raw),
   created_at: new Date(raw.created_at),
   updated_at: new Date(raw.updated_at),

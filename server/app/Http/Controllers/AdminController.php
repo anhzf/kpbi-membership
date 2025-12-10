@@ -16,13 +16,7 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(
-            fn(Request $request, $next) => (
-                array_search($request->user()->role, UserRole::cases()) !== false
-            )
-                ? $next($request)
-                : abort(403)
-        );
+        $this->middleware('require.user.role');
     }
 
     public function membershipRequestList(Request $request)
@@ -66,7 +60,7 @@ class AdminController extends Controller
 
     public function listUsers()
     {
-        return User::all();
+        return User::all(['id', 'name', 'email', 'role', 'employee_id']);
     }
 
     public function setUserRole(User $user, Request $request)

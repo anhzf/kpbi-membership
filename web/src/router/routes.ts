@@ -84,7 +84,12 @@ const routes: RouteRecordRaw[] = [
             path: 'invoices',
             name: 'admin:ManageInvoices',
             component: () => import('pages/admin/ManageInvoicesPage.vue'),
-          }
+          },
+          {
+            path: 'system-settings',
+            name: 'admin:ManageSystemSettings',
+            component: () => import('pages/admin/SystemSettingsPage.vue'),
+          },
         ],
       },
     ],

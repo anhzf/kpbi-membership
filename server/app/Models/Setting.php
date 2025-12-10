@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $key
+ * @property mixed $value
+ */
 class Setting extends Model
 {
     use HasFactory;

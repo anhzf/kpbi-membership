@@ -86,6 +86,12 @@ const adminNavItems: INavItem[] = [
     icon: 'receipt_long',
     to: { name: 'admin:ManageInvoices' },
   },
+  {
+    featureName: 'ManageSystemSettings',
+    title: 'Pengaturan Sistem',
+    icon: 'settings',
+    to: { name: 'admin:ManageSystemSettings' },
+  },
 ];
 
 const leftDrawerOpen = ref(false);
@@ -209,7 +215,14 @@ watch([() => auth.isReady, () => route.query.callback_url], async ([isReady, cal
                 KPBI
               </q-item-label>
               <q-item-label caption>
-                Anda belum login
+                <template v-if="auth.isReady">
+                  Anda belum login
+                </template>
+                <q-skeleton
+                  v-else
+                  type="rect"
+                  style="max-width: 100px"
+                />
               </q-item-label>
             </q-item-section>
           </template>

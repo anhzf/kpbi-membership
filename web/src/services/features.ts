@@ -7,6 +7,7 @@ const FEATURES_UNLOCK = Object.freeze({
   ManageUsers: <IsRoleAllowed>((role) => role === 'admin'),
   VerifyPayment: <IsRoleAllowed>((role) => USER_ROLES.includes(role)),
   ManageInvoices: <IsRoleAllowed>((role) => role === 'admin'),
+  ManageSystemSettings: <IsRoleAllowed>((role) => role === 'admin'),
 });
 
 export type Feature = keyof typeof FEATURES_UNLOCK;

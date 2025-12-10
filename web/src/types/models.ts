@@ -46,6 +46,7 @@ export interface PaginatedList<D> {
 }
 
 export interface PaginationQuery {
+  search?: string;
   page?: number;
   per_page?: number;
 }

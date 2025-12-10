@@ -13,6 +13,7 @@ use App\Http\Controllers\MembershipRequestController;
 use App\Http\Controllers\UtilityController;
 use App\Http\Controllers\V2\AdminController as V2AdminController;
 use App\Http\Controllers\V2\MembershipController as V2MembershipController;
+use App\Http\Controllers\V2\SystemController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -123,9 +124,21 @@ Route::group([
     Route::group([
         'prefix' => '/admin',
         'as' => 'admin.',
-        'middleware' => 'auth:sanctum',
+        'middleware' => ['auth:sanctum', 'require.user.role:admin'],
     ], function () {
         Route::get('/membership-requests-states', [V2AdminController::class, 'getMembershipRequestStates']);
         Route::patch('/invoices/{invoice}/membership-request', [V2AdminController::class, 'attachMembershipRequestToInvoice']);
+
+        Route::group([
+            'prefix' => '/system',
+            'as' => 'system.',
+        ], function () {
+            Route::get('/membership-fee', [SystemController::class, 'getMembershipFee']);
+            Route::put('/membership-fee', [SystemController::class, 'setMembershipFee']);
+            Route::get('/invoice-doc-contact-person', [SystemController::class, 'getInvoiceDocContactPerson']);
+            Route::put('/invoice-doc-contact-person', [SystemController::class, 'setInvoiceDocContactPerson']);
+            Route::get('/invoice-doc-treasurer', [SystemController::class, 'getInvoiceDocTreasurer']);
+            Route::put('/invoice-doc-treasurer', [SystemController::class, 'setInvoiceDocTreasurer']);
+        });
     });
 });
