@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import useMemberProfile from 'src/composables/use-member-profile';
 import { CourseSemesterType, COURSE_SEMESTER_TYPES_LABELS } from 'src/types/constants';
-import { getWhatsAppLink } from 'src/utils/common';
+import { getWhatsAppLink } from 'src/utils/misc';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 

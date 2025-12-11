@@ -7,7 +7,7 @@ import useMemberProfile from 'src/composables/use-member-profile';
 import courseServices from 'src/services/course';
 import { getMemberDisplayName } from 'src/services/member';
 import { Course } from 'src/types/models';
-import { getWhatsAppLink } from 'src/utils/common';
+import { getWhatsAppLink } from 'src/utils/misc';
 import { getErrMsg } from 'src/utils/simpler';
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
